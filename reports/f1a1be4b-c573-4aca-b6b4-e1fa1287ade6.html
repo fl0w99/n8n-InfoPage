@@ -6,21 +6,8 @@
     <title>Dein Morgenbericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 16px;
-            background-color: #f8f9fa;
-            color: #212529;
-            line-height: 1.6;
-        }
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 16px; background-color: #f8f9fa; color: #212529; line-height: 1.6; }
+        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
         .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
         .gemini-text { font-size: 16px; white-space: pre-line; }
@@ -31,12 +18,12 @@
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Sonntag, 15. Februar 2026</div>
+    <div class="date">Donnerstag, 19. Februar 2026</div>
 
     <div class="card">
         <div class="gemini-text">
             <strong>KI-Zusammenfassung:</strong>
-            Hier steht der Text, den Gemini für dich generiert hat. Heute ist ein idealer Tag für Fokus-Arbeit. Deine Daten zeigen einen positiven Trend bei der Produktivität der letzten 7 Tage.
+            Keine Zusammenfassung verfügbar.
         </div>
     </div>
 
@@ -48,30 +35,26 @@
     <div class="footer">Erstellt mit n8n & Gemini AI</div>
 
     <script>
-        // Diese Daten würde n8n dynamisch in das Script einfügen
+        // Diese Daten kommen jetzt von deinem Code-Node, der die SQL-Daten aufbereitet hat
         const data = [{
-            x: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-            y: [65, 59, 80, 81, 56, 55, 40],
+            x: [undefined], // Beispiel: '2026-02-12', '2026-02-13'...
+            y: [undefined], // Beispiel: 1759, 1799...
             type: 'scatter',
             mode: 'lines+markers',
             marker: { color: '#1a73e8' },
-            line: { shape: 'spline' }
+            line: { shape: 'hv', width: 2 } // 'hv' zeigt Preissprünge besser an
         }];
 
         const layout = {
-            margin: { t: 20, b: 40, l: 30, r: 10 },
-            xaxis: { gridcolor: '#eee' },
-            yaxis: { gridcolor: '#eee' },
+            margin: { t: 20, b: 40, l: 40, r: 10 },
+            xaxis: { gridcolor: '#eee', type: 'date' },
+            yaxis: { gridcolor: '#eee', title: 'Preis in €' },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
             autosize: true
         };
 
-        const config = {
-            responsive: true,
-            displayModeBar: false // Versteckt die störende Toolbar auf dem Handy
-        };
-
+        const config = { responsive: true, displayModeBar: false };
         Plotly.newPlot('chart', data, layout, config);
     </script>
 </body>
