@@ -3,16 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Morgenbericht</title>
+    <title>Dein Tankstellen-Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 16px; background-color: #f8f9fa; color: #212529; line-height: 1.6; }
-        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background-color: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
         h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
         .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
         .gemini-text { font-size: 16px; white-space: pre-line; }
-        #chart { width: 100%; height: 350px; }
+        #chart { width: 100%; height: 400px; }
         .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
+        
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { font-size: 12px !important; }
     </style>
 </head>
 <body>
@@ -23,102 +39,56 @@
     <div class="card">
         <div class="gemini-text">
             <strong>KI-Zusammenfassung:</strong>
-            Keine Zusammenfassung verfügbar.
+            Analysiere aktuelle Preisentwicklungen...
         </div>
     </div>
 
     <div class="card">
-        <strong>Datenvisualisierung</strong>
+        <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
         <div id="chart"></div>
     </div>
 
-    <div class="footer">Erstellt mit n8n & Gemini AI</div>
+    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
+
     <script>
-    // JSON.stringify sorgt dafür, dass die n8n-Arrays 
-    // exakt so im Code landen, wie JavaScript sie braucht.
-    const data = [{
-        x: undefined, 
-        y: undefined,
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker: { 
-            color: '#1a73e8',
-            size: 8 
-        },
-        line: { 
-    <div class="card">
-        <strong>Datenvisualisierung</strong>
-        <div id="chart"></div>
-    </div>
+        // Die Daten werden von n8n als JSON-String injiziert
+        // Das Ergebnis ist ein Array von Objekten (eines pro Station)
+        const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779],"type":"scatter","mode":"lines+markers","line":{"shape":"hv"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779],"type":"scatter","mode":"lines+markers","line":{"shape":"hv"},"connectgaps":true}];
 
-    <div class="footer">Erstellt mit n8n & Gemini AI</div>
-    <script>
-    // JSON.stringify sorgt dafür, dass die n8n-Arrays 
-    // exakt so im Code landen, wie JavaScript sie braucht.
-    const data = [{
-        x: undefined, 
-        y: undefined,
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker: { 
-            color: '#1a73e8',
-            size: 8 
-        },
-        line: { 
-    <div class="card">
-        <strong>Datenvisualisierung</strong>
-        <div id="chart"></div>
-    </div>
+        const layout = {
+            margin: { t: 10, b: 80, l: 60, r: 20 },
+            showlegend: true,
+            legend: {
+                orientation: 'h',
+                y: -0.3,
+                x: 0.5,
+                xanchor: 'center'
+            },
+            xaxis: {
+                type: 'date',
+                gridcolor: '#eee',
+                tickformat: '%d.%m\n%H:%M',
+                autorange: true
+            },
+            yaxis: {
+                title: 'Preis (€)',
+                gridcolor: '#eee',
+                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                tickformat: ',.3f', 
+                autorange: true
+            },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            autosize: true
+        };
 
-    <div class="footer">Erstellt mit n8n & Gemini AI</div>
-    <script>
-    // JSON.stringify sorgt dafür, dass die n8n-Arrays 
-    // exakt so im Code landen, wie JavaScript sie braucht.
-    const data = [{
-        x: undefined, 
-        y: undefined,
-        type: 'scatter',
-        mode: 'lines+markers',
-        marker: { 
-            color: '#1a73e8',
-            size: 8 
-        },
-        line: { 
-    <div class="card">
-    <strong>Preisvergleich: Tankstellen</strong>
-    <div id="chart"></div>
-</div>
+        const config = {
+            responsive: true,
+            displayModeBar: false
+        };
 
-<script>
-    // Da plotlyData bereits ein Array mit Objekten ist, 
-    // können wir es direkt ohne [] drumherum einfügen.
-    const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779],"type":"scatter","mode":"lines+markers","line":{"shape":"hv"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779],"type":"scatter","mode":"lines+markers","line":{"shape":"hv"},"connectgaps":true}];
-
-    const layout = {
-        margin: { t: 40, b: 60, l: 60, r: 20 },
-        showlegend: true, // Zeigt an, welche Farbe zu welcher Tankstelle gehört
-        legend: { orientation: 'h', y: -0.2 },
-        xaxis: { 
-            type: 'date', 
-            gridcolor: '#eee',
-            tickformat: '%d.%m\n%H:%M'
-        },
-        yaxis: { 
-            title: 'Preis in €', 
-            gridcolor: '#eee',
-            tickformat: ',.3f', // Zeigt 3 Nachkommastellen (z.B. 1.759)
-            autorange: true 
-        },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
-        autosize: true
-    };
-
-    const config = { responsive: true, displayModeBar: false };
-
-    Plotly.newPlot('chart', traces, layout, config);
-</script>
-
-
+        // Chart erstellen
+        Plotly.newPlot('chart', traces, layout, config);
+    </script>
 </body>
 </html>
