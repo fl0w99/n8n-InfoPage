@@ -33,29 +33,44 @@
     </div>
 
     <div class="footer">Erstellt mit n8n & Gemini AI</div>
-
     <script>
-        // Diese Daten kommen jetzt von deinem Code-Node, der die SQL-Daten aufbereitet hat
-        const data = [{
-            x: [undefined], // Beispiel: '2026-02-12', '2026-02-13'...
-            y: [undefined], // Beispiel: 1759, 1799...
-            type: 'scatter',
-            mode: 'lines+markers',
-            marker: { color: '#1a73e8' },
-            line: { shape: 'hv', width: 2 } // 'hv' zeigt Preissprünge besser an
-        }];
+    // WICHTIG: Keine extra [] um die n8n-Ausdrücke!
+    // n8n wandelt das Array automatisch in das richtige Format um.
+    const data = [{
+        x: ["2026-02-12 14:05:56","2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 16:22:02","2026-02-12 19:00:25","2026-02-12 19:00:27","2026-02-12 22:10:05","2026-02-12 22:10:06","2026-02-12 23:00:22","2026-02-12 23:00:23","2026-02-13 04:00:22","2026-02-13 04:00:24","2026-02-13 09:00:22","2026-02-13 09:00:23","2026-02-13 14:00:23","2026-02-13 14:00:24","2026-02-13 19:00:22","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 04:00:54","2026-02-14 09:00:52","2026-02-14 09:00:53","2026-02-14 14:00:52","2026-02-14 14:00:54","2026-02-14 19:00:52","2026-02-14 19:00:53","2026-02-14 23:00:18","2026-02-14 23:00:19","2026-02-15 04:00:18","2026-02-15 04:00:19","2026-02-15 09:00:18","2026-02-15 09:00:19","2026-02-15 14:00:18","2026-02-15 14:00:19","2026-02-15 19:00:18","2026-02-15 19:00:19","2026-02-17 11:17:28","2026-02-17 11:17:29","2026-02-17 14:00:28","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-17 23:00:45","2026-02-18 02:00:44","2026-02-18 02:00:45","2026-02-18 05:00:44","2026-02-18 05:00:45"], 
+        y: [1759,1799,1729,1739,1729,1769,1729,1779,1749,1779,1749,1779,1829,1829,1749,1789,1709,1739,1739,1769,1739,1769,1749,1779,1739,1779,1709,1719,1749,1779,1749,1779,1809,1859,1739,1769,1709,1739,1729,1819,1739,1809,1719,1749,1749,1779,1749,1779,1779,1779],
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: { color: '#1a73e8' },
+        line: { shape: 'hv', width: 2 }
+    }];
 
-        const layout = {
-            margin: { t: 20, b: 40, l: 40, r: 10 },
-            xaxis: { gridcolor: '#eee', type: 'date' },
-            yaxis: { gridcolor: '#eee', title: 'Preis in €' },
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            autosize: true
-        };
+    const layout = {
+        margin: { t: 20, b: 40, l: 50, r: 10 },
+        xaxis: { 
+            type: 'date', 
+            gridcolor: '#eee',
+            // Erzwingt, dass Plotly nicht bei 2000 startet
+            autorange: true 
+        },
+        yaxis: { 
+            title: 'Preis in €', 
+            gridcolor: '#eee',
+            autorange: true
+        },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        autosize: true
+    };
 
-        const config = { responsive: true, displayModeBar: false };
-        Plotly.newPlot('chart', data, layout, config);
-    </script>
+    const config = { responsive: true, displayModeBar: false };
+
+    // Kleiner Check für die Konsole (F12 im Browser), falls es noch hakt
+    console.log("X-Daten:", data[0].x);
+    console.log("Y-Daten:", data[0].y);
+
+    Plotly.newPlot('chart', data, layout, config);
+</script>
+
 </body>
 </html>
