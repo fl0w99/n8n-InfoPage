@@ -37,8 +37,8 @@
     // JSON.stringify sorgt dafür, dass die n8n-Arrays 
     // exakt so im Code landen, wie JavaScript sie braucht.
     const data = [{
-        x: ["2026-02-12 14:05:56","2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 16:22:02","2026-02-12 19:00:25","2026-02-12 19:00:27","2026-02-12 22:10:05","2026-02-12 22:10:06","2026-02-12 23:00:22","2026-02-12 23:00:23","2026-02-13 04:00:22","2026-02-13 04:00:24","2026-02-13 09:00:22","2026-02-13 09:00:23","2026-02-13 14:00:23","2026-02-13 14:00:24","2026-02-13 19:00:22","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 04:00:54","2026-02-14 09:00:52","2026-02-14 09:00:53","2026-02-14 14:00:52","2026-02-14 14:00:54","2026-02-14 19:00:52","2026-02-14 19:00:53","2026-02-14 23:00:18","2026-02-14 23:00:19","2026-02-15 04:00:18","2026-02-15 04:00:19","2026-02-15 09:00:18","2026-02-15 09:00:19","2026-02-15 14:00:18","2026-02-15 14:00:19","2026-02-15 19:00:18","2026-02-15 19:00:19","2026-02-17 11:17:28","2026-02-17 11:17:29","2026-02-17 14:00:28","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-17 23:00:45","2026-02-18 02:00:44","2026-02-18 02:00:45","2026-02-18 05:00:44","2026-02-18 05:00:45"], 
-        y: [1.759,1.799,1.729,1.739,1.729,1.769,1.729,1.779,1.749,1.779,1.749,1.779,1.829,1.829,1.749,1.789,1.709,1.739,1.739,1.769,1.739,1.769,1.749,1.779,1.739,1.779,1.709,1.719,1.749,1.779,1.749,1.779,1.809,1.859,1.739,1.769,1.709,1.739,1.729,1.819,1.739,1.809,1.719,1.749,1.749,1.779,1.749,1.779,1.779,1.779],
+        x: undefined, 
+        y: undefined,
         type: 'scatter',
         mode: 'lines+markers',
         marker: { 
@@ -46,23 +46,67 @@
             size: 8 
         },
         line: { 
-            shape: 'hv', // Erzeugt die Treppenstufen-Optik
-            width: 3,
-            color: '#1a73e8'
+    <div class="card">
+        <strong>Datenvisualisierung</strong>
+        <div id="chart"></div>
+    </div>
+
+    <div class="footer">Erstellt mit n8n & Gemini AI</div>
+    <script>
+    // JSON.stringify sorgt dafür, dass die n8n-Arrays 
+    // exakt so im Code landen, wie JavaScript sie braucht.
+    const data = [{
+        x: undefined, 
+        y: undefined,
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: { 
+            color: '#1a73e8',
+            size: 8 
         },
-        connectgaps: true
-    }];
+        line: { 
+    <div class="card">
+        <strong>Datenvisualisierung</strong>
+        <div id="chart"></div>
+    </div>
+
+    <div class="footer">Erstellt mit n8n & Gemini AI</div>
+    <script>
+    // JSON.stringify sorgt dafür, dass die n8n-Arrays 
+    // exakt so im Code landen, wie JavaScript sie braucht.
+    const data = [{
+        x: undefined, 
+        y: undefined,
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: { 
+            color: '#1a73e8',
+            size: 8 
+        },
+        line: { 
+    <div class="card">
+    <strong>Preisvergleich: Tankstellen</strong>
+    <div id="chart"></div>
+</div>
+
+<script>
+    // Da plotlyData bereits ein Array mit Objekten ist, 
+    // können wir es direkt ohne [] drumherum einfügen.
+    const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779],"type":"scatter","mode":"lines+markers","line":{"shape":"hv"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779],"type":"scatter","mode":"lines+markers","line":{"shape":"hv"},"connectgaps":true}];
 
     const layout = {
-        margin: { t: 20, b: 60, l: 60, r: 20 },
+        margin: { t: 40, b: 60, l: 60, r: 20 },
+        showlegend: true, // Zeigt an, welche Farbe zu welcher Tankstelle gehört
+        legend: { orientation: 'h', y: -0.2 },
         xaxis: { 
             type: 'date', 
             gridcolor: '#eee',
-            tickformat: '%d.%m\n%H:%M' // Formatiert die Achse: "12.02. 14:05"
+            tickformat: '%d.%m\n%H:%M'
         },
         yaxis: { 
             title: 'Preis in €', 
             gridcolor: '#eee',
+            tickformat: ',.3f', // Zeigt 3 Nachkommastellen (z.B. 1.759)
             autorange: true 
         },
         paper_bgcolor: 'rgba(0,0,0,0)',
@@ -70,12 +114,9 @@
         autosize: true
     };
 
-    const config = { 
-        responsive: true, 
-        displayModeBar: false 
-    };
+    const config = { responsive: true, displayModeBar: false };
 
-    Plotly.newPlot('chart', data, layout, config);
+    Plotly.newPlot('chart', traces, layout, config);
 </script>
 
 
