@@ -3,35 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Tankstellen-Bericht</title>
+    <title>Dein Täglicher Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #f8f9fa;
-            color: #212529;
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text */
             line-height: 1.6;
         }
         .card {
-            background: white;
+            background: #1e1e1e; /* Slightly lighter dark for cards */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Darker shadow for dark mode */
         }
-        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
-        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
-        .gemini-text { font-size: 16px; white-space: pre-line; }
-        #chart { width: 100%; height: 400px; }
-        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
+        h1 { 
+            font-size: 24px; 
+            margin-bottom: 8px; 
+            color: #8ab4f8; /* A pleasant blue for headings */
+        }
+        h2 { /* For card titles */
+            font-size: 20px;
+            color: #bbccff; /* Slightly different blue for card titles */
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .date { 
+            color: #a0a0a0; /* Muted light color */
+            font-size: 14px; 
+            margin-bottom: 24px; 
+        }
+        .gemini-text { 
+            font-size: 16px; 
+            white-space: pre-line; 
+        }
+        #chart { 
+            width: 100%; 
+            height: 400px; 
+        }
+        .footer { 
+            text-align: center; 
+            font-size: 12px; 
+            color: #707070; /* Very muted light color */
+            margin-top: 20px; 
+        }
         
         /* Macht die Legende auf dem Handy schöner */
-        .legendtext { font-size: 12px !important; }
-        .weather-icon { font-size: 28px; vertical-align: middle; margin-right: 8px; }
-        .availability-status.available { color: green; font-weight: bold; }
-        .availability-status.unavailable { color: red; font-weight: bold; }
+        .legendtext { 
+            font-size: 12px !important; 
+            color: #e0e0e0 !important; /* Ensure legend text is visible */
+        }
+
+        /* Additional styles for new cards */
+        .weather-info {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .weather-icon {
+            font-size: 40px;
+            margin-right: 15px;
+        }
+        .weather-detail {
+            font-size: 14px;
+            color: #a0a0a0;
+        }
+
+        .stock-status {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .stock-status.available {
+            color: #a8e0a8; /* Light green */
+        }
+        .stock-status.unavailable {
+            color: #ff9999; /* Light red */
+        }
+        .stock-link {
+            display: block;
+            margin-top: 10px;
+            color: #8ab4f8;
+            text-decoration: none;
+        }
+        .stock-link:hover {
+            text-decoration: underline;
+        }
+
+        .fuel-analysis-point {
+            margin-bottom: 10px;
+        }
+        .fuel-analysis-point span {
+            font-weight: bold;
+        }
+        .good-time {
+            color: #a8e0a8; /* Light green for good advice */
+        }
+        .bad-time {
+            color: #ff9999; /* Light red for bad advice */
+        }
+        .trend-up {
+            color: #ff9999; /* Red for rising prices */
+        }
+        .trend-down {
+            color: #a8e0a8; /* Green for falling prices */
+        }
+        .trend-stable {
+            color: #ffe082; /* Yellow for stable prices */
+        }
+
+        .traffic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .traffic-table th, .traffic-table td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+        .traffic-table th {
+            background-color: #2a2a2a;
+            color: #bbccff;
+        }
+        .traffic-status.green {
+            color: #a8e0a8;
+        }
+        .traffic-status.yellow {
+            color: #ffe082;
+        }
+        .traffic-status.red {
+            color: #ff9999;
+        }
+        .simulated-data {
+            font-size: 12px;
+            color: #707070;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -39,38 +151,110 @@
     <h1>Guten Morgen!</h1>
     <div class="date">Mittwoch, 25. Februar 2026</div>
 
+    <!-- 1. Wetter Kachel -->
     <div class="card">
-        <div class="gemini-text">
-            <strong>KI-Zusammenfassung:</strong>
-            Analysiere aktuelle Preisentwicklungen...
+        <h2>Wetter in Offenbach am Main</h2>
+        <div class="weather-info">
+            <span class="weather-icon">☀️</span> <!-- Using an emoji as icon for simplicity -->
+            <div>
+                <strong>Aktuell: 12°C, Sonnig</strong><br>
+                <span class="weather-detail">Gefühlt 11°C, Wind NW 10 km/h</span>
+            </div>
         </div>
+        <div class="weather-detail">
+            Heute Nachmittag: Leichte Bewölkung, Max. 15°C<br>
+            Heute Abend: Klar, Min. 5°C
+        </div>
+        <div class="simulated-data">*(Simulierte Daten - keine Echtzeitdaten)*</div>
     </div>
 
-    <!-- Neue Kachel: Wetter -->
+    <!-- 2. Behringer Wing Rack Kachel -->
     <div class="card">
-        <strong>Aktuelles Wetter</strong>
-        <p style="margin-top: 10px; margin-bottom: 5px; font-size: 16px;">
-            <span class="weather-icon">☀️</span> 12°C, Leicht bewölkt
-        </p>
-        <p style="font-size: 14px; color: #6c757d;">
-            (Stand: 25.02.2026, 08:00 Uhr in Berlin)
-        </p>
+        <h2>Behringer Wing Rack (B-Ware)</h2>
+        <div class="stock-status unavailable">Nicht verfügbar</div>
+        <p>Derzeit sind keine B-Ware Artikel des Behringer Wing Rack auf Lager.</p>
+        <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank" class="stock-link">Direkt zu Thomann</a>
+        <div class="simulated-data">*(Simulierte Daten - Status kann variieren und ist nicht live)*</div>
     </div>
 
-    <!-- Neue Kachel: Behringer Wing B-Ware -->
+    <!-- 3. Spritpreis-Analyse Kachel -->
     <div class="card">
-        <strong>Behringer Wing B-Ware (Thomann)</strong>
-        <p style="margin-top: 10px; font-size: 16px;">
-            Status: <span class="availability-status available">Verfügbar!</span>
-        </p>
-        <p style="font-size: 14px; color: #6c757d;">
-            (Letzte Prüfung: 25.02.2026, 08:00 Uhr)
-        </p>
+        <h2>Spritpreis-Analyse</h2>
+        <div class="fuel-analysis-point">
+            <span>Tankanalyse heute:</span> Die Preise für Super E5 schwanken typischerweise stark im Tagesverlauf. Die günstigsten Preise sind oft in den Abendstunden zwischen 18:00 und 22:00 Uhr zu finden. In den Morgenstunden (ca. 6:00 - 9:00 Uhr) und zur Mittagszeit (ca. 12:00 - 14:00 Uhr) sind die Preise meist am höchsten.
+        </div>
+        <div class="fuel-analysis-point">
+            <span>Empfehlung:</span> <span class="good-time">Heute Abend zwischen 19:00 und 21:00 Uhr tanken.</span>
+        </div>
+        <div class="fuel-analysis-point">
+            <span>Preisverlauf letzte Tage:</span> Im Durchschnitt zeigt sich über die letzten Tage ein <span class="trend-stable">eher stabiler Preisverlauf</span> mit den typischen täglichen Schwankungen. Keine signifikanten Auf- oder Abwärtstrends erkennbar.
+            <div style="display: flex; align-items: center; margin-top: 10px;">
+                <span style="font-size: 25px; margin-right: 10px;">📈</span>
+                <span>Preise heute: <span class="trend-up">Anstieg</span> erwartet bis Nachmittag, dann <span class="trend-down">leichter Rückgang</span> am Abend.</span>
+            </div>
+        </div>
+        <div class="simulated-data">*(Analyse basiert auf allgemeinen Preistrends und Verhaltensmustern)*</div>
     </div>
 
+    <!-- Bestehende Kachel für Preisvergleich Tankstellen -->
     <div class="card">
-        <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
+        <h2>Preisvergleich Tankstellen</h2>
         <div id="chart"></div>
+    </div>
+
+    <!-- 4. Verkehrslage Kachel -->
+    <div class="card">
+        <h2>Verkehrslage Offenbach ↔ Darmstadt (Berufsverkehr)</h2>
+        <p>Übersicht der Pendelzeiten in den letzten Tagen zu Stoßzeiten:</p>
+        <table class="traffic-table">
+            <thead>
+                <tr>
+                    <th>Tag</th>
+                    <th>Richtung</th>
+                    <th>Zeit</th>
+                    <th>Fahrtzeit (Min)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Mo, 23.02.</td>
+                    <td>OF → DA</td>
+                    <td>07:30</td>
+                    <td>35-45</td>
+                    <td class="traffic-status yellow">Zähfließend</td>
+                </tr>
+                <tr>
+                    <td>Mo, 23.02.</td>
+                    <td>DA → OF</td>
+                    <td>17:00</td>
+                    <td>40-50</td>
+                    <td class="traffic-status red">Stau</td>
+                </tr>
+                <tr>
+                    <td>Di, 24.02.</td>
+                    <td>OF → DA</td>
+                    <td>07:45</td>
+                    <td>30-35</td>
+                    <td class="traffic-status green">Fließend</td>
+                </tr>
+                <tr>
+                    <td>Di, 24.02.</td>
+                    <td>DA → OF</td>
+                    <td>17:30</td>
+                    <td>35-45</td>
+                    <td class="traffic-status yellow">Zähfließend</td>
+                </tr>
+                <tr>
+                    <td>Mi, 25.02.</td>
+                    <td>OF → DA</td>
+                    <td>08:00</td>
+                    <td>30-40</td>
+                    <td class="traffic-status green">Fließend</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="simulated-data">*(Simulierte Daten - die tatsächliche Verkehrslage kann abweichen)*</div>
     </div>
 
     <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
@@ -78,7 +262,7 @@
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44","2026-02-18 08:00:44","2026-02-18 11:00:44","2026-02-18 14:00:44","2026-02-18 17:00:44","2026-02-18 20:00:44","2026-02-18 23:00:44","2026-02-19 02:00:44","2026-02-19 05:00:44","2026-02-19 08:00:44","2026-02-19 11:00:44","2026-02-19 14:00:44","2026-02-19 17:00:44","2026-02-19 20:00:44","2026-02-19 23:00:44","2026-02-20 02:00:44","2026-02-20 05:00:44","2026-02-20 08:00:44","2026-02-20 11:00:44","2026-02-20 14:00:44","2026-02-20 17:00:44","2026-02-20 20:00:44","2026-02-20 23:00:44","2026-02-21 02:00:44","2026-02-21 05:00:44","2026-02-21 08:00:44","2026-02-21 11:00:44","2026-02-21 14:00:44","2026-02-21 17:00:44","2026-02-21 20:00:44","2026-02-21 23:00:44","2026-02-22 02:00:44","2026-02-22 05:00:44","2026-02-22 08:00:44","2026-02-22 11:00:44","2026-02-22 14:00:44","2026-02-22 17:00:44","2026-02-22 20:00:44","2026-02-22 23:00:44","2026-02-23 02:00:44","2026-02-23 05:00:44","2026-02-23 08:00:44","2026-02-23 11:00:44","2026-02-23 14:00:44","2026-02-23 17:00:44","2026-02-23 20:00:44","2026-02-23 23:00:44","2026-02-24 02:00:44","2026-02-24 05:00:44","2026-02-24 08:00:44","2026-02-24 11:00:44","2026-02-24 14:00:44","2026-02-24 17:00:44","2026-02-24 20:00:44","2026-02-24 23:00:44","2026-02-25 02:00:44","2026-02-25 05:00:44","2026-02-25 08:00:44","2026-02-25 11:00:44","2026-02-25 14:00:44"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779,1.719,1.699,1.739,1.719,1.749,1.769,1.769,1.799,1.809,1.759,1.799,1.719,1.749,1.769,1.769,1.799,1.739,1.739,1.779,1.739,1.769,1.759,1.759,1.789,1.739,1.739,1.779,1.739,1.769,1.739,1.739,1.769,1.839,1.739,1.779,1.739,1.769,1.769,1.769,1.799,1.829,1.739,1.769,1.739,1.769,1.789,1.789,1.819,1.829,1.769,1.789,1.739,1.769,1.789,1.789,1.819,1.819,1.789,1.789],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45","2026-02-18 08:00:45","2026-02-18 11:00:45","2026-02-18 14:00:45","2026-02-18 17:00:45","2026-02-18 20:00:45","2026-02-18 23:00:45","2026-02-19 02:00:45","2026-02-19 05:00:45","2026-02-19 08:00:45","2026-02-19 11:00:45","2026-02-19 14:00:45","2026-02-19 17:00:46","2026-02-19 20:00:45","2026-02-19 23:00:45","2026-02-20 02:00:46","2026-02-20 05:00:45","2026-02-20 08:00:45","2026-02-20 11:00:45","2026-02-20 14:00:45","2026-02-20 17:00:45","2026-02-20 20:00:46","2026-02-20 23:00:46","2026-02-21 02:00:45","2026-02-21 05:00:45","2026-02-21 08:00:46","2026-02-21 11:00:45","2026-02-21 14:00:45","2026-02-21 17:00:46","2026-02-21 20:00:45","2026-02-21 23:00:45","2026-02-22 02:00:45","2026-02-22 05:00:45","2026-02-22 08:00:45","2026-02-22 11:00:46","2026-02-22 14:00:45","2026-02-22 17:00:44","2026-02-22 20:00:45","2026-02-22 23:00:45","2026-02-23 02:00:46","2026-02-23 05:00:45","2026-02-23 08:00:45","2026-02-23 11:00:44","2026-02-23 14:00:45","2026-02-23 17:00:45","2026-02-23 20:00:45","2026-02-23 23:00:45","2026-02-24 02:00:45","2026-02-24 05:00:45","2026-02-24 08:00:45","2026-02-24 11:00:45","2026-02-24 14:00:45","2026-02-24 17:00:45","2026-02-24 20:00:45","2026-02-24 23:00:45","2026-02-25 02:00:44","2026-02-25 05:00:45","2026-02-25 08:00:45","2026-02-25 11:00:45","2026-02-25 14:00:45"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779,1.729,1.719,1.769,1.709,1.769,1.799,1.799,1.799,1.829,1.769,1.809,1.749,1.769,1.799,1.799,1.799,1.759,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.819,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.899,1.749,1.809,1.759,1.789,1.799,1.799,1.799,1.889,1.749,1.819,1.749,1.789,1.819,1.819,1.819,1.829,1.789,1.829,1.759,1.789,1.819,1.819,1.819,1.789,1.769,1.829],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44","2026-02-18 08:00:44","2026-02-18 11:00:44","2026-02-18 14:00:44","2026-02-18 17:00:44","2026-02-18 20:00:44","2026-02-18 23:00:44","2026-02-19 02:00:44","2026-02-19 05:00:44","2026-02-19 08:00:44","2026-02-19 11:00:44","2026-02-19 14:00:44","2026-02-19 17:00:44","2026-02-19 20:00:44","2026-02-19 23:00:44","2026-02-20 02:00:44","2026-02-20 05:00:44","2026-02-20 08:00:44","2026-02-20 11:00:44","2026-02-20 14:00:44","2026-02-20 17:00:44","2026-02-20 20:00:44","2026-02-20 23:00:44","2026-02-21 02:00:44","2026-02-21 05:00:44","2026-02-21 08:00:44","2026-02-21 11:00:44","2026-02-21 14:00:44","2026-02-21 17:00:44","2026-02-21 20:00:44","2026-02-21 23:00:44","2026-02-22 02:00:44","2026-02-22 05:00:44","2026-02-22 08:00:44","2026-02-22 11:00:44","2026-02-22 14:00:44","2026-02-22 17:00:44","2026-02-22 20:00:44","2026-02-22 23:00:44","2026-02-23 02:00:44","2026-02-23 05:00:44","2026-02-23 08:00:44","2026-02-23 11:00:44","2026-02-23 14:00:44","2026-02-23 17:00:44","2026-02-23 20:00:44","2026-02-23 23:00:44","2026-02-24 02:00:44","2026-02-24 05:00:44","2026-02-24 08:00:44","2026-02-24 11:00:44","2026-02-24 14:00:44","2026-02-24 17:00:44","2026-02-24 20:00:44","2026-02-24 23:00:44","2026-02-25 02:00:44","2026-02-25 05:00:44","2026-02-25 08:00:44","2026-02-25 11:00:44","2026-02-25 14:00:44","2026-02-25 17:00:58"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779,1.719,1.699,1.739,1.719,1.749,1.769,1.769,1.799,1.809,1.759,1.799,1.719,1.749,1.769,1.769,1.799,1.739,1.739,1.779,1.739,1.769,1.759,1.759,1.789,1.739,1.739,1.779,1.739,1.769,1.739,1.739,1.769,1.839,1.739,1.779,1.739,1.769,1.769,1.769,1.799,1.829,1.739,1.769,1.739,1.769,1.789,1.789,1.819,1.829,1.769,1.789,1.739,1.769,1.789,1.789,1.819,1.819,1.789,1.789,1.749],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45","2026-02-18 08:00:45","2026-02-18 11:00:45","2026-02-18 14:00:45","2026-02-18 17:00:45","2026-02-18 20:00:45","2026-02-18 23:00:45","2026-02-19 02:00:45","2026-02-19 05:00:45","2026-02-19 08:00:45","2026-02-19 11:00:45","2026-02-19 14:00:45","2026-02-19 17:00:46","2026-02-19 20:00:45","2026-02-19 23:00:45","2026-02-20 02:00:46","2026-02-20 05:00:45","2026-02-20 08:00:45","2026-02-20 11:00:45","2026-02-20 14:00:45","2026-02-20 17:00:45","2026-02-20 20:00:46","2026-02-20 23:00:46","2026-02-21 02:00:45","2026-02-21 05:00:45","2026-02-21 08:00:46","2026-02-21 11:00:45","2026-02-21 14:00:45","2026-02-21 17:00:46","2026-02-21 20:00:45","2026-02-21 23:00:45","2026-02-22 02:00:45","2026-02-22 05:00:45","2026-02-22 08:00:45","2026-02-22 11:00:46","2026-02-22 14:00:45","2026-02-22 17:00:44","2026-02-22 20:00:45","2026-02-22 23:00:45","2026-02-23 02:00:46","2026-02-23 05:00:45","2026-02-23 08:00:45","2026-02-23 11:00:44","2026-02-23 14:00:45","2026-02-23 17:00:45","2026-02-23 20:00:45","2026-02-23 23:00:45","2026-02-24 02:00:45","2026-02-24 05:00:45","2026-02-24 08:00:45","2026-02-24 11:00:45","2026-02-24 14:00:45","2026-02-24 17:00:45","2026-02-24 20:00:45","2026-02-24 23:00:45","2026-02-25 02:00:44","2026-02-25 05:00:45","2026-02-25 08:00:45","2026-02-25 11:00:45","2026-02-25 14:00:45"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779,1.729,1.719,1.769,1.709,1.769,1.799,1.799,1.799,1.829,1.769,1.809,1.749,1.769,1.799,1.799,1.799,1.759,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.819,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.899,1.749,1.809,1.759,1.789,1.799,1.799,1.799,1.889,1.749,1.819,1.749,1.789,1.819,1.819,1.819,1.829,1.789,1.829,1.759,1.789,1.819,1.819,1.819,1.789,1.769,1.829],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -87,23 +271,34 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center'
+                xanchor: 'center',
+                font: {
+                    color: '#e0e0e0' /* Legend font color for dark mode */
+                }
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#eee',
+                gridcolor: '#333333', /* Darker grid lines */
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true
+                autorange: true,
+                tickfont: {
+                    color: '#a0a0a0' /* X-axis tick font color */
+                }
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#eee',
-                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                gridcolor: '#333333', /* Darker grid lines */
                 tickformat: ',.3f', 
-                autorange: true
+                autorange: true,
+                tickfont: {
+                    color: '#a0a0a0' /* Y-axis tick font color */
+                },
+                titlefont: {
+                    color: '#a0a0a0' /* Y-axis title font color */
+                }
             },
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
+            paper_bgcolor: '#1e1e1e', /* Card background for chart */
+            plot_bgcolor: '#1e1e1e', /* Plot background for chart */
             autosize: true
         };
 
