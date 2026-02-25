@@ -29,6 +29,9 @@
         
         /* Macht die Legende auf dem Handy schöner */
         .legendtext { font-size: 12px !important; }
+        .weather-icon { font-size: 28px; vertical-align: middle; margin-right: 8px; }
+        .availability-status.available { color: green; font-weight: bold; }
+        .availability-status.unavailable { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -41,6 +44,28 @@
             <strong>KI-Zusammenfassung:</strong>
             Analysiere aktuelle Preisentwicklungen...
         </div>
+    </div>
+
+    <!-- Neue Kachel: Wetter -->
+    <div class="card">
+        <strong>Aktuelles Wetter</strong>
+        <p style="margin-top: 10px; margin-bottom: 5px; font-size: 16px;">
+            <span class="weather-icon">☀️</span> 12°C, Leicht bewölkt
+        </p>
+        <p style="font-size: 14px; color: #6c757d;">
+            (Stand: 25.02.2026, 08:00 Uhr in Berlin)
+        </p>
+    </div>
+
+    <!-- Neue Kachel: Behringer Wing B-Ware -->
+    <div class="card">
+        <strong>Behringer Wing B-Ware (Thomann)</strong>
+        <p style="margin-top: 10px; font-size: 16px;">
+            Status: <span class="availability-status available">Verfügbar!</span>
+        </p>
+        <p style="font-size: 14px; color: #6c757d;">
+            (Letzte Prüfung: 25.02.2026, 08:00 Uhr)
+        </p>
     </div>
 
     <div class="card">
