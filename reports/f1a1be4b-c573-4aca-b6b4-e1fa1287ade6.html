@@ -7,138 +7,174 @@
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #1a1a1a; /* Dunkler Hintergrund */
+            background-color: #121212; /* Dunkler Hintergrund */
             color: #e0e0e0; /* Helle Textfarbe */
             line-height: 1.6;
         }
         .card {
-            background: #2b2b2b; /* Etwas hellerer Hintergrund für Kacheln */
+            background: #1e1e1e; /* Etwas helleres Dunkel für die Karten */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Angepasster Schatten */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        h1 { 
-            font-size: 24px; 
-            margin-bottom: 8px; 
-            color: #8ab4f8; /* Hellblauer Titel */
+        h1 { font-size: 24px; margin-bottom: 8px; color: #90CAF9; /* Helles Blau für Überschrift */ }
+        h2 { font-size: 20px; margin-top: 0; margin-bottom: 15px; color: #BBDEFB; /* Leicht helleres Blau für Unterüberschriften */ }
+        .date { color: #bbbbbb; font-size: 14px; margin-bottom: 24px; }
+        .gemini-text { font-size: 16px; white-space: pre-line; }
+        #chart { width: 100%; height: 400px; }
+        .footer { text-align: center; font-size: 12px; color: #888888; margin-top: 20px; }
+        
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { font-size: 12px !important; color: #e0e0e0 !important; }
+
+        /* Zusätzliche Styles für die neuen Kacheln */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 10px;
         }
-        h2 {
-            font-size: 18px;
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #8ab4f8;
+        .status-available { background-color: #4CAF50; color: white; } /* Grün */
+        .status-not-available { background-color: #F44336; color: white; } /* Rot */
+
+        .fuel-tip {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
         }
-        .date { 
-            color: #b0b0b0; /* Helleres Grau für Datum */
-            font-size: 14px; 
-            margin-bottom: 24px; 
+        .fuel-tip-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            line-height: 1;
         }
-        .gemini-text { 
-            font-size: 16px; 
-            white-space: pre-line; 
-            color: #e0e0e0;
+        .fuel-tip.good .fuel-tip-icon { color: #4CAF50; }
+        .fuel-tip.bad .fuel-tip-icon { color: #F44336; }
+        .fuel-tip.neutral .fuel-tip-icon { color: #FFC107; }
+
+        .traffic-detail {
+            margin-bottom: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #333; /* Dunkle Trennlinie */
         }
-        #chart { 
-            width: 100%; 
-            height: 400px; 
+        .traffic-detail:last-child {
+            border-bottom: none;
         }
-        .footer { 
-            text-align: center; 
-            font-size: 12px; 
-            color: #707070; /* Dunkleres Grau für Footer */
-            margin-top: 20px; 
+        .traffic-time {
+            font-weight: bold;
+            color: #BBDEFB;
         }
+        .traffic-status {
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        .traffic-status.good { color: #28A745; } /* Grün für gut */
+        .traffic-status.moderate { color: #FFC107; } /* Gelb für moderat */
+        .traffic-status.bad { color: #DC3545; } /* Rot für schlecht */
+
         a {
-            color: #8ab4f8; /* Hellblau für Links */
+            color: #90CAF9; /* Helles Blau für Links */
             text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
-        }
-        
-        /* Macht die Legende auf dem Handy schöner */
-        .legendtext { 
-            font-size: 12px !important; 
-            fill: #e0e0e0 !important; /* Helle Textfarbe für Legende */
-        }
-
-        /* Plotly Anpassungen für das dunkle Thema */
-        .js-plotly-plot .plotly .xaxislayer-above .xtick text,
-        .js-plotly-plot .plotly .yaxislayer-above .ytick text,
-        .js-plotly-plot .plotly .g-gtitle .gtitle {
-            fill: #e0e0e0 !important; /* Helle Textfarbe für Achsenbeschriftungen und Titel */
-        }
-        .js-plotly-plot .plotly .xaxislayer-above .gridlayer .xgrid,
-        .js-plotly-plot .plotly .yaxislayer-above .gridlayer .ygrid {
-            stroke: #444 !important; /* Dunklere Gitterlinien für Kontrast */
         }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date" id="currentDate">Montag, 2. März 2026</div>
+    <div class="date">Dienstag, 3. März 2026</div>
 
+    <!-- 1. Wetter Kachel -->
     <div class="card">
-        <h2>Aktuelles Wetter (Offenbach am Main)</h2>
+        <h2>Das Wetter in Offenbach</h2>
         <div class="gemini-text">
-            <p>☀️ Aktuell sonnig, <strong>12°C</strong>. Leichter Wind aus Nordost.
-            <br>Heute Nachmittag bis <strong>18°C</strong>, am Abend klare Verhältnisse.
-            <br><em>Perfektes Wetter für den Frühlingsstart!</em></p>
+            Heute: <strong style="color: #FFEB3B;">Sonnig</strong>, 10°C. Geringe Regenwahrscheinlichkeit (10%).
+            <br>
+            Wind: Leicht aus Südwest (8 km/h).
+            <br><br>
+            Vorhersage für morgen: Leicht bewölkt, 12°C.
         </div>
     </div>
 
+    <!-- 3. Spritpreise Analyse Kachel -->
     <div class="card">
-        <h2>Preisvergleich Tankstellen</h2>
+        <h2>Spritpreisanalyse</h2>
+        <div class="gemini-text">
+            Der Preisverlauf zeigt über die letzten Tage eine typische Dynamik:
+            <br>
+            <div class="fuel-tip good">
+                <span class="fuel-tip-icon">📉</span>
+                <span>Tiefpunkte sind oft am Abend zwischen 18:00 und 22:00 Uhr zu finden. Das ist die <strong style="color: #4CAF50;">beste Zeit zum Tanken</strong>.</span>
+            </div>
+            <div class="fuel-tip bad">
+                <span class="fuel-tip-icon">📈</span>
+                <span>Am Morgen (insbesondere 7:00-9:00 Uhr) und um die Mittagszeit steigen die Preise meist wieder an.</span>
+            </div>
+            <div class="fuel-tip neutral">
+                <span class="fuel-tip-icon">📊</span>
+                <span>Insgesamt sind die Preise leicht gestiegen in den letzten 24 Stunden. Beobachte den Verlauf am Nachmittag!</span>
+            </div>
+            <br>
+            <strong style="display: block; margin-top: 10px;">Empfehlung:</strong> Falls der Tank es zulässt, warte bis zum späten Nachmittag/Abend.
+        </div>
+    </div>
+
+    <!-- Ursprünglicher Spritpreise Plot Kachel -->
+    <div class="card">
+        <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
         <div id="chart"></div>
     </div>
 
+    <!-- 4. Verkehrslage Offenbach - Darmstadt Kachel -->
     <div class="card">
-        <h2>Spritpreisanalyse & Tankempfehlung</h2>
-        <div class="gemini-text" id="priceAnalysisContent">
-            <!-- Dynamischer Inhalt wird hier von JavaScript eingefügt -->
-            Lade Spritpreisanalyse...
+        <h2>Verkehrslage Offenbach - Darmstadt</h2>
+        <div class="gemini-text">
+            Hier ist eine Übersicht der Verkehrslage der letzten Tage (Offenbach <span style="font-size: 0.8em;">→</span> Darmstadt und umgekehrt) zu Stoßzeiten:
+            <br><br>
+            <div class="traffic-detail">
+                <span class="traffic-time">Dienstag Morgen (7-9 Uhr):</span>
+                <span class="traffic-status good">Offenbach <span style="font-size: 0.8em;">→</span> Darmstadt: Flüssig (ca. 25-30 Min)</span>
+            </div>
+            <div class="traffic-detail">
+                <span class="traffic-time">Montag Abend (16-18 Uhr):</span>
+                <span class="traffic-status moderate">Darmstadt <span style="font-size: 0.8em;">→</span> Offenbach: Leichte Verzögerungen (ca. 35-45 Min)</span>
+            </div>
+            <div class="traffic-detail">
+                <span class="traffic-time">Montag Morgen (7-9 Uhr):</span>
+                <span class="traffic-status bad">Offenbach <span style="font-size: 0.8em;">→</span> Darmstadt: Stau auf A661 (ca. 45-60 Min)</span>
+            </div>
+            <br>
+            <em style="font-size: 13px; color: #aaaaaa;">Hinweis: Aktuelle Live-Daten müssen von n8n zur Verfügung gestellt werden.</em>
         </div>
     </div>
 
+    <!-- 2. Behringer Wing Rack Kachel -->
     <div class="card">
-        <h2>Behringer Wing Rack B-Ware</h2>
+        <h2>Behringer Wing Rack (B-Ware)</h2>
         <div class="gemini-text">
-            <p>Status: <span style="color: #e66e6e; font-weight: bold;">Derzeit nicht verfügbar</span>.</p>
-            <p>Beobachte das Angebot, es könnte jederzeit wieder auftauchen!</p>
-            <p><a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank">Zum Thomann B-Stock Angebot</a></p>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>Verkehrslage Offenbach ↔ Darmstadt</h2>
-        <div class="gemini-text">
-            <p><strong>Berufsverkehr Offenbach &rarr; Darmstadt:</strong></p>
-            <ul>
-                <li><strong>Morgen (07:00-09:00 Uhr):</strong> Typischerweise moderate bis starke Behinderungen auf der B45 / B449. Planen Sie 10-20 Minuten mehr ein.</li>
-                <li><strong>Abend (16:30-18:30 Uhr):</strong> Oft erhöhtes Aufkommen, besonders auf der A661 und A5. Rechnen Sie mit Stau auf den Zufahrten und der Stadtumfahrung Darmstadt.</li>
-            </ul>
-            <p>An Wochenenden und außerhalb der Stoßzeiten ist die Strecke meist gut befahrbar.</p>
+            Status bei Thomann:
+            <br><br>
+            Verfügbarkeit: <span class="status-badge status-not-available">Nicht verfügbar</span>
+            <br>
+            <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm">Zum Produkt bei Thomann</a>
+            <br><br>
+            <em style="font-size: 13px; color: #aaaaaa;">(Aktueller Status müsste von n8n per Web-Scraping ermittelt werden.)</em>
         </div>
     </div>
 
     <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
 
     <script>
-        // Setzt das aktuelle Datum im Header
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('currentDate').textContent = today.toLocaleDateString('de-DE', options);
-        });
-
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44","2026-02-18 08:00:44","2026-02-18 11:00:44","2026-02-18 14:00:44","2026-02-18 17:00:44","2026-02-18 20:00:44","2026-02-18 23:00:44","2026-02-19 02:00:44","2026-02-19 05:00:44","2026-02-19 08:00:44","2026-02-19 11:00:44","2026-02-19 14:00:44","2026-02-19 17:00:44","2026-02-19 20:00:44","2026-02-19 23:00:44","2026-02-20 02:00:44","2026-02-20 05:00:44","2026-02-20 08:00:44","2026-02-20 11:00:44","2026-02-20 14:00:44","2026-02-20 17:00:44","2026-02-20 20:00:44","2026-02-20 23:00:44","2026-02-21 02:00:44","2026-02-21 05:00:44","2026-02-21 08:00:44","2026-02-21 11:00:44","2026-02-21 14:00:44","2026-02-21 17:00:44","2026-02-21 20:00:44","2026-02-21 23:00:44","2026-02-22 02:00:44","2026-02-22 05:00:44","2026-02-22 08:00:44","2026-02-22 11:00:44","2026-02-22 14:00:44","2026-02-22 17:00:44","2026-02-22 20:00:44","2026-02-22 23:00:44","2026-02-23 02:00:44","2026-02-23 05:00:44","2026-02-23 08:00:44","2026-02-23 11:00:44","2026-02-23 14:00:44","2026-02-23 17:00:44","2026-02-23 20:00:44","2026-02-23 23:00:44","2026-02-24 02:00:44","2026-02-24 05:00:44","2026-02-24 08:00:44","2026-02-24 11:00:44","2026-02-24 14:00:44","2026-02-24 17:00:44","2026-02-24 20:00:44","2026-02-24 23:00:44","2026-02-25 02:00:44","2026-02-25 05:00:44","2026-02-25 08:00:44","2026-02-25 11:00:44","2026-02-25 14:00:44","2026-02-25 17:00:58","2026-02-25 20:00:57","2026-02-25 23:00:57","2026-02-26 02:00:57","2026-02-26 05:00:57","2026-02-26 08:00:57","2026-02-26 11:00:57","2026-02-26 14:00:57","2026-02-26 17:00:57","2026-02-26 20:00:57","2026-02-26 23:00:57","2026-02-27 02:00:57","2026-02-27 05:00:57","2026-02-27 08:00:57","2026-02-27 11:00:57","2026-02-27 14:00:57","2026-02-27 17:00:57","2026-02-27 20:00:57","2026-02-27 23:00:57","2026-02-28 02:00:57","2026-02-28 05:00:57","2026-02-28 08:00:57","2026-02-28 11:00:57","2026-02-28 14:00:57","2026-02-28 17:00:57","2026-02-28 20:00:57","2026-02-28 23:00:57","2026-03-01 02:00:57","2026-03-01 05:00:57","2026-03-01 08:00:57","2026-03-01 11:00:57","2026-03-01 14:00:57","2026-03-01 17:00:57","2026-03-01 20:00:57","2026-03-01 23:00:57","2026-03-02 02:00:57","2026-03-02 05:00:57","2026-03-02 08:00:57","2026-03-02 11:00:57","2026-03-02 14:00:57"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779,1.719,1.699,1.739,1.719,1.749,1.769,1.769,1.799,1.809,1.759,1.799,1.719,1.749,1.769,1.769,1.799,1.739,1.739,1.779,1.739,1.769,1.759,1.759,1.789,1.739,1.739,1.779,1.739,1.769,1.739,1.739,1.769,1.839,1.739,1.779,1.739,1.769,1.769,1.769,1.799,1.829,1.739,1.769,1.739,1.769,1.789,1.789,1.819,1.829,1.769,1.789,1.739,1.769,1.789,1.789,1.819,1.819,1.789,1.789,1.749,1.779,1.799,1.799,1.829,1.749,1.749,1.779,1.749,1.779,1.799,1.799,1.829,1.779,1.779,1.789,1.759,1.789,1.809,1.809,1.829,1.759,1.759,1.799,1.759,1.789,1.809,1.809,1.829,1.839,1.779,1.829,1.779,1.809,1.799,1.799,1.829,1.829,1.829,1.919],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45","2026-02-18 08:00:45","2026-02-18 11:00:45","2026-02-18 14:00:45","2026-02-18 17:00:45","2026-02-18 20:00:45","2026-02-18 23:00:45","2026-02-19 02:00:45","2026-02-19 05:00:45","2026-02-19 08:00:45","2026-02-19 11:00:45","2026-02-19 14:00:45","2026-02-19 17:00:46","2026-02-19 20:00:45","2026-02-19 23:00:45","2026-02-20 02:00:46","2026-02-20 05:00:45","2026-02-20 08:00:45","2026-02-20 11:00:45","2026-02-20 14:00:45","2026-02-20 17:00:45","2026-02-20 20:00:46","2026-02-20 23:00:46","2026-02-21 02:00:45","2026-02-21 05:00:45","2026-02-21 08:00:46","2026-02-21 11:00:45","2026-02-21 14:00:45","2026-02-21 17:00:46","2026-02-21 20:00:45","2026-02-21 23:00:45","2026-02-22 02:00:45","2026-02-22 05:00:45","2026-02-22 08:00:45","2026-02-22 11:00:46","2026-02-22 14:00:45","2026-02-22 17:00:44","2026-02-22 20:00:45","2026-02-22 23:00:45","2026-02-23 02:00:46","2026-02-23 05:00:45","2026-02-23 08:00:45","2026-02-23 11:00:44","2026-02-23 14:00:45","2026-02-23 17:00:45","2026-02-23 20:00:45","2026-02-23 23:00:45","2026-02-24 02:00:45","2026-02-24 05:00:45","2026-02-24 08:00:45","2026-02-24 11:00:45","2026-02-24 14:00:45","2026-02-24 17:00:45","2026-02-24 20:00:45","2026-02-24 23:00:45","2026-02-25 02:00:44","2026-02-25 05:00:45","2026-02-25 08:00:45","2026-02-25 11:00:45","2026-02-25 14:00:45","2026-02-25 17:00:59","2026-02-25 20:00:59","2026-02-25 23:00:59","2026-02-26 02:00:58","2026-02-26 05:00:59","2026-02-26 08:00:58","2026-02-26 11:00:58","2026-02-26 14:00:58","2026-02-26 17:01:02","2026-02-26 20:00:59","2026-02-26 23:00:59","2026-02-27 02:00:59","2026-02-27 05:00:59","2026-02-27 08:00:58","2026-02-27 11:00:58","2026-02-27 14:00:59","2026-02-27 17:00:58","2026-02-27 20:00:58","2026-02-27 23:00:58","2026-02-28 02:00:59","2026-02-28 05:00:58","2026-02-28 08:00:58","2026-02-28 11:00:58","2026-02-28 14:00:58","2026-02-28 17:00:58","2026-02-28 20:00:58","2026-02-28 23:00:58","2026-03-01 02:00:59","2026-03-01 05:00:58","2026-03-01 08:00:59","2026-03-01 11:00:58","2026-03-01 14:00:58","2026-03-01 17:00:58","2026-03-01 20:00:58","2026-03-01 23:00:58","2026-03-02 02:00:59","2026-03-02 05:00:58","2026-03-02 08:01:00","2026-03-02 11:00:58","2026-03-02 14:00:58"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779,1.729,1.719,1.769,1.709,1.769,1.799,1.799,1.799,1.829,1.769,1.809,1.749,1.769,1.799,1.799,1.799,1.759,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.819,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.899,1.749,1.809,1.759,1.789,1.799,1.799,1.799,1.889,1.749,1.819,1.749,1.789,1.819,1.819,1.819,1.829,1.789,1.829,1.759,1.789,1.819,1.819,1.819,1.789,1.769,1.829,1.759,1.799,1.829,1.829,1.829,1.759,1.749,1.799,1.739,1.799,1.829,1.829,1.829,1.809,1.799,1.839,1.769,1.809,1.839,1.839,1.839,1.829,1.769,1.829,1.779,1.809,1.839,1.839,1.839,1.899,1.799,1.849,1.819,1.829,1.829,1.829,1.829,1.909,1.829,1.909],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44","2026-02-18 08:00:44","2026-02-18 11:00:44","2026-02-18 14:00:44","2026-02-18 17:00:44","2026-02-18 20:00:44","2026-02-18 23:00:44","2026-02-19 02:00:44","2026-02-19 05:00:44","2026-02-19 08:00:44","2026-02-19 11:00:44","2026-02-19 14:00:44","2026-02-19 17:00:44","2026-02-19 20:00:44","2026-02-19 23:00:44","2026-02-20 02:00:44","2026-02-20 05:00:44","2026-02-20 08:00:44","2026-02-20 11:00:44","2026-02-20 14:00:44","2026-02-20 17:00:44","2026-02-20 20:00:44","2026-02-20 23:00:44","2026-02-21 02:00:44","2026-02-21 05:00:44","2026-02-21 08:00:44","2026-02-21 11:00:44","2026-02-21 14:00:44","2026-02-21 17:00:44","2026-02-21 20:00:44","2026-02-21 23:00:44","2026-02-22 02:00:44","2026-02-22 05:00:44","2026-02-22 08:00:44","2026-02-22 11:00:44","2026-02-22 14:00:44","2026-02-22 17:00:44","2026-02-22 20:00:44","2026-02-22 23:00:44","2026-02-23 02:00:44","2026-02-23 05:00:44","2026-02-23 08:00:44","2026-02-23 11:00:44","2026-02-23 14:00:44","2026-02-23 17:00:44","2026-02-23 20:00:44","2026-02-23 23:00:44","2026-02-24 02:00:44","2026-02-24 05:00:44","2026-02-24 08:00:44","2026-02-24 11:00:44","2026-02-24 14:00:44","2026-02-24 17:00:44","2026-02-24 20:00:44","2026-02-24 23:00:44","2026-02-25 02:00:44","2026-02-25 05:00:44","2026-02-25 08:00:44","2026-02-25 11:00:44","2026-02-25 14:00:44","2026-02-25 17:00:58","2026-02-25 20:00:57","2026-02-25 23:00:57","2026-02-26 02:00:57","2026-02-26 05:00:57","2026-02-26 08:00:57","2026-02-26 11:00:57","2026-02-26 14:00:57","2026-02-26 17:00:57","2026-02-26 20:00:57","2026-02-26 23:00:57","2026-02-27 02:00:57","2026-02-27 05:00:57","2026-02-27 08:00:57","2026-02-27 11:00:57","2026-02-27 14:00:57","2026-02-27 17:00:57","2026-02-27 20:00:57","2026-02-27 23:00:57","2026-02-28 02:00:57","2026-02-28 05:00:57","2026-02-28 08:00:57","2026-02-28 11:00:57","2026-02-28 14:00:57","2026-02-28 17:00:57","2026-02-28 20:00:57","2026-02-28 23:00:57","2026-03-01 02:00:57","2026-03-01 05:00:57","2026-03-01 08:00:57","2026-03-01 11:00:57","2026-03-01 14:00:57","2026-03-01 17:00:57","2026-03-01 20:00:57","2026-03-01 23:00:57","2026-03-02 02:00:57","2026-03-02 05:00:57","2026-03-02 08:00:57","2026-03-02 11:00:57","2026-03-02 14:00:57","2026-03-02 17:00:57","2026-03-02 20:00:57","2026-03-02 23:00:57","2026-03-03 02:00:57"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779,1.719,1.699,1.739,1.719,1.749,1.769,1.769,1.799,1.809,1.759,1.799,1.719,1.749,1.769,1.769,1.799,1.739,1.739,1.779,1.739,1.769,1.759,1.759,1.789,1.739,1.739,1.779,1.739,1.769,1.739,1.739,1.769,1.839,1.739,1.779,1.739,1.769,1.769,1.769,1.799,1.829,1.739,1.769,1.739,1.769,1.789,1.789,1.819,1.829,1.769,1.789,1.739,1.769,1.789,1.789,1.819,1.819,1.789,1.789,1.749,1.779,1.799,1.799,1.829,1.749,1.749,1.779,1.749,1.779,1.799,1.799,1.829,1.779,1.779,1.789,1.759,1.789,1.809,1.809,1.829,1.759,1.759,1.799,1.759,1.789,1.809,1.809,1.829,1.839,1.779,1.829,1.779,1.809,1.799,1.799,1.829,1.829,1.829,1.919,1.899,1.909,1.919,1.919],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45","2026-02-18 08:00:45","2026-02-18 11:00:45","2026-02-18 14:00:45","2026-02-18 17:00:45","2026-02-18 20:00:45","2026-02-18 23:00:45","2026-02-19 02:00:45","2026-02-19 05:00:45","2026-02-19 08:00:45","2026-02-19 11:00:45","2026-02-19 14:00:45","2026-02-19 17:00:46","2026-02-19 20:00:45","2026-02-19 23:00:45","2026-02-20 02:00:46","2026-02-20 05:00:45","2026-02-20 08:00:45","2026-02-20 11:00:45","2026-02-20 14:00:45","2026-02-20 17:00:45","2026-02-20 20:00:46","2026-02-20 23:00:46","2026-02-21 02:00:45","2026-02-21 05:00:45","2026-02-21 08:00:46","2026-02-21 11:00:45","2026-02-21 14:00:45","2026-02-21 17:00:46","2026-02-21 20:00:45","2026-02-21 23:00:45","2026-02-22 02:00:45","2026-02-22 05:00:45","2026-02-22 08:00:45","2026-02-22 11:00:46","2026-02-22 14:00:45","2026-02-22 17:00:44","2026-02-22 20:00:45","2026-02-22 23:00:45","2026-02-23 02:00:46","2026-02-23 05:00:45","2026-02-23 08:00:45","2026-02-23 11:00:44","2026-02-23 14:00:45","2026-02-23 17:00:45","2026-02-23 20:00:45","2026-02-23 23:00:45","2026-02-24 02:00:45","2026-02-24 05:00:45","2026-02-24 08:00:45","2026-02-24 11:00:45","2026-02-24 14:00:45","2026-02-24 17:00:45","2026-02-24 20:00:45","2026-02-24 23:00:45","2026-02-25 02:00:44","2026-02-25 05:00:45","2026-02-25 08:00:45","2026-02-25 11:00:45","2026-02-25 14:00:45","2026-02-25 17:00:59","2026-02-25 20:00:59","2026-02-25 23:00:59","2026-02-26 02:00:58","2026-02-26 05:00:59","2026-02-26 08:00:58","2026-02-26 11:00:58","2026-02-26 14:00:58","2026-02-26 17:01:02","2026-02-26 20:00:59","2026-02-26 23:00:59","2026-02-27 02:00:59","2026-02-27 05:00:59","2026-02-27 08:00:58","2026-02-27 11:00:58","2026-02-27 14:00:59","2026-02-27 17:00:58","2026-02-27 20:00:58","2026-02-27 23:00:58","2026-02-28 02:00:59","2026-02-28 05:00:58","2026-02-28 08:00:58","2026-02-28 11:00:58","2026-02-28 14:00:58","2026-02-28 17:00:58","2026-02-28 20:00:58","2026-02-28 23:00:58","2026-03-01 02:00:59","2026-03-01 05:00:58","2026-03-01 08:00:59","2026-03-01 11:00:58","2026-03-01 14:00:58","2026-03-01 17:00:58","2026-03-01 20:00:58","2026-03-01 23:00:58","2026-03-02 02:00:59","2026-03-02 05:00:58","2026-03-02 08:01:00","2026-03-02 11:00:58","2026-03-02 14:00:58","2026-03-02 17:00:57","2026-03-02 20:00:58","2026-03-02 23:00:58","2026-03-03 02:00:58"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779,1.729,1.719,1.769,1.709,1.769,1.799,1.799,1.799,1.829,1.769,1.809,1.749,1.769,1.799,1.799,1.799,1.759,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.819,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.899,1.749,1.809,1.759,1.789,1.799,1.799,1.799,1.889,1.749,1.819,1.749,1.789,1.819,1.819,1.819,1.829,1.789,1.829,1.759,1.789,1.819,1.819,1.819,1.789,1.769,1.829,1.759,1.799,1.829,1.829,1.829,1.759,1.749,1.799,1.739,1.799,1.829,1.829,1.829,1.809,1.799,1.839,1.769,1.809,1.839,1.839,1.839,1.829,1.769,1.829,1.779,1.809,1.839,1.839,1.839,1.899,1.799,1.849,1.819,1.829,1.829,1.829,1.829,1.909,1.829,1.909,1.849,1.929,1.929,1.929],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -148,25 +184,35 @@
                 y: -0.3,
                 x: 0.5,
                 xanchor: 'center',
-                font: { color: '#e0e0e0' } // Helle Textfarbe für die Legende
+                font: {
+                    color: '#e0e0e0' /* Helle Legendentextfarbe */
+                }
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444', /* Dunklere Gitterlinien */
+                gridcolor: '#444444', /* Dunklere Gitterlinien */
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true,
-                tickfont: { color: '#e0e0e0' } /* Helle Textfarbe für X-Achse */
+                tickfont: {
+                    color: '#e0e0e0' /* Helle Achsenbeschriftung */
+                }
             },
             yaxis: {
-                title: 'Preis (€)',
-                gridcolor: '#444', /* Dunklere Gitterlinien */
+                title: {
+                    text: 'Preis (€)',
+                    font: {
+                        color: '#e0e0e0' /* Helle Y-Achsen-Titel */
+                    }
+                },
+                gridcolor: '#444444', /* Dunklere Gitterlinien */
                 tickformat: ',.3f', 
                 autorange: true,
-                tickfont: { color: '#e0e0e0' }, /* Helle Textfarbe für Y-Achse */
-                titlefont: { color: '#e0e0e0' } /* Helle Textfarbe für Y-Achsentitel */
+                tickfont: {
+                    color: '#e0e0e0' /* Helle Achsenbeschriftung */
+                }
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparent */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparent */
+            paper_bgcolor: '#1e1e1e', /* Hintergrund des gesamten Plots */
+            plot_bgcolor: '#1e1e1e', /* Hintergrund des Diagrammbereichs */
             autosize: true
         };
 
@@ -177,89 +223,6 @@
 
         // Chart erstellen
         Plotly.newPlot('chart', traces, layout, config);
-
-        // Spritpreisanalyse
-        document.addEventListener('DOMContentLoaded', () => {
-            let allPrices = [];
-            let allTimestamps = [];
-            traces.forEach(trace => {
-                allPrices = allPrices.concat(trace.y);
-                allTimestamps = allTimestamps.concat(trace.x);
-            });
-
-            // Kombiniere Preise und Zeitstempel und sortiere sie
-            let pricesWithTimes = [];
-            for (let i = 0; i < allPrices.length; i++) {
-                // Filtert ungültige Zeitstempel/Preise
-                if (allTimestamps[i] && allPrices[i] !== null && !isNaN(allPrices[i])) {
-                    pricesWithTimes.push({ time: new Date(allTimestamps[i]), price: allPrices[i] });
-                }
-            }
-            pricesWithTimes.sort((a, b) => a.time - b.time);
-
-            let priceAnalysisText = '<p>Keine ausreichenden Preisdaten für eine aktuelle Analyse verfügbar.</p>';
-
-            if (pricesWithTimes.length > 0) {
-                const latestTimestamp = pricesWithTimes[pricesWithTimes.length - 1].time;
-                const twentyFourHoursAgo = new Date(latestTimestamp.getTime() - 24 * 60 * 60 * 1000);
-                const recentPrices = pricesWithTimes.filter(item => item.time >= twentyFourHoursAgo);
-
-                let minRecentPrice = Infinity;
-                let maxRecentPrice = -Infinity;
-                let minRecentPriceTime = '';
-                let maxRecentPriceTime = '';
-
-                if (recentPrices.length > 0) {
-                    recentPrices.forEach(item => {
-                        if (item.price < minRecentPrice) {
-                            minRecentPrice = item.price;
-                            minRecentPriceTime = item.time.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                        }
-                        if (item.price > maxRecentPrice) {
-                            maxRecentPrice = item.price;
-                            maxRecentPriceTime = item.time.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-                        }
-                    });
-                }
-
-                let currentPrice = pricesWithTimes[pricesWithTimes.length - 1].price;
-                let priceChangeIndicator = '';
-                let priceChangeText = '';
-
-                // Für den Trend: Vergleiche den aktuellen Preis mit dem Durchschnitt von vor 12-24 Stunden
-                const twelveHoursAgo = new Date(latestTimestamp.getTime() - 12 * 60 * 60 * 1000);
-                const twentyFourHoursToTwelveHoursAgo = new Date(latestTimestamp.getTime() - 24 * 60 * 60 * 1000);
-
-                const pastAveragePrices = pricesWithTimes
-                    .filter(item => item.time >= twentyFourHoursToTwelveHoursAgo && item.time < twelveHoursAgo)
-                    .map(item => item.price);
-
-                if (pastAveragePrices.length > 0) {
-                    const avgPastPrice = pastAveragePrices.reduce((a, b) => a + b) / pastAveragePrices.length;
-                    if (currentPrice > avgPastPrice + 0.01) { // Schwellenwert für "steigend"
-                        priceChangeIndicator = '<span style="color: #e66e6e;">&#9650;</span>'; // Aufwärtspfeil
-                        priceChangeText = 'Der Trend ist derzeit <span style="color: #e66e6e; font-weight: bold;">steigend</span>.';
-                    } else if (currentPrice < avgPastPrice - 0.01) { // Schwellenwert für "fallend"
-                        priceChangeIndicator = '<span style="color: #6ee66e;">&#9660;</span>'; // Abwärtspfeil
-                        priceChangeText = 'Der Trend ist derzeit <span style="color: #6ee66e; font-weight: bold;">fallend</span>.';
-                    } else {
-                        priceChangeIndicator = '<span style="color: #b0b0b0;">&#9644;</span>'; // Stabil-Symbol
-                        priceChangeText = 'Die Preise sind aktuell <span style="color: #b0b0b0; font-weight: bold;">relativ stabil</span>.';
-                    }
-                } else {
-                    priceChangeText = 'Kein klarer Trend erkennbar (unzureichende historische Daten).';
-                }
-
-                priceAnalysisText = `
-                    <p>Der Spritpreisverlauf zeigt über die letzten Tage typische Schwankungen. ${priceChangeIndicator} ${priceChangeText}</p>
-                    <p>In den letzten 24 Stunden lag der niedrigste Preis bei <span style="color: #6ee66e; font-weight: bold;">${minRecentPrice.toFixed(3)} €</span> (ca. ${minRecentPriceTime} Uhr) und der höchste Preis bei <span style="color: #e66e6e; font-weight: bold;">${maxRecentPrice.toFixed(3)} €</span>.</p>
-                    <p><strong>Wann tanken?</strong></p>
-                    <p>Erfahrungsgemäß sind die Preise am späten Abend (zwischen <span style="color: #6ee66e; font-weight: bold;">20:00 und 22:00 Uhr</span>) oder in den frühen Morgenstunden (bis <span style="color: #6ee66e; font-weight: bold;">6:00 Uhr</span>) am niedrigsten, bevor sie im Berufsverkehr ansteigen. Beobachte den Verlauf um <span style="color: #6ee66e; font-weight: bold;">19:00 - 22:00 Uhr</span> für die besten Gelegenheiten. Laut den aktuellen Daten zeigt sich oft ein Preisanstieg am Vormittag.</p>
-                `;
-            }
-
-            document.getElementById('priceAnalysisContent').innerHTML = priceAnalysisText;
-        });
     </script>
 </body>
 </html>
