@@ -3,104 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Täglicher Bericht</title>
+    <title>Dein Tagesbericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #121212; /* Dunkler Hintergrund */
-            color: #e0e0e0; /* Heller Text */
+            background-color: #f8f9fa; /* Light background for the overall page */
+            color: #212529;
             line-height: 1.6;
         }
+        h1 { 
+            font-size: 24px; 
+            margin-bottom: 8px; 
+            color: #1a73e8; /* Google Blue */
+        }
+        .date { 
+            color: #6c757d; /* Grey text */
+            font-size: 14px; 
+            margin-bottom: 24px; 
+        }
+        .gemini-text { 
+            font-size: 16px; 
+            white-space: pre-line; 
+        }
+        #chart { 
+            width: 100%; 
+            height: 400px; 
+        }
+        .footer { 
+            text-align: center; 
+            font-size: 12px; 
+            color: #adb5bd; 
+            margin-top: 20px; 
+        }
+        
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { 
+            font-size: 12px !important; 
+        }
+
+        /* Standard light card for existing content (e.g., fuel prices) */
         .card {
-            background: #212121; /* Etwas helleres Dunkel für Kacheln */
+            background: white;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Dunklerer Schatten */
-            color: #e0e0e0; /* Sicherstellen, dass der Text in Kacheln hell ist */
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #8ab4f8; /* Heller blauer Akzent für h1 */
-        }
-        .date {
-            color: #9e9e9e; /* Helleres Grau für Datum */
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .gemini-text {
-            font-size: 16px;
-            white-space: pre-line;
-        }
-        #chart {
-            width: 100%;
-            height: 400px;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #757575; /* Dunkleres Grau für den Footer */
-            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        /* Weather Card Specific Styles */
+        /* Dark weather card styling for the new sections */
         .weather-card {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            text-align: left;
+            background: #2c2c2c; /* Dark background */
+            color: #f8f9fa; /* Light text for readability */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* More prominent shadow for dark card */
+            display: flex; /* For flexible layout of content inside */
+            align-items: center; /* Vertically align items */
+            gap: 15px; /* Space between icon and text */
         }
-        .weather-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .weather-city {
+        .weather-card h2 {
             font-size: 20px;
+            margin: 0; /* Remove default margin for h2 */
+            color: #bb86fc; /* Accent color for the city title (e.g., a purple shade) */
+            line-height: 1.2;
+        }
+        .weather-card .weather-icon {
+            font-size: 48px; /* Large icon for visual prominence */
+            line-height: 1; 
+            color: #ffe082; /* Yellowish color for weather icons (sun/clouds) */
+            min-width: 48px; /* Ensure icon has enough space and aligns well */
+            text-align: center;
+        }
+        .weather-card .weather-details {
+            flex-grow: 1; /* Allows details to take up available horizontal space */
+        }
+        .weather-card .temperature {
+            font-size: 36px;
             font-weight: bold;
-            color: #8ab4f8; /* Akzentfarbe für den Stadtnamen */
+            margin: 5px 0; /* Add some vertical margin to separate from title/description */
+            line-height: 1;
         }
-        .weather-icon {
-            width: 50px;
-            height: 50px;
-            flex-shrink: 0; /* Verhindert, dass das Icon schrumpft */
+        .weather-card .description {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #a0a0a0; /* Lighter grey for descriptive text */
         }
-        .weather-details {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            flex-wrap: wrap; /* Erlaubt Umbruch auf kleineren Bildschirmen */
-        }
-        .temperature {
-            font-size: 32px;
-            font-weight: bold;
-            color: #e0e0e0; /* Hauptfarbe für die Temperatur */
-        }
-        .description {
-            font-size: 18px;
-            color: #bdbdbd;
-            flex-grow: 1; /* Lässt die Beschreibung den restlichen Platz einnehmen */
-        }
-        .feels-like, .min-max {
+        .weather-card .min-max {
             font-size: 14px;
-            color: #9e9e9e;
-        }
-
-        /* Plotly specific colors for dark theme */
-        .legendtext {
-            font-size: 12px !important;
-            color: #e0e0e0 !important; /* Legendentext hell */
-        }
-        .modebar-container { /* Für Plotly Modebar, falls sie angezeigt wird */
-            background-color: #303030 !important;
-            color: #e0e0e0 !important;
-        }
-        .plotly .crisp { /* Plotly Texte allgemein */
-            fill: #e0e0e0 !important;
+            color: #a0a0a0; /* Lighter grey for min/max temperatures */
         }
     </style>
 </head>
@@ -110,39 +104,25 @@
     <div class="date">Donnerstag, 5. März 2026</div>
 
     <!-- Wetter für Frankfurt -->
-    <div class="card weather-card">
-        <div class="weather-header">
-            <strong class="weather-city">Wetter Frankfurt</strong>
-            <!-- Icon URL wird von n8n/API dynamisch eingefügt -->
-            <img src="https://openweathermap.org/img/wn/04d.png" alt="Wetter-Icon" class="weather-icon">
-        </div>
+    <div class="weather-card">
+        <div class="weather-icon" id="frankfurt-weather-icon">☀️</div> <!-- Beispiel: Unicode-Sonnensymbol -->
         <div class="weather-details">
-            <!-- Temperatur wird von n8n/API dynamisch eingefügt -->
-            <span class="temperature">15°C</span>
-            <!-- Beschreibung wird von n8n/API dynamisch eingefügt -->
-            <span class="description">Leicht bewölkt</span>
+            <h2 id="frankfurt-city">Wetter für Frankfurt</h2>
+            <div class="temperature" id="frankfurt-temp">10°C</div>
+            <div class="description" id="frankfurt-description">Leicht bewölkt</div>
+            <div class="min-max" id="frankfurt-min-max">Min: 6°C • Max: 12°C</div>
         </div>
-        <!-- Gefühlt und Min/Max werden von n8n/API dynamisch eingefügt -->
-        <div class="feels-like">Gefühlt 14°C</div>
-        <div class="min-max">Min: 10°C / Max: 18°C</div>
     </div>
 
     <!-- Wetter für Offenbach Bieber -->
-    <div class="card weather-card">
-        <div class="weather-header">
-            <strong class="weather-city">Wetter Offenbach Bieber</strong>
-            <!-- Icon URL wird von n8n/API dynamisch eingefügt -->
-            <img src="https://openweathermap.org/img/wn/01d.png" alt="Wetter-Icon" class="weather-icon">
-        </div>
+    <div class="weather-card">
+        <div class="weather-icon" id="bieber-weather-icon">🌤️</div> <!-- Beispiel: Unicode-Teilweise bewölkt-Symbol -->
         <div class="weather-details">
-            <!-- Temperatur wird von n8n/API dynamisch eingefügt -->
-            <span class="temperature">16°C</span>
-            <!-- Beschreibung wird von n8n/API dynamisch eingefügt -->
-            <span class="description">Sonnig</span>
+            <h2 id="bieber-city">Wetter für Offenbach Bieber</h2>
+            <div class="temperature" id="bieber-temp">9°C</div>
+            <div class="description" id="bieber-description">Meist sonnig</div>
+            <div class="min-max" id="bieber-min-max">Min: 5°C • Max: 11°C</div>
         </div>
-        <!-- Gefühlt und Min/Max werden von n8n/API dynamisch eingefügt -->
-        <div class="feels-like">Gefühlt 15°C</div>
-        <div class="min-max">Min: 11°C / Max: 19°C</div>
     </div>
 
     <div class="card">
@@ -164,32 +144,23 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center',
-                font: {
-                    color: '#e0e0e0' /* Legendentextfarbe im dunklen Design */
-                }
+                xanchor: 'center'
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#424242', /* Dunklere Gitterlinien */
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true,
-                color: '#e0e0e0' /* X-Achsenbeschriftung hell */
+                autorange: true
             },
             yaxis: {
-                title: {
-                    text: 'Preis (€)',
-                    font: {
-                        color: '#e0e0e0' /* Y-Achsen-Titel hell */
-                    }
-                },
-                gridcolor: '#424242', /* Dunklere Gitterlinien */
-                tickformat: ',.3f',
-                autorange: true,
-                color: '#e0e0e0' /* Y-Achsenbeschriftung hell */
+                title: 'Preis (€)',
+                gridcolor: '#eee',
+                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                tickformat: ',.3f', 
+                autorange: true
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparent, nimmt Kachel-Hintergrund an */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparent, nimmt Kachel-Hintergrund an */
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
             autosize: true
         };
 
