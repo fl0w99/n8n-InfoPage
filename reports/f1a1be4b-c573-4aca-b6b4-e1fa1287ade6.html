@@ -3,165 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Tägliches Dashboard</title>
+    <title>Dein Tankstellen-Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #1a1a1a; /* Dark background */
-            color: #e0e0e0; /* Light text */
+            background-color: #f8f9fa;
+            color: #212529;
             line-height: 1.6;
         }
         .card {
-            background: #2c2c2c; /* Slightly lighter dark for cards */
+            background: white;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Stronger shadow for contrast */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #8ab4f8; /* Light blue for main heading */
-        }
-        h2 { /* Style for card headings */
-            font-size: 18px;
-            margin-bottom: 12px;
-            color: #e0e0e0;
-        }
-        .date {
-            color: #9aa0a6; /* Muted light color */
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .gemini-text {
-            font-size: 16px;
-            white-space: pre-line;
-        }
-        #chart {
-            width: 100%;
-            height: 400px;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #9aa0a6; /* Muted light color */
-            margin-top: 20px;
-        }
+        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
+        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
+        .gemini-text { font-size: 16px; white-space: pre-line; }
+        #chart { width: 100%; height: 400px; }
+        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
+        
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { font-size: 12px !important; }
 
-        /* Makes the legend on mobile look nicer */
-        .legendtext {
-            font-size: 12px !important;
-            color: #e0e0e0 !important; /* Ensure legend text is light */
+        /* Dark Card Styling für neue Kacheln */
+        .dark-card {
+            background: #2c2c2e; /* Dunkler Hintergrund */
+            color: #e0e0e0; /* Heller Text */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
-
-        /* Additional styles for new cards */
-        .weather-info {
+        .dark-card h2 {
+            color: #8ab4f8; /* Kontrastfarbe für Überschriften */
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
+        }
+        .dark-card p {
             margin-bottom: 10px;
         }
-        .weather-icon {
-            font-size: 40px;
-            margin-right: 15px;
-            vertical-align: middle;
-            line-height: 1; /* Adjust line height for icon */
+        .dark-card a {
+            color: #8ab4f8; /* Linkfarbe */
+            text-decoration: none;
         }
-        .weather-details {
-            font-size: 16px;
+        .dark-card a:hover {
+            text-decoration: underline;
+        }
+        /* Wetter-spezifische Stile */
+        .weather-icon {
+            font-size: 32px;
+            margin-right: 10px;
+            vertical-align: middle;
         }
         .weather-temp {
             font-size: 28px;
             font-weight: bold;
-            line-height: 1;
+            vertical-align: middle;
+            color: white; /* Temperatur hervorheben */
         }
+        .weather-description {
+            font-size: 16px;
+            margin-top: 5px;
+            color: #b0b0b0;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        /* Verfügbarkeits-Status Stile */
         .availability-status {
             font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
             display: inline-block;
             margin-top: 10px;
+            font-size: 16px;
         }
         .status-available {
-            background-color: #4CAF50; /* Green */
+            background-color: #4CAF50; /* Grün */
             color: white;
         }
         .status-unavailable {
-            background-color: #f44336; /* Red */
+            background-color: #F44336; /* Rot */
             color: white;
         }
-        .price-recommendation {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #3a3f4a; /* Slightly different background for analysis */
-            border: 1px solid #444; /* Subtle border */
+        /* Spritpreis-Analyse Stile */
+        .fuel-analysis-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
         }
-        .price-recommendation h3 {
-            font-size: 16px;
-            margin-bottom: 8px;
-            color: #8ab4f8;
+        .fuel-analysis-point .indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            margin-top: 4px;
         }
-        .price-good { color: #69F0AE; font-weight: bold; } /* Green accent */
-        .price-bad { color: #FF8A80; font-weight: bold; } /* Red accent */
-        .price-neutral { color: #FFD54F; } /* Amber accent */
-        a {
-            color: #8ab4f8; /* Link color for dark mode */
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        .indicator.good { background-color: #4CAF50; } /* Grün */
+        .indicator.bad { background-color: #F44336; }  /* Rot */
+        .indicator.neutral { background-color: #FFC107; } /* Gelb/Orange */
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Donnerstag, 5. März 2026</div>
+    <div class="date">Freitag, 6. März 2026</div>
 
-    <!-- 1. Wetter Kachel -->
-    <div class="card">
-        <h2>Das Wetter in Berlin</h2>
-        <div class="weather-info">
-            <span class="weather-icon">🌧️</span>
-            <div>
-                <div class="weather-temp">8°C</div>
-                <div class="weather-details">Meist bewölkt mit leichtem Regen</div>
-            </div>
-        </div>
-        <p>Tiefst: 5°C, Höchst: 10°C • Wind: 15 km/h N</p>
-    </div>
-
-    <!-- 2. Spritpreisanalyse Kachel -->
-    <div class="card">
-        <h2>Spritpreisanalyse für Super E5</h2>
-        <p>Die Spritpreise zeigen über den Beobachtungszeitraum vom 12. bis 21. Februar 2026 eine deutliche Volatilität mit täglichen Zyklen. Der niedrigste beobachtete Preis lag bei <span class="price-good">1.699 €</span>, der höchste bei <span class="price-bad">1.859 €</span>.</p>
-        <div class="price-recommendation">
-            <h3>Wann tanken?</h3>
-            <p>Generell lässt sich beobachten, dass die Preise oft morgens nach einer Preisanhebung am höchsten sind und im Laufe des Nachmittags und Abends sinken. Die <span class="price-good">günstigsten Tankzeiten</span> liegen typischerweise zwischen <span class="price-good">18:00 und 22:00 Uhr</span>. Am Morgen und Vormittag (ca. 6:00-10:00 Uhr) sind die Preise meist am höchsten.</p>
-        </div>
-        <p style="margin-top: 15px;">Aktueller Trend: <span class="price-neutral">Die Preise sind momentan leicht fallend am Nachmittag und stabil am Abend.</span></p>
-    </div>
-
-    <!-- Ursprüngliche Plot Kachel -->
-    <div class="card">
-        <h2>Preisvergleich Tankstellen</h2>
-        <div id="chart"></div>
-    </div>
-
-    <!-- 3. Behringer Wing Rack B-Ware Kachel -->
-    <div class="card">
-        <h2>Behringer Wing Rack B-Ware</h2>
-        <p>Status bei Thomann:</p>
-        <span class="availability-status status-unavailable">Nicht verfügbar</span>
-        <p style="margin-top: 10px;">
-            <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank">Direkt zum Produkt bei Thomann</a>
+    <!-- Wetter-Kachel -->
+    <div class="dark-card">
+        <h2><span class="weather-icon">&#x26C5;</span> Das Wetter heute</h2>
+        <p>
+            <span class="weather-temp">18°C</span>
+            <span class="weather-description">Leicht bewölkt</span>
+        </p>
+        <p>
+            Tagsüber: <strong>22°C</strong>, sonnig mit leichter Brise.<br>
+            Nachts: <strong>10°C</strong>, klar.
+        </p>
+        <p style="font-size: 14px; color: #b0b0b0; margin-top: 20px;">
+            (Daten simuliert, n8n würde hier aktuelle Wetterdaten einfügen)
         </p>
     </div>
 
-    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB und externe APIs (simuliert)</div>
+    <!-- Spritpreise Plot -->
+    <div class="card">
+        <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
+        <div id="chart"></div>
+    </div>
+
+    <!-- Spritpreisanalyse-Kachel -->
+    <div class="dark-card">
+        <h2>Spritpreis-Analyse</h2>
+        <p>Basierend auf den letzten Daten zeigt sich folgendes Muster:</p>
+        
+        <div class="fuel-analysis-point">
+            <div class="indicator good"></div>
+            <span><strong>Beste Tankzeit:</strong> Oft zwischen <span style="color: #A5D6A7;"><strong>19:00 und 22:00 Uhr</strong></span>. Hier sind die Preise in der Regel am niedrigsten, wie man an den wiederkehrenden Tiefpunkten in den Abendstunden sehen kann.</span>
+        </div>
+        <div class="fuel-analysis-point">
+            <div class="indicator good"></div>
+            <span>Auch der <span style="color: #A5D6A7;"><strong>frühe Morgen (ca. 05:00 - 07:00 Uhr)</strong></span> kann manchmal günstig sein, aber die Preise steigen danach schnell an.</span>
+        </div>
+        <div class="fuel-analysis-point">
+            <div class="indicator bad"></div>
+            <span><strong>Ungünstige Tankzeit:</strong> Vermeide die Mittagszeit und den späten Vormittag (<span style="color: #EF9A9A;"><strong>ca. 09:00 - 14:00 Uhr</strong></span>), da die Preise hier tendenziell am höchsten sind.</span>
+        </div>
+        
+        <p style="margin-top: 20px;">
+            <strong style="color: #FFC107;">Preisverlauf:</strong> Die Preise unterliegen starken täglichen Schwankungen mit einem typischen "Wellental" am Abend. Achte auf diese Muster, um bares Geld zu sparen!
+        </p>
+    </div>
+
+    <!-- Behringer Wing Rack B-Ware Kachel -->
+    <div class="dark-card">
+        <h2>Behringer Wing Rack B-Ware</h2>
+        <p>Status bei Thomann:</p>
+        <div class="availability-status status-available">Verfügbar!</div>
+        <p style="margin-top: 15px;">
+            <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank">
+                Direkt zu Thomann
+            </a>
+        </p>
+        <p style="font-size: 14px; color: #b0b0b0; margin-top: 20px;">
+            (Status simuliert, n8n würde hier den tatsächlichen Verfügbarkeits-Check durchführen)
+        </p>
+    </div>
+
+    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
 
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
@@ -175,40 +191,24 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center',
-                font: {
-                    color: '#e0e0e0' /* Legend font color for dark mode */
-                }
+                xanchor: 'center'
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444', /* Dark grid lines */
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true,
-                tickfont: {
-                    color: '#e0e0e0' /* X-axis label color for dark mode */
-                }
+                autorange: true
             },
             yaxis: {
-                title: {
-                    text: 'Preis (€)',
-                    font: {
-                        color: '#e0e0e0' /* Y-axis title color for dark mode */
-                    }
-                },
-                gridcolor: '#444', /* Dark grid lines */
-                tickformat: ',.3f',
-                autorange: true,
-                tickfont: {
-                    color: '#e0e0e0' /* Y-axis label color for dark mode */
-                }
+                title: 'Preis (€)',
+                gridcolor: '#eee',
+                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                tickformat: ',.3f', 
+                autorange: true
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparent, uses body background */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparent, uses body background */
-            autosize: true,
-            font: {
-                color: '#e0e0e0' /* Default font color for chart elements for dark mode */
-            }
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            autosize: true
         };
 
         const config = {
