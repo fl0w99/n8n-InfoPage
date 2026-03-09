@@ -10,111 +10,113 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #f8f9fa; /* Leichter Hintergrund für die gesamte Seite */
-            color: #212529; /* Standardtextfarbe für helle Bereiche */
+            background-color: #121212; /* Dunkler Hintergrund */
+            color: #e0e0e0; /* Helle Textfarbe */
             line-height: 1.6;
         }
         .card {
-            background: white;
+            background: #1e1e1e; /* Dunklere Kartenfarbe */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            color: #212529; /* Standardtextfarbe für helle Kacheln */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Dunklerer Schatten */
         }
-        .card-dark {
-            background: #2c3e50; /* Dunkler Hintergrund für Wetterkacheln */
-            color: #ecf0f1;     /* Heller Text für Wetterkacheln */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Etwas stärkerer Schatten für dunkle Kacheln */
+        h1 { 
+            font-size: 24px; 
+            margin-bottom: 8px; 
+            color: #bb86fc; /* Akzentfarbe für Überschriften */
         }
-        .card-dark h2, .card-dark strong {
-            color: #ecf0f1; /* Stellt sicher, dass Überschriften/fetter Text in dunklen Kacheln auch hell sind */
+        .date { 
+            color: #a0a0a0; 
+            font-size: 14px; 
+            margin-bottom: 24px; 
         }
-        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
-        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
-        .gemini-text { font-size: 16px; white-space: pre-line; }
-        #chart { width: 100%; height: 400px; }
-        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
+        .gemini-text { 
+            font-size: 16px; 
+            white-space: pre-line; 
+        }
+        #chart { 
+            width: 100%; 
+            height: 400px; 
+        }
+        .footer { 
+            text-align: center; 
+            font-size: 12px; 
+            color: #707070; 
+            margin-top: 20px; 
+        }
         
-        /* Spezifische Styles für Wetterkarten */
-        .weather-header {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block; /* Macht strong zu einem Block-Element für margin */
-        }
-        .weather-content {
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { font-size: 12px !important; }
+
+        /* Spezifische Stile für Wetterkarten */
+        .weather-card-content {
             display: flex;
             align-items: center;
             gap: 15px;
         }
         .weather-icon {
-            width: 70px;
-            height: 70px;
-            object-fit: contain;
-            flex-shrink: 0; /* Verhindert, dass das Icon schrumpft */
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+            object-fit: contain; /* Stellt sicher, dass das Bild passt */
         }
-        .weather-details-group {
+        .weather-details {
             flex-grow: 1;
         }
-        .weather-current-temp {
-            font-size: 2.5em;
-            font-weight: bold;
-            line-height: 1;
+        .weather-temp {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #e0e0e0;
+        }
+        .weather-description {
+            font-size: 1.1em;
+            color: #a0a0a0;
             margin-bottom: 5px;
         }
-        .weather-condition {
-            font-size: 1.1em;
-            margin-bottom: 8px;
-            color: #bdc3c7; /* Leicht gedämpft für bessere Lesbarkeit */
-        }
-        .weather-min-max, .weather-wind, .weather-humidity {
+        .weather-minmax {
             font-size: 0.9em;
-            margin-top: 4px;
-            color: #bdc3c7;
+            color: #a0a0a0;
+            margin-top: 5px;
         }
-        .weather-min-max span, .weather-wind span, .weather-humidity span {
-            font-weight: bold;
-            color: #ecf0f1; /* Hebt die Werte hervor */
-        }
-        
-        /* Macht die Legende auf dem Handy schöner */
-        .legendtext { font-size: 12px !important; }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Sonntag, 8. März 2026</div>
+    <div class="date">Montag, 9. März 2026</div>
 
-    <!-- Wetterkarte Frankfurt -->
-    <div class="card card-dark">
-        <strong class="weather-header">Wetter Frankfurt</strong>
-        <div class="weather-content">
-            <!-- Platzhalter für Wetter-Icon. n8n würde hier die URL einfügen (z.B. von OpenWeatherMap) -->
-            <img src="{{weather_frankfurt_icon_url}}" alt="Wetter-Symbol" class="weather-icon">
-            <div class="weather-details-group">
-                <div class="weather-current-temp">{{weather_frankfurt_temp}}°C</div>
-                <div class="weather-condition">{{weather_frankfurt_condition}}</div>
-                <div class="weather-min-max">Tiefst: <span>{{weather_frankfurt_min_temp}}°C</span> | Höchst: <span>{{weather_frankfurt_max_temp}}°C</span></div>
-                <div class="weather-wind">Wind: <span>{{weather_frankfurt_wind_speed}} km/h</span></div>
-                <div class="weather-humidity">Luftfeuchte: <span>{{weather_frankfurt_humidity}}%</span></div>
+    <!-- Wetter-Kachel für Frankfurt -->
+    <div class="card">
+        <strong style="display: block; margin-bottom: 15px;">Wetter in Frankfurt</strong>
+        <div class="weather-card-content">
+            <!-- Platzhalter für Wetter-Icon. n8n muss hier die URL injizieren -->
+            <img src="{{FRANKFURT_ICON_URL}}" alt="Wetter-Icon" class="weather-icon">
+            <div class="weather-details">
+                <!-- Platzhalter für aktuelle Temperatur. n8n muss hier den Wert injizieren -->
+                <div class="weather-temp">{{FRANKFURT_CURRENT_TEMP}}°C</div>
+                <!-- Platzhalter für Wetterbeschreibung. n8n muss hier den Text injizieren -->
+                <div class="weather-description">{{FRANKFURT_DESCRIPTION}}</div>
+                <!-- Platzhalter für Min/Max-Temperaturen. n8n muss hier die Werte injizieren -->
+                <div class="weather-minmax">Tiefst: {{FRANKFURT_MIN_TEMP}}°C • Höchst: {{FRANKFURT_MAX_TEMP}}°C</div>
             </div>
         </div>
     </div>
 
-    <!-- Wetterkarte Offenbach Bieber -->
-    <div class="card card-dark">
-        <strong class="weather-header">Wetter Offenbach Bieber</strong>
-        <div class="weather-content">
-            <!-- Platzhalter für Wetter-Icon. n8n würde hier die URL einfügen -->
-            <img src="{{weather_offenbach_bieber_icon_url}}" alt="Wetter-Symbol" class="weather-icon">
-            <div class="weather-details-group">
-                <div class="weather-current-temp">{{weather_offenbach_bieber_temp}}°C</div>
-                <div class="weather-condition">{{weather_offenbach_bieber_condition}}</div>
-                <div class="weather-min-max">Tiefst: <span>{{weather_offenbach_bieber_min_temp}}°C</span> | Höchst: <span>{{weather_offenbach_bieber_max_temp}}°C</span></div>
-                <div class="weather-wind">Wind: <span>{{weather_offenbach_bieber_wind_speed}} km/h</span></div>
-                <div class="weather-humidity">Luftfeuchte: <span>{{weather_offenbach_bieber_humidity}}%</span></div>
+    <!-- Wetter-Kachel für Offenbach Bieber -->
+    <div class="card">
+        <strong style="display: block; margin-bottom: 15px;">Wetter in Offenbach Bieber</strong>
+        <div class="weather-card-content">
+            <!-- Platzhalter für Wetter-Icon. n8n muss hier die URL injizieren -->
+            <img src="{{OFFENBACH_ICON_URL}}" alt="Wetter-Icon" class="weather-icon">
+            <div class="weather-details">
+                <!-- Platzhalter für aktuelle Temperatur. n8n muss hier den Wert injizieren -->
+                <div class="weather-temp">{{OFFENBACH_CURRENT_TEMP}}°C</div>
+                <!-- Platzhalter für Wetterbeschreibung. n8n muss hier den Text injizieren -->
+                <div class="weather-description">{{OFFENBACH_DESCRIPTION}}</div>
+                <!-- Platzhalter für Min/Max-Temperaturen. n8n muss hier die Werte injizieren -->
+                <div class="weather-minmax">Tiefst: {{OFFENBACH_MIN_TEMP}}°C • Höchst: {{OFFENBACH_MAX_TEMP}}°C</div>
             </div>
         </div>
     </div>
@@ -138,24 +140,28 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center'
+                xanchor: 'center',
+                font: { color: '#e0e0e0' } /* Farbe der Legendentexte */
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#eee',
+                gridcolor: '#333', /* Dunklere Gitterlinien */
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true
+                autorange: true,
+                tickfont: { color: '#e0e0e0' } /* Farbe der X-Achsenbeschriftung */
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#eee',
-                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                gridcolor: '#333', /* Dunklere Gitterlinien */
                 tickformat: ',.3f', 
-                autorange: true
+                autorange: true,
+                tickfont: { color: '#e0e0e0' }, /* Farbe der Y-Achsenbeschriftung */
+                titlefont: { color: '#e0e0e0' } /* Farbe des Y-Achsentitels */
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparenter Hintergrund für den Plot-Bereich */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparenter Hintergrund für das Diagramm selbst */
-            autosize: true
+            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparenter Hintergrund der Plot-Fläche */
+            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparenter Hintergrund des Diagramms */
+            autosize: true,
+            font: { color: '#e0e0e0' } /* Globale Schriftfarbe für Plotly-Elemente */
         };
 
         const config = {
