@@ -3,121 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein täglicher Bericht</title>
+    <title>Dein Tankstellen-Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #121212; /* Dark background */
-            color: #e0e0e0; /* Light text */
+            background-color: #f8f9fa; /* Light background for the overall page */
+            color: #212529;
             line-height: 1.6;
         }
         .card {
-            background: #1e1e1e; /* Slightly lighter dark background for cards */
+            background: white; /* Default light card for fuel prices */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Darker shadow */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #8ab4f8; /* Soft blue for heading */
-        }
-        .date {
-            color: #a0a0a0; /* Lighter gray for date */
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .gemini-text {
-            font-size: 16px;
-            white-space: pre-line;
-            color: #e0e0e0; /* Ensure visibility */
-        }
-        #chart { width: 100%; height: 400px; }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #606060; /* Darker gray for footer */
-            margin-top: 20px;
-        }
-
-        /* Weather Card Specific Styles */
+        /* Dark Theme for Weather Cards */
         .weather-card {
+            background: #2c2c2e; /* Dark background */
+            color: #f8f8f8;      /* Light text */
+            padding: 15px 20px;  /* Slightly different padding */
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            margin-bottom: 15px; /* Adjust margin */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Darker shadow */
         }
         .weather-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #333; /* Subtle separator */
-            padding-bottom: 10px;
             margin-bottom: 10px;
         }
-        .weather-header .city-name {
+        .weather-location {
             font-size: 20px;
-            font-weight: bold;
-            color: #8ab4f8; /* Blue for city names */
+            font-weight: 600;
+            color: #90caf9; /* A light blue accent for location name */
+            margin: 0;
         }
-        .weather-header .temperature {
+        .weather-current-temp {
             font-size: 28px;
-            font-weight: bold;
-            color: #e0e0e0;
+            font-weight: 700;
+            color: #e0e0e0; /* Off-white for current temperature */
         }
         .weather-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            font-size: 15px;
-        }
-        .weather-details > span {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 15px;
         }
         .weather-icon {
-            font-size: 22px; /* For emojis */
-            width: 28px; /* Fixed width for alignment */
-            text-align: center;
-            flex-shrink: 0; /* Prevent icon from shrinking */
+            width: 60px; /* Larger icon */
+            height: 60px;
+            /* Optional: Add a slight filter for better visibility on dark background if needed */
+            /* filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); */
+        }
+        .weather-description {
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+        }
+        .condition-text {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .temp-range span {
+            font-size: 14px;
+            color: #bbbbbb; /* Lighter grey for min/max */
+            margin-right: 10px;
+        }
+        .temp-range span:last-child {
+             margin-right: 0;
         }
 
+        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
+        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
+        .gemini-text { font-size: 16px; white-space: pre-line; }
+        #chart { width: 100%; height: 400px; }
+        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
+        
         /* Macht die Legende auf dem Handy schöner */
-        .legendtext { font-size: 12px !important; color: #e0e0e0 !important; }
+        .legendtext { font-size: 12px !important; }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            .weather-current-temp {
+                font-size: 24px;
+            }
+            .weather-location {
+                font-size: 18px;
+            }
+            .weather-icon {
+                width: 50px;
+                height: 50px;
+            }
+            .weather-description {
+                font-size: 14px;
+            }
+            .temp-range span {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Montag, 9. März 2026</div>
+    <!-- Placeholder for current date, to be injected by n8n -->
+    <div class="date">{{$json.currentDate}}</div>
 
+    <!-- Wetterkarte für Frankfurt -->
     <div class="card weather-card">
         <div class="weather-header">
-            <span class="city-name">Wetter in Frankfurt</span>
-            <span class="temperature">15°C</span>
+            <h2 class="weather-location">Wetter Frankfurt</h2>
+            <span class="weather-current-temp">{{$json.frankfurt.currentTemp}}°C</span>
         </div>
         <div class="weather-details">
-            <span><span class="weather-icon">☁️</span>Leicht bewölkt</span>
-            <span><span class="weather-icon">🌡️</span>Gefühlt: 13°C</span>
-            <span><span class="weather-icon">🌬️</span>Wind: 12 km/h</span>
-            <span><span class="weather-icon">💧</span>Luftfeuchtigkeit: 65%</span>
+            <!-- Example icon URL, to be injected by n8n -->
+            <img src="{{$json.frankfurt.iconUrl}}" alt="{{$json.frankfurt.conditionText}}" class="weather-icon">
+            <div class="weather-description">
+                <span class="condition-text">{{$json.frankfurt.conditionText}}</span>
+                <div class="temp-range">
+                    <span>Max: {{$json.frankfurt.maxTemp}}°C</span>
+                    <span>Min: {{$json.frankfurt.minTemp}}°C</span>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Wetterkarte für Offenbach Bieber -->
     <div class="card weather-card">
         <div class="weather-header">
-            <span class="city-name">Wetter in Offenbach Bieber</span>
-            <span class="temperature">14°C</span>
+            <h2 class="weather-location">Wetter Offenbach Bieber</h2>
+            <span class="weather-current-temp">{{$json.offenbach.currentTemp}}°C</span>
         </div>
         <div class="weather-details">
-            <span><span class="weather-icon">🌧️</span>Leichter Regen</span>
-            <span><span class="weather-icon">🌡️</span>Gefühlt: 11°C</span>
-            <span><span class="weather-icon">💨</span>Wind: 18 km/h</span>
-            <span><span class="weather-icon">💦</span>Luftfeuchtigkeit: 80%</span>
+            <!-- Example icon URL, to be injected by n8n -->
+            <img src="{{$json.offenbach.iconUrl}}" alt="{{$json.offenbach.conditionText}}" class="weather-icon">
+            <div class="weather-description">
+                <span class="condition-text">{{$json.offenbach.conditionText}}</span>
+                <div class="temp-range">
+                    <span>Max: {{$json.offenbach.maxTemp}}°C</span>
+                    <span>Min: {{$json.offenbach.minTemp}}°C</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -140,37 +170,23 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center',
-                font: {
-                    color: '#e0e0e0' /* Legend text color for dark theme */
-                }
+                xanchor: 'center'
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444444', /* Darker grid lines for dark theme */
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true,
-                tickfont: {
-                    color: '#e0e0e0' /* X-axis labels color for dark theme */
-                }
+                autorange: true
             },
             yaxis: {
-                title: {
-                    text: 'Preis (€)',
-                    font: {
-                        color: '#e0e0e0' /* Y-axis title color for dark theme */
-                    }
-                },
-                gridcolor: '#444444', /* Darker grid lines for dark theme */
+                title: 'Preis (€)',
+                gridcolor: '#eee',
                 // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
-                tickformat: ',.3f',
-                autorange: true,
-                tickfont: {
-                    color: '#e0e0e0' /* Y-axis labels color for dark theme */
-                }
+                tickformat: ',.3f', 
+                autorange: true
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparent, card background will show */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparent, card background will show */
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
             autosize: true
         };
 
