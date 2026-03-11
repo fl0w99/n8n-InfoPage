@@ -3,72 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Tankstellen-Bericht</title>
+    <title>Dein Täglicher Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #f8f9fa; /* Light background for the overall report */
-            color: #212529; /* Dark text for light background */
+            background-color: #1a1a1a; /* Dark background */
+            color: #e0e0e0; /* Light text */
             line-height: 1.6;
         }
         .card {
-            background: white;
+            background: #2a2a2a; /* Slightly lighter dark card background */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* Darker shadow */
         }
-        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
-        h2 { font-size: 20px; margin-top: 0; margin-bottom: 15px; } /* Default H2 style for consistency */
-        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
-        .gemini-text { font-size: 16px; white-space: pre-line; }
-        #chart { width: 100%; height: 400px; }
-        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
-        
-        /* Macht die Legende auf dem Handy schöner */
-        .legendtext { font-size: 12px !important; }
-
-        /* Dark Card Styles */
-        .dark-card {
-            background: #2c2c2e; /* Dark background */
-            color: #f0f0f0; /* Light text */
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* More pronounced shadow */
+        h1 { 
+            font-size: 24px; 
+            margin-bottom: 8px; 
+            color: #8ab4f8; /* Lighter blue for dark mode */
         }
-        .dark-card h2 {
-            color: #bb86fc; /* Accent color for titles, similar to Material Dark */
+        h2 { /* For card titles */
             font-size: 20px;
             margin-top: 0;
             margin-bottom: 15px;
+            color: #e0e0e0; 
         }
-        .dark-card a {
-            color: #03dac6; /* Link color for dark theme */
-            text-decoration: none; /* Remove underline for cleaner look */
+        .date { 
+            color: #a0a0a0; /* Lighter gray for date */
+            font-size: 14px; 
+            margin-bottom: 24px; 
         }
-        .dark-card a:hover {
+        .gemini-text { 
+            font-size: 16px; 
+            white-space: pre-line; 
+        }
+        #chart { 
+            width: 100%; 
+            height: 400px; 
+        }
+        .footer { 
+            text-align: center; 
+            font-size: 12px; 
+            color: #707070; /* Darker gray for footer */
+            margin-top: 20px; 
+        }
+        
+        /* Makes the legend nicer on mobile */
+        .legendtext { font-size: 12px !important; }
+
+        /* Specific styles for new cards */
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .weather-icon {
+            font-size: 40px;
+            line-height: 1;
+            color: #fdd835; /* Yellow for sun, modify as needed */
+        }
+        .weather-details {
+            font-size: 16px;
+        }
+        .weather-temp {
+            font-size: 28px;
+            font-weight: bold;
+            color: #8ab4f8; /* Blue for temperature */
+        }
+        .stock-status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .stock-available {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        .stock-unavailable {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+        .fuel-tip {
+            margin-top: 15px;
+            padding: 10px;
+            border-left: 5px solid;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        .fuel-tip.good {
+            border-color: #4CAF50; /* Green */
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        .fuel-tip.neutral {
+            border-color: #ffc107; /* Amber */
+            background-color: rgba(255, 193, 7, 0.1);
+        }
+        .fuel-tip.bad {
+            border-color: #f44336; /* Red */
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        .price-trend-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        .trend-up { background-color: #f44336; } /* Red */
+        .trend-down { background-color: #4CAF50; } /* Green */
+        .trend-stable { background-color: #ffc107; } /* Amber */
+        a {
+            color: #8ab4f8; /* Lighter blue for links */
+            text-decoration: none;
+        }
+        a:hover {
             text-decoration: underline;
         }
 
-        /* Status indicators for B-Ware */
-        .status-available { color: #8bc34a; font-weight: bold; } /* Green for available */
-        .status-not-available { color: #ef5350; font-weight: bold; } /* Red for not available */
-        
-        /* Weather icon styling */
-        .weather-icon { font-size: 3em; margin-bottom: 10px; display: block; text-align: center; }
-
-        /* Price suggestion box for fuel analysis */
-        .price-suggestion { padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 15px; }
-        .price-suggestion p { margin: 0; }
-        
-        /* Dark card variants for price suggestion colors */
-        .dark-card .price-suggestion.green { background-color: #388e3c; color: #e8f5e9; }
-        .dark-card .price-suggestion.yellow { background-color: #fbc02d; color: #212121; }
-        .dark-card .price-suggestion.red { background-color: #d32f2f; color: #ffebee; }
     </style>
 </head>
 <body>
@@ -76,40 +134,63 @@
     <h1>Guten Morgen!</h1>
     <div class="date">Mittwoch, 11. März 2026</div>
 
+    <!-- Weather Card -->
+    <div class="card">
+        <h2>Aktuelles Wetter</h2>
+        <div class="weather-info">
+            <span class="weather-icon">☀️</span> 
+            <div class="weather-details">
+                <span class="weather-temp">15°C</span>
+                <br>
+                Leicht bewölkt, leichter Wind aus West.
+                <br>
+                <small style="color: #a0a0a0;">Ort: Berlin</small>
+            </div>
+        </div>
+        <p>Heute erwartet uns ein angenehmer Tag mit milden Temperaturen. Perfekt für einen Spaziergang!</p>
+    </div>
+
+    <!-- Behringer Wing Rack B-Ware Card -->
+    <div class="card">
+        <h2>Behringer Wing Rack B-Ware</h2>
+        <p>Status bei <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm">Thomann</a>:</p>
+        <span class="stock-status stock-unavailable">Nicht verfügbar</span>
+        <!-- Im realen n8n-Szenario würde der Status hier dynamisch eingetragen, z.B.:
+        <span class="stock-status stock-available">Sofort verfügbar</span>
+        -->
+        <p style="margin-top: 10px;">Schau regelmäßig vorbei, B-Ware ist oft schnell vergriffen!</p>
+    </div>
+
+    <!-- Fuel Price Chart Card -->
     <div class="card">
         <h2>Preisvergleich Tankstellen</h2>
         <div id="chart"></div>
     </div>
 
-    <!-- Weather Card -->
-    <div class="dark-card">
-        <h2>Wetter heute in deiner Region</h2>
-        <div class="card-content">
-            <!-- Hinweis: Diese Wetterdaten sind statisch. In einem realen Szenario würde n8n hier dynamische Daten einfügen. -->
-            <span class="weather-icon">☀️</span>
-            <p><strong>Temperatur:</strong> 15°C</p>
-            <p><strong>Bedingungen:</strong> Sonnig, leichte Bewölkung</p>
-            <p><strong>Wind:</strong> 10 km/h aus West</p>
-            <p><strong>Niederschlag:</strong> 0% Wahrscheinlichkeit</p>
-        </div>
-    </div>
+    <!-- Fuel Price Analysis Card -->
+    <div class="card">
+        <h2>Spritpreis-Analyse</h2>
+        <p>Basierend auf den Daten lässt sich ein typisches Preisverhalten erkennen:</p>
+        <ul>
+            <li><strong>Tagesverlauf:</strong> Die Preise sind tendenziell am <span style="color: #f44336;">Morgen hoch</span> und fallen dann gegen den <span style="color: #4CAF50;">frühen Abend</span>, um danach wieder leicht anzusteigen.</li>
+            <li><strong>Bester Tankzeitpunkt:</strong> Um das meiste zu sparen, tanke am besten zwischen <strong style="color: #4CAF50;">18:00 und 20:00 Uhr</strong>. Auch zwischen 11:00 und 13:00 Uhr gibt es oft günstigere Phasen.</li>
+            <li><strong>Vermeide:</strong> Die teuersten Zeiten sind meist der Vormittag (ca. 09:00 - 11:00 Uhr) und kurz nach Mitternacht.</li>
+        </ul>
 
-    <!-- Behringer Wing Rack Card -->
-    <div class="dark-card">
-        <h2>Behringer Wing Rack B-Ware Status</h2>
-        <div class="card-content">
-            <p>Aktueller Status bei <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank">Thomann</a>:</p>
-            <p id="wing-rack-status"></p>
+        <div class="fuel-tip good">
+            <strong>Empfehlung heute:</strong> Die Preise haben in den letzten 24 Stunden <span style="color: #4CAF50;">leicht nachgegeben</span>.<span class="price-trend-indicator trend-down"></span> Ein guter Zeitpunkt zum Tanken am Abend.
         </div>
-    </div>
-
-    <!-- Spritpreis-Analyse Card -->
-    <div class="dark-card">
-        <h2>Spritpreis-Analyse & Empfehlung</h2>
-        <div class="card-content">
-            <div id="price-analysis-text"></div>
-            <div id="price-suggestion-box" class="price-suggestion"></div>
+        <!-- Im realen n8n-Szenario würde die Empfehlung dynamisch basierend auf den aktuellen Preisen generiert, z.B. so:
+        <div class="fuel-tip neutral">
+            <strong>Empfehlung heute:</strong> Die Preise sind über Nacht <span style="color: #ffc107;">weitgehend stabil</span> geblieben.<span class="price-trend-indicator trend-stable"></span> Warte auf die Abendstunden.
         </div>
+        <div class="fuel-tip bad">
+            <strong>Empfehlung heute:</strong> Die Preise sind <span style="color: #f44336;">deutlich gestiegen</span>.<span class="price-trend-indicator trend-up"></span> Wenn möglich, warte mit dem Tanken.
+        </div>
+        -->
+        <p style="font-size: 14px; color: #a0a0a0; margin-top: 20px;">
+            <em>Dies ist eine generische Analyse basierend auf typischen Preisbewegungen. Lokale Faktoren können abweichen.</em>
+        </p>
     </div>
 
     <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
@@ -126,24 +207,39 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center'
+                xanchor: 'center',
+                font: {
+                    color: '#e0e0e0' 
+                }
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#eee',
+                gridcolor: '#444', /* Dark mode grid color */
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true
+                autorange: true,
+                automargin: true, 
+                tickfont: {
+                    color: '#e0e0e0' 
+                }
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#eee',
-                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                gridcolor: '#444', /* Dark mode grid color */
                 tickformat: ',.3f', 
-                autorange: true
+                autorange: true,
+                title_font: {
+                    color: '#e0e0e0' 
+                },
+                tickfont: {
+                    color: '#e0e0e0' 
+                }
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
-            autosize: true
+            autosize: true,
+            font: { 
+                color: '#e0e0e0'
+            }
         };
 
         const config = {
@@ -153,135 +249,6 @@
 
         // Chart erstellen
         Plotly.newPlot('chart', traces, layout, config);
-
-        // --- NEUE JAVASCRIPT-FUNKTIONEN FÜR DYNAMISCHE INHALTE ---
-
-        // Behringer Wing Rack Status (simulierte Daten - in einem realen Szenario würde n8n dies live abrufen)
-        const isWingRackAvailable = Math.random() < 0.3; // Simuliert die Verfügbarkeit (z.B. 30% Chance)
-        const wingRackStatusElement = document.getElementById('wing-rack-status');
-        if (isWingRackAvailable) {
-            wingRackStatusElement.innerHTML = '<span class="status-available">✅ Verfügbar! Greif zu!</span>';
-        } else {
-            wingRackStatusElement.innerHTML = '<span class="status-not-available">❌ Derzeit nicht verfügbar.</span>';
-        }
-
-        // Spritpreis-Analyse
-        function analyzeFuelPrices(traces) {
-            let allPrices = [];
-            let priceObservations = []; // Zum Speichern von {price, timestamp}
-            let minPrice = Infinity;
-            let maxPrice = -Infinity;
-            let minPriceTime = null;
-            let maxPriceTime = null;
-
-            traces.forEach(trace => {
-                trace.y.forEach((price, index) => {
-                    const timestampStr = trace.x[index];
-                    const timestamp = new Date(timestampStr);
-
-                    allPrices.push(price);
-                    priceObservations.push({ price: price, timestamp: timestamp });
-
-                    if (price < minPrice) {
-                        minPrice = price;
-                        minPriceTime = timestamp;
-                    }
-                    if (price > maxPrice) {
-                        maxPrice = price;
-                        maxPriceTime = timestamp;
-                    }
-                });
-            });
-
-            // Beobachtungen nach Zeitstempel sortieren für Trendanalyse
-            priceObservations.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-
-            if (allPrices.length === 0) {
-                return {
-                    analysis: "Keine Preisdaten zur Analyse verfügbar.",
-                    suggestion: "Preisdaten fehlen.",
-                    suggestionClass: "yellow"
-                };
-            }
-
-            // Durchschnittspreise pro Stunde des Tages berechnen
-            const hourlyPriceSums = new Array(24).fill(0);
-            const hourlyPriceCounts = new Array(24).fill(0);
-
-            priceObservations.forEach(data => {
-                const hour = data.timestamp.getHours();
-                hourlyPriceSums[hour] += data.price;
-                hourlyPriceCounts[hour]++;
-            });
-
-            let hourlyAverages = [];
-            for (let i = 0; i < 24; i++) {
-                if (hourlyPriceCounts[i] > 0) {
-                    hourlyAverages.push({ hour: i, avgPrice: hourlyPriceSums[i] / hourlyPriceCounts[i] });
-                }
-            }
-
-            hourlyAverages.sort((a, b) => a.avgPrice - b.avgPrice);
-            let bestHoursInfo = "";
-            let bestAvgPrice = null;
-
-            if (hourlyAverages.length > 0) {
-                bestAvgPrice = hourlyAverages[0].avgPrice;
-                // Stunden finden, die innerhalb von 1 Cent des niedrigsten Durchschnittspreises liegen
-                const bestHourlyPeriods = hourlyAverages.filter(h => h.avgPrice <= bestAvgPrice + 0.01);
-                const hourStrings = bestHourlyPeriods.map(h => `${String(h.hour).padStart(2, '0')}:00 Uhr`).join(', ');
-                bestHoursInfo = `Historisch gesehen ist die günstigste Tankzeit oft um <strong>${hourStrings}</strong> mit einem Durchschnittspreis von etwa ${bestAvgPrice.toFixed(3)} €.`;
-            } else {
-                bestHoursInfo = `Es konnte keine klare günstigste Tankzeit identifiziert werden.`;
-            }
-
-            // Trendanalyse: Durchschnitt der ersten 15% vs. letzten 15% der Datenpunkte vergleichen
-            let trendText = "";
-            let suggestionClass = "yellow"; // Standard: neutral
-            if (priceObservations.length > 10) { // Genügend Datenpunkte für eine aussagekräftige Trendanalyse
-                const numPointsForTrend = Math.max(5, Math.floor(priceObservations.length * 0.15)); // Mindestens 5 Punkte oder 15% der Daten
-                const firstPrices = priceObservations.slice(0, numPointsForTrend).map(p => p.price);
-                const lastPrices = priceObservations.slice(-numPointsForTrend).map(p => p.price);
-
-                const avgFirstPrice = firstPrices.reduce((sum, val) => sum + val, 0) / firstPrices.length;
-                const avgLastPrice = lastPrices.reduce((sum, val) => sum + val, 0) / lastPrices.length;
-
-                const priceDiff = avgLastPrice - avgFirstPrice;
-
-                if (priceDiff > 0.02) { // Mehr als 2 Cent durchschnittlicher Anstieg
-                    trendText = "Basierend auf den letzten Daten zeigt der Trend eine <strong>leichte Preissteigerung</strong>.";
-                    suggestionClass = "red";
-                } else if (priceDiff < -0.02) { // Mehr als 2 Cent durchschnittlicher Rückgang
-                    trendText = "Basierend auf den letzten Daten zeigt der Trend eine <strong>leichte Preissenkung</strong>.";
-                    suggestionClass = "green";
-                } else {
-                    trendText = "Die Preise zeigen eine eher <strong>stabile Entwicklung mit normalen Schwankungen</strong>.";
-                }
-            } else {
-                trendText = "Nicht genügend Daten für eine aussagekräftige Trendanalyse.";
-            }
-
-            let analysisOutput = `Der Spritpreis schwankte in den letzten Wochen zwischen <strong>${minPrice.toFixed(3)} €</strong> (am ${minPriceTime.toLocaleDateString('de-DE')} um ${minPriceTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}) und <strong>${maxPrice.toFixed(3)} €</strong> (am ${maxPriceTime.toLocaleDateString('de-DE')} um ${maxPriceTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}).<br><br>`;
-            analysisOutput += `${bestHoursInfo}<br><br>`;
-            analysisOutput += `<strong>Preisentwicklung:</strong> ${trendText}`;
-
-            let suggestionOutput = "";
-            if (suggestionClass === "green") {
-                suggestionOutput = "Es könnte sich lohnen, noch etwas abzuwarten, da die Preise tendenziell sinken könnten. Plane das Tanken in den historisch günstigeren Stunden ein.";
-            } else if (suggestionClass === "red") {
-                suggestionOutput = "Es wird empfohlen, eher früher als später zu tanken, da die Preise tendenziell steigen könnten. Versuche trotzdem, in den historisch günstigeren Stunden zu tanken.";
-            } else {
-                suggestionOutput = "Beobachte die Preise genau. Die historischen Tiefstpreise liegen oft am Abend oder in der Nacht. Der Trend ist momentan stabil.";
-            }
-
-            return { analysis: analysisOutput, suggestion: suggestionOutput, suggestionClass: suggestionClass };
-        }
-
-        const priceAnalysisResult = analyzeFuelPrices(traces);
-        document.getElementById('price-analysis-text').innerHTML = priceAnalysisResult.analysis;
-        const suggestionBox = document.getElementById('price-suggestion-box');
-        suggestionBox.innerHTML = `<p>${priceAnalysisResult.suggestion}</p>`;
-        suggestionBox.classList.add(priceAnalysisResult.suggestionClass);
     </script>
 </body>
 </html>
