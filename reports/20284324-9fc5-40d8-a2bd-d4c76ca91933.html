@@ -15,117 +15,109 @@
             line-height: 1.6;
         }
         .card {
-            background: #282828; /* Slightly lighter dark for cards */
+            background: #2a2a2a; /* Slightly lighter dark card background */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Stronger shadow for dark theme */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Darker shadow for dark theme */
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #8ab4f8; /* Highlight color for dark theme */
-        }
-        .date {
-            color: #a0a0a0; /* Muted date color */
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .gemini-text {
-            font-size: 16px;
-            white-space: pre-line;
-        }
-        #chart {
-            width: 100%;
-            height: 400px;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #808080; /* Muted footer color */
-            margin-top: 20px;
-        }
-
+        h1 { font-size: 24px; margin-bottom: 8px; color: #4a90e2; } /* Blue for title */
+        h2 { font-size: 20px; margin: 0; color: #e0e0e0; }
+        .date { color: #9e9e9e; font-size: 14px; margin-bottom: 24px; } /* Medium grey */
+        .gemini-text { font-size: 16px; white-space: pre-line; }
+        #chart { width: 100%; height: 400px; }
+        .footer { text-align: center; font-size: 12px; color: #9e9e9e; margin-top: 20px; } /* Medium grey */
+        
         /* Macht die Legende auf dem Handy schöner */
-        .legendtext {
-            font-size: 12px !important;
-            color: #e0e0e0 !important; /* Ensure legend text is visible on dark background */
-        }
+        .legendtext { font-size: 12px !important; }
 
         /* Weather Card Specific Styles */
-        .weather-card .weather-city {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #8ab4f8; /* Highlighted city name */
-            font-weight: bold;
+        .weather-card {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .weather-main {
+        .weather-header {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            border-bottom: 1px solid #3a3a3a; /* Darker border */
+            padding-bottom: 10px;
         }
         .weather-icon {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            /* Consider applying a filter if icons are designed for light backgrounds */
-            /* filter: invert(0.9) hue-rotate(180deg) saturate(2); */
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
         }
-        .weather-temp {
-            font-size: 36px;
+        .weather-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .temperature {
+            font-size: 32px;
             font-weight: bold;
+            margin: 0;
             color: #e0e0e0;
         }
-        .weather-description {
-            font-size: 16px;
-            color: #a0a0a0;
-            margin-bottom: 8px;
+        .description {
+            font-size: 18px;
+            margin: 0;
+            color: #9e9e9e; /* Medium grey */
         }
-        .weather-min-max {
+        .min-max, .feels-like {
             font-size: 14px;
-            color: #b0b0b0;
+            margin: 0;
+            color: #707070; /* Slightly darker grey for less emphasis */
         }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">{{report_date}}</div> <!-- Beispiel: Dienstag, 24. Oktober 2024 -->
+    <!-- n8n: Datum hier einfügen, z.B. "Donnerstag, 12. März 2026" -->
+    <div class="date">Donnerstag, 12. März 2026</div>
 
     <!-- Wetter für Frankfurt -->
     <div class="card weather-card">
-        <strong class="weather-city">Wetter in Frankfurt</strong>
-        <div class="weather-main">
-            <!-- n8n kann hier dynamisch eine URL für das Wettersymbol einfügen -->
-            <img src="{{weather_frankfurt_icon_url}}" alt="{{weather_frankfurt_description}}" class="weather-icon">
-            <span class="weather-temp">{{weather_frankfurt_temp}}°C</span>
+        <div class="weather-header">
+            <h2 class="weather-city">Wetter für Frankfurt</h2>
+            <!-- n8n: Wetter-Icon URL hier einfügen, z.B. "https://openweathermap.org/img/wn/01d@2x.png" -->
+            <img src="https://openweathermap.org/img/wn/01d@2x.png" alt="Wetter Icon" class="weather-icon">
         </div>
-        <div class="weather-description">
-            {{weather_frankfurt_description}}
-        </div>
-        <div class="weather-min-max">
-            Min: {{weather_frankfurt_min}}°C &bull; Max: {{weather_frankfurt_max}}°C
+        <div class="weather-details">
+            <!-- n8n: Aktuelle Temperatur hier einfügen, z.B. "15°C" -->
+            <p class="temperature">15°C</p>
+            <!-- n8n: Wetterbeschreibung hier einfügen, z.B. "Sonnig" -->
+            <p class="description">Sonnig</p>
+            <!-- n8n: Min/Max Temperatur hier einfügen, z.B. "Min: 10°C / Max: 18°C" -->
+            <p class="min-max">Min: 10°C / Max: 18°C</p>
+            <!-- n8n: Gefühlte Temperatur hier einfügen, z.B. "Gefühlt: 14°C" -->
+            <p class="feels-like">Gefühlt: 14°C</p>
         </div>
     </div>
 
     <!-- Wetter für Offenbach Bieber -->
     <div class="card weather-card">
-        <strong class="weather-city">Wetter in Offenbach Bieber</strong>
-        <div class="weather-main">
-            <!-- n8n kann hier dynamisch eine URL für das Wettersymbol einfügen -->
-            <img src="{{weather_offenbach_icon_url}}" alt="{{weather_offenbach_description}}" class="weather-icon">
-            <span class="weather-temp">{{weather_offenbach_temp}}°C</span>
+        <div class="weather-header">
+            <h2 class="weather-city">Wetter für Offenbach Bieber</h2>
+            <!-- n8n: Wetter-Icon URL hier einfügen, z.B. "https://openweathermap.org/img/wn/04d@2x.png" -->
+            <img src="https://openweathermap.org/img/wn/04d@2x.png" alt="Wetter Icon" class="weather-icon">
         </div>
-        <div class="weather-description">
-            {{weather_offenbach_description}}
-        </div>
-        <div class="weather-min-max">
-            Min: {{weather_offenbach_min}}°C &bull; Max: {{weather_offenbach_max}}°C
+        <div class="weather-details">
+            <!-- n8n: Aktuelle Temperatur hier einfügen, z.B. "12°C" -->
+            <p class="temperature">12°C</p>
+            <!-- n8n: Wetterbeschreibung hier einfügen, z.B. "Leicht bewölkt" -->
+            <p class="description">Leicht bewölkt</p>
+            <!-- n8n: Min/Max Temperatur hier einfügen, z.B. "Min: 8°C / Max: 15°C" -->
+            <p class="min-max">Min: 8°C / Max: 15°C</p>
+            <!-- n8n: Gefühlte Temperatur hier einfügen, z.b. "Gefühlt: 11°C" -->
+            <p class="feels-like">Gefühlt: 11°C</p>
         </div>
     </div>
 
     <div class="card">
-        <strong style="display: block; margin-bottom: 15px; color: #8ab4f8;">Preisvergleich Tankstellen</strong>
+        <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
         <div id="chart"></div>
     </div>
 
@@ -145,28 +137,35 @@
                 x: 0.5,
                 xanchor: 'center',
                 font: {
-                    color: '#e0e0e0' /* Legend text color for dark theme */
+                    color: '#e0e0e0' /* Light legend text for dark theme */
                 }
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444444', /* Dark theme grid color */
+                gridcolor: '#444', /* Darker grid for dark theme */
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true,
-                tickfont: { color: '#e0e0e0' },
-                linecolor: '#444444'
+                tickfont: {
+                    color: '#e0e0e0' /* Light tick labels for dark theme */
+                }
             },
             yaxis: {
-                title: 'Preis (€)',
-                gridcolor: '#444444', /* Dark theme grid color */
-                tickformat: ',.3f',
+                title: {
+                    text: 'Preis (€)',
+                    font: {
+                        color: '#e0e0e0' /* Light y-axis title for dark theme */
+                    }
+                },
+                gridcolor: '#444', /* Darker grid for dark theme */
+                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                tickformat: ',.3f', 
                 autorange: true,
-                tickfont: { color: '#e0e0e0' },
-                titlefont: { color: '#e0e0e0' },
-                linecolor: '#444444'
+                tickfont: {
+                    color: '#e0e0e0' /* Light tick labels for dark theme */
+                }
             },
-            paper_bgcolor: '#282828', /* Match card background */
-            plot_bgcolor: '#282828', /* Match card background */
+            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparent, nimmt den Hintergrund der Karte an */
+            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparent, nimmt den Hintergrund der Karte an */
             autosize: true
         };
 
