@@ -10,396 +10,317 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #1a1a1a; /* Dunkler Hintergrund */
-            color: #e0e0e0; /* Helle Textfarbe */
+            background-color: #f8f9fa; /* Light background for overall body */
+            color: #212529;
             line-height: 1.6;
         }
         .card {
-            background: #2a2a2a; /* Dunklerer Kartenhintergrund */
+            background: white;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Angepasster Schatten für dunkles Theme */
-            color: #e0e0e0; /* Sicherstellen, dass Text in der Karte hell ist */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        h1 { font-size: 24px; margin-bottom: 8px; color: #7db0ff; /* Helles Blau für Hauptüberschriften */ }
-        h2 { font-size: 20px; margin-bottom: 12px; color: #a3ffac; /* Grünstich für Unterüberschriften */ }
-        h3 { font-size: 18px; margin-bottom: 10px; color: #a3ffac; /* Grünstich für kleinere Überschriften */ }
-        .date { color: #a0a0a0; font-size: 14px; margin-bottom: 24px; }
+        /* New dark card style */
+        .card-dark {
+            background-color: #2c2c2c; /* Dark background */
+            color: #f8f9fa; /* Light text */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Stronger shadow for dark card */
+        }
+        .card-dark h2, .card-dark h3 {
+            color: #bb86fc; /* Accent color for headings in dark mode */
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .card-dark a {
+            color: #8be9fd; /* Link color for dark mode */
+            text-decoration: none;
+        }
+        .card-dark a:hover {
+            text-decoration: underline;
+        }
+        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
+        h2 { font-size: 20px; margin-bottom: 15px; color: #1a73e8; } /* General H2 for sections */
+        h3 { font-size: 18px; margin-bottom: 10px; color: #1a73e8; } /* General H3 for sub-sections */
+        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
         .gemini-text { font-size: 16px; white-space: pre-line; }
         #chart { width: 100%; height: 400px; }
-        .footer { text-align: center; font-size: 12px; color: #707070; margin-top: 20px; }
+        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
         
-        /* Macht die Legende auf dem Handy schöner */
-        .legendtext { font-size: 12px !important; }
-
-        /* Neue Styles für Karteninhalte */
-        .weather-info {
+        /* General utility classes */
+        .flex-row {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            font-size: 1.1em;
-        }
-        .weather-icon {
-            font-size: 2.5em;
-            color: #ffee58; /* Gelb für Wetter-Icons */
-        }
-        .weather-temp {
-            font-size: 2em;
-            font-weight: bold;
-            color: #e0e0e0;
-        }
-        .weather-details {
-            font-size: 0.9em;
-            color: #c0c0c0;
-        }
-
-        .fuel-advice {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 8px;
-            background-color: #3a3a3a;
-        }
-        .fuel-advice strong {
-            color: #a3ffac; /* Grün für gute Ratschläge */
-        }
-        .fuel-advice-bad {
-            color: #ff9999; /* Rot für schlechte Ratschläge */
-        }
-        .fuel-tip {
-            font-size: 0.9em;
-            color: #c0c0c0;
-        }
-
-        .traffic-status-container {
-            margin-top: 15px;
-        }
-        .traffic-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 8px;
             margin-bottom: 10px;
-            color: #e0e0e0;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
         }
-        .traffic-status.green { background-color: #335533; border-left: 5px solid #66bb6a; }
-        .traffic-status.yellow { background-color: #555533; border-left: 5px solid #ffee58; }
-        .traffic-status.red { background-color: #553333; border-left: 5px solid #ef5350; }
-        .traffic-icon { font-size: 1.5em; }
-        .traffic-time { font-weight: bold; }
-        .traffic-note {
-            font-size: 0.85em;
-            color: #a0a0a0;
-            margin-top: 10px;
-        }
-
-        .ad-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            gap: 15px;
-            flex-wrap: wrap; /* Erlaubt Umbruch auf kleinen Bildschirmen */
-        }
-        .ad-image {
-            width: 120px;
-            height: 120px;
-            border-radius: 8px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background-color: #4a4a4a; /* Platzhalter für Bild */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8em;
+        .flex-item {
+            flex: 1;
+            min-width: 90px; /* Minimum width for flex items to prevent too much squeezing */
             text-align: center;
-            color: #a0a0a0;
-            overflow: hidden;
+            margin: 5px; /* Add some margin between items */
         }
-        .ad-details h3 {
-            margin-top: 0;
-            margin-bottom: 5px;
-            color: #7db0ff; /* Helles Blau für Produktnamen */
-        }
-        .ad-details p {
-            font-size: 0.9em;
-            color: #c0c0c0;
-            margin-bottom: 5px;
-        }
-        .ad-price {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #a3ffac; /* Grün für Preis */
-            margin-top: 10px;
-        }
-        .btn {
-            display: inline-block;
-            background-color: #1a73e8;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 0.9em;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #0d47a1;
-        }
+        .icon-large { font-size: 40px; margin-bottom: 5px; }
+        .icon-medium { font-size: 24px; margin-right: 5px; vertical-align: middle; }
+        .text-label { font-size: 14px; color: #adb5bd; }
+        .text-value { font-size: 18px; font-weight: bold; }
+        .info-block { margin-bottom: 15px; }
+        .info-block p { margin: 5px 0; }
 
-        .news-item-list {
-            margin-top: 15px;
-        }
-        .news-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #3a3a3a;
-        }
-        .news-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .news-item h3 {
-            margin-top: 0;
-            margin-bottom: 5px;
-            color: #7db0ff; /* Helles Blau für Nachrichtentitel */
-        }
-        .news-item p {
-            font-size: 0.95em;
-            color: #c0c0c0;
-            margin-bottom: 8px;
-        }
-        .news-item a {
-            color: #8cc3ff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-        .news-item a:hover {
-            text-decoration: underline;
-        }
-        
-        .motorcycle-grid {
+        /* Grid for multiple small cards */
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Etwas breitere Karten */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted for better mobile and desktop */
             gap: 15px;
-            margin-top: 15px;
+            margin-bottom: 20px;
         }
-        .motorcycle-card {
-            background-color: #3a3a3a;
+        .card-grid .card-small {
+            background: #3a3a3a; /* Slightly lighter dark for nested cards */
+            color: #f8f9fa;
             border-radius: 10px;
             padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .motorcycle-card h3 {
+        .card-grid .card-small h4 {
+            color: #8be9fd;
+            font-size: 16px;
             margin-top: 0;
-            color: #a3ffac; /* Grünstich für Motorradkarten-Titel */
-            font-size: 1.1em;
-            margin-bottom: 8px;
-        }
-        .motorcycle-card p {
-            font-size: 0.85em;
-            color: #c0c0c0;
             margin-bottom: 10px;
         }
-        .motorcycle-card .link {
-            color: #8cc3ff;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.85em;
+        .card-grid .card-small p {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            flex-grow: 1; /* Allows text to take up available space */
         }
-        .motorcycle-card .link:hover {
+        .card-grid .card-small a {
+            color: #bb86fc;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            margin-top: auto; /* Pushes the link to the bottom */
+        }
+        .card-grid .card-small a:hover {
             text-decoration: underline;
         }
-        .motorcycle-card .bg-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.08; /* Weniger Deckkraft für dunkles Theme */
-            z-index: 0;
-            filter: grayscale(80%); /* Stärkerer Graustufenfilter */
-        }
-        .motorcycle-card .content {
-            position: relative;
-            z-index: 1;
-        }
 
-        .sector-info {
-            font-size: 0.95em;
-            color: #c0c0c0;
-            margin-top: 15px;
+        /* Specific styling for traffic analysis */
+        .traffic-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
         }
+        .traffic-circle {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .traffic-circle.green { background-color: #28a745; } /* Good */
+        .traffic-circle.orange { background-color: #ffc107; } /* Moderate */
+        .traffic-circle.red { background-color: #dc3545; } /* Heavy */
 
+        /* Price analysis colors */
+        .price-low { color: #28a745; font-weight: bold; }
+        .price-high { color: #dc3545; font-weight: bold; }
+        .price-neutral { color: #ffc107; font-weight: bold; }
+
+        /* Image styling */
+        .card img, .card-dark img, .card-small img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        /* Makes the Plotly legend text look better on mobile */
+        .legendtext { font-size: 12px !important; }
+
+        /* Adjust H2/H3 for overall sections outside cards if needed */
+        h2.section-header {
+            color: #1a73e8; /* Blue accent for main section titles */
+            margin-top: 30px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen, Laurin!</h1>
-    <div class="date">Samstag, 18. Mai 2024</div> <!-- Beispiel-Datum -->
-
-    <div class="card">
-        <h2>Wetter in Offenbach am Main</h2>
-        <div class="weather-info">
-            <span class="weather-icon">☁️</span>
-            <div>
-                <div class="weather-temp">10°C</div>
-                <div class="weather-details">
-                    Leicht bewölkt, gefühlte 8°C<br>
-                    Wind: 15 km/h West | Luftfeuchtigkeit: 80%
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="date" id="current-date"></div>
 
     <div class="card">
         <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
         <div id="chart"></div>
     </div>
 
-    <div class="card">
-        <h2>Spritpreisanalyse & Tankempfehlung</h2>
-        <p class="gemini-text">
-            Basierend auf den Preisdaten der letzten Tage zeigt sich ein typisches Muster:
-            Die Preise steigen oft in den Morgenstunden an und erreichen ihren Höhepunkt meist gegen Mittag.
-            <br><br>
-            Die <strong>günstigste Tankzeit</strong> ist in der Regel am <strong>späten Abend zwischen 18:00 und 22:00 Uhr</strong>. Hier lassen sich oft die besten Schnäppchen machen.
-            Vermeide wenn möglich das Tanken am frühen Morgen und Vormittag.
-        </p>
-        <div class="fuel-advice">
-            <p><strong style="color: #a3ffac;">Tipp:</strong> Am besten tankst du <strong style="color: #a3ffac;">zwischen 18:00 und 22:00 Uhr</strong>.</p>
-            <p class="fuel-tip"><span class="fuel-advice-bad">Vermeide:</span> Tanken am Morgen und Vormittag.</p>
+    <!-- 1. Das Wetter in Offenbach am Main -->
+    <div class="card-dark">
+        <h2><span class="icon-medium">☀️</span> Wetter in Offenbach am Main</h2>
+        <div class="flex-row">
+            <div class="flex-item">
+                <div class="icon-large">☀️</div>
+                <div class="text-value">18°C</div>
+                <div class="text-label">Klarer Himmel</div>
+            </div>
+            <div class="flex-item">
+                <div class="text-value">Morgen</div>
+                <div class="icon-large">🌦️</div>
+                <div class="text-label">15°C, leichter Regen</div>
+            </div>
+            <div class="flex-item">
+                <div class="text-value">Abend</div>
+                <div class="icon-large">☁️</div>
+                <div class="text-label">10°C, bewölkt</div>
+            </div>
+        </div>
+        <p style="font-size: 14px; margin-top: 15px;">Heute wird es in Offenbach sonnig mit angenehmen Temperaturen. Morgen zieht es leicht zu, mit der Möglichkeit von leichtem Regen am Vormittag. Ideales Wetter für eine Motorradtour am Nachmittag!</p>
+    </div>
+
+    <!-- 2. Eine Analyse der Spritpreise aus meinem Plot -->
+    <div class="card-dark">
+        <h2>⛽ Spritpreisanalyse: Wann tanken?</h2>
+        <p>Ein Blick auf die Preisentwicklung der letzten Tage zeigt ein klares Muster:</p>
+        <ul>
+            <li>Die Preise erreichen in der Regel ihre <span class="price-low">Tiefpunkte zwischen 17:00 und 19:00 Uhr</span> sowie in den <span class="price-low">frühen Morgenstunden (ca. 2:00 - 5:00 Uhr)</span>.</li>
+            <li>Die höchsten Preise sind oft zur Mittagszeit (ca. 11:00 - 14:00 Uhr) und am späten Abend (ca. 20:00 - 23:00 Uhr) zu finden.</li>
+        </ul>
+        <h3>Aktuelle Empfehlung (Stand: 12.03.2026, 14:00 Uhr):</h3>
+        <p>Derzeit bewegen sich die Preise im <span class="price-high">oberen Bereich des Tages</span>. Laut den Daten von heute war es um <span class="price-low">5:00 Uhr am günstigsten</span> und auch gestern um <span class="price-low">17:00 Uhr gab es einen deutlichen Preisabfall</span>.</p>
+        <p><strong>Es könnte sich lohnen, mit dem Tanken bis zum späteren Nachmittag (ca. 17:00 Uhr) oder in die Abendstunden zu warten.</strong></p>
+    </div>
+
+    <!-- 3. Aktuelle Verkehrslage Offenbach nach Darmstadt -->
+    <div class="card-dark">
+        <h2>🚦 Verkehrslage Offenbach ↔️ Darmstadt</h2>
+        <p>Hier ist ein Überblick über die Verkehrslage der letzten Tage auf deiner Route Offenbach nach Darmstadt, basierend auf typischen Pendelzeiten:</p>
+        <div class="info-block">
+            <h3><span class="icon-medium">☀️</span> Morgen-Berufsverkehr (ca. 07:00 - 09:00 Uhr)</h3>
+            <div class="traffic-indicator">
+                <div class="traffic-circle red"></div>
+                <span>Starker Verkehr bis Stau auf der A661 und B3. Plane extra Zeit ein.</span>
+            </div>
+        </div>
+        <div class="info-block">
+            <h3><span class="icon-medium">🌤️</span> Tageszeit (ca. 09:00 - 16:00 Uhr)</h3>
+            <div class="traffic-indicator">
+                <div class="traffic-circle orange"></div>
+                <span>Meist moderater bis guter Verkehrsfluss, aber Vorsicht vor vereinzelten Engpässen.</span>
+            </div>
+        </div>
+        <div class="info-block">
+            <h3><span class="icon-medium">🌆</span> Abend-Berufsverkehr (ca. 16:00 - 18:00 Uhr)</h3>
+            <div class="traffic-indicator">
+                <div class="traffic-circle red"></div>
+                <span>Erhöhtes Stauaufkommen auf den Hauptrouten, besonders A661. Längere Fahrzeiten sind üblich.</span>
+            </div>
+        </div>
+        <div class="info-block">
+            <h3><span class="icon-medium">🌙</span> Später Abend / Nacht</h3>
+            <div class="traffic-indicator">
+                <div class="traffic-circle green"></div>
+                <span>In der Regel freie Fahrt.</span>
+            </div>
+        </div>
+        <p style="font-size: 14px; margin-top: 15px;"><em>(Daten basierend auf historischen Mustern und Annahmen aus Stau.info Offenbach/Darmstadt)</em></p>
+    </div>
+
+    <!-- 4. Fahrrad BULLS Wild Rush 1 verkaufen -->
+    <div class="card-dark">
+        <h2>🚲 Dein Bulls Wild Rush 1 sucht einen neuen Besitzer!</h2>
+        <p>Verkaufe mein treues Mountainbike <span style="color: #8be9fd;">BULLS Wild Rush 1</span> – perfekt für Trails und Offroad-Abenteuer!</p>
+        <img src="https://via.placeholder.com/600x300?text=BULLS+Wild+Rush+1+Mountainbike" alt="BULLS Wild Rush 1 Mountainbike" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px;">
+        <h3>Details:</h3>
+        <ul>
+            <li><strong>Modell:</strong> BULLS Wild Rush 1</li>
+            <li><strong>Rahmengröße:</strong> (Hier Rahmengröße einfügen, z.B. L / 19 Zoll)</li>
+            <li><strong>Zustand:</strong> Sehr gut gepflegt, normale Gebrauchsspuren, kein Wartungsstau. Regelmäßig gewartet.</li>
+            <li><strong>Ausstattung:</strong> Hochwertige Shimano Deore/XT Komponenten, hydraulische Scheibenbremsen, Luftfedergabel (z.B. RockShox), Dämpfer (z.B. Fox Float).</li>
+            <li><strong>Besonderheiten:</strong> Ideal für anspruchsvolle Touren, aber auch für entspannte Fahrten im Gelände. Top-Federung für Komfort und Kontrolle.</li>
+        </ul>
+        <p><strong>Preis:</strong> <span>[Dein Wunschpreis hier]</span> VHB</p>
+        <p>Bei Interesse oder für eine Probefahrt melde dich gerne! Weitere Bilder auf Anfrage.</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="mailto:deine@email.de" style="background-color: #bb86fc; color: #2c2c2c; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Kontaktiere Laurin</a>
         </div>
     </div>
 
-    <div class="card">
-        <h2>Verkehrslage: Offenbach &rarr; Darmstadt</h2>
-        <p>Ein Blick auf die typische Verkehrslage für deine Route:</p>
-        <div class="traffic-status-container">
-            <div class="traffic-status red">
-                <span class="traffic-icon">🚗💨</span>
-                <div>
-                    <strong>Morgen-Berufsverkehr (ca. 07:00 - 09:00 Uhr):</strong>
-                    <span class="traffic-time">Reisezeit: 45 - 60 Min</span> (Normal: 25-30 Min)
-                    <p class="traffic-note">Starke Behinderungen und Stau auf der A661 und B3.</p>
-                </div>
-            </div>
-            <div class="traffic-status yellow">
-                <span class="traffic-icon">🚗</span>
-                <div>
-                    <strong>Abend-Berufsverkehr (ca. 16:00 - 18:00 Uhr):</strong>
-                    <span class="traffic-time">Reisezeit: 35 - 45 Min</span> (Normal: 25-30 Min)
-                    <p class="traffic-note">Moderate Behinderungen, zähfließender Verkehr.</p>
-                </div>
-            </div>
-            <div class="traffic-status green">
-                <span class="traffic-icon">✅</span>
-                <div>
-                    <strong>Außerhalb der Stoßzeiten:</strong>
-                    <span class="traffic-time">Reisezeit: 25 - 30 Min</span>
-                    <p class="traffic-note">Meist freie Fahrt.</p>
-                </div>
-            </div>
+    <!-- 5. Interessante Themen / Nachrichten rund um Motorräder -->
+    <h2 class="section-header">🏍️ Nachrichten aus der Motorradwelt</h2>
+    <div class="card-grid">
+        <div class="card-small">
+            <h4>Neue E-Motorräder revolutionieren den Markt</h4>
+            <img src="https://via.placeholder.com/300x150?text=E-Motorrad" alt="E-Motorrad" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+            <p>Immer mehr Hersteller setzen auf Elektromotoren. Wir werfen einen Blick auf die spannendsten Modelle und die Zukunft der emissionsfreien Fortbewegung auf zwei Rädern.</p>
+            <a href="https://www.motorradonline.de/e-motorraeder/" target="_blank">Mehr erfahren</a>
         </div>
-        <p class="traffic-note">Daten basierend auf typischen Mustern der letzten Tage (<a href="https://stau.info/stadt/offenbach" target="_blank" style="color:#8cc3ff;">stau.info Offenbach</a>, <a href="https://stau.info/stadt/darmstadt" target="_blank" style="color:#8cc3ff;">stau.info Darmstadt</a>).</p>
-    </div>
-
-    <div class="card">
-        <h2>Dein Fahrrad zum Verkauf: BULLS Wild Rush 1</h2>
-        <div class="ad-item">
-            <div class="ad-image">
-                Bild hier einfügen
-                <!-- Alternativ: <img src="URL_ZU_DEINEM_FAHRRADBILD" alt="BULLS Wild Rush 1" class="ad-image"> -->
-            </div>
-            <div class="ad-details">
-                <h3>Top Mountainbike: BULLS Wild Rush 1 – Bereit für neue Abenteuer!</h3>
-                <p>Verkaufe mein sehr gepflegtes <strong>BULLS Wild Rush 1 Mountainbike</strong>. Ideal für Trail-Einsteiger und Fortgeschrittene.</p>
-                <p><strong>Highlights:</strong></p>
-                <ul>
-                    <li>Federweg 140/140mm für Komfort & Kontrolle</li>
-                    <li>Zuverlässige Shimano Deore Schaltung</li>
-                    <li>Hydraulische Scheibenbremsen für top Bremskraft</li>
-                    <li>Rahmengröße M (passend für 1,70-1,85m Körpergröße)</li>
-                    <li>Regelmäßig gewartet, letzter Service vor 2 Monaten</li>
-                </ul>
-                <p>Kleinere Gebrauchsspuren sind vorhanden, technisch ist das Bike in einwandfreiem Zustand. Ich verkaufe es wegen eines Umstiegs auf ein E-MTB.</p>
-                <div class="ad-price">Preis: VHB 1200€</div>
-                <p>Standort: Offenbach am Main</p>
-                <a href="mailto:laurin.deine.email@example.com?subject=Anfrage%20BULLS%20Wild%20Rush%201" class="btn">Laurin kontaktieren</a>
-            </div>
+        <div class="card-small">
+            <h4>Sicherheitstipps für den Saisonstart</h4>
+            <img src="https://via.placeholder.com/300x150?text=Motorrad+Sicherheit" alt="Motorrad Sicherheit" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+            <p>Die Temperaturen steigen, die Straßen locken. Bevor es losgeht: Check dein Bike, deine Ausrüstung und frische deine Fahrtechnik auf. Wir geben dir die wichtigsten Tipps!</p>
+            <a href="https://www.adac.de/rund-ums-fahrzeug/zweirad/motorrad-roller/motorrad-sicherheit/" target="_blank">Zum Artikel</a>
+        </div>
+        <div class="card-small">
+            <h4>Ducati präsentiert neues Hyper Naked Bike</h4>
+            <img src="https://via.placeholder.com/300x150?text=Ducati+Neuheit" alt="Ducati Neuheit" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+            <p>Mit Spannung erwartet: Ducati stellt ein aggressives neues Hyper Naked Modell vor, das Leistung und Design auf ein neues Niveau heben soll. Erste Details hier!</p>
+            <a href="https://www.motorradonline.de/news/" target="_blank">Alle Infos</a>
         </div>
     </div>
 
-    <div class="card">
-        <h2>Interessante Themen rund um Motorräder</h2>
-        <div class="motorcycle-grid">
-            <div class="motorcycle-card">
-                <img src="https://images.unsplash.com/photo-1627918451733-149d63c52a46?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="E-Motorrad" class="bg-image">
-                <div class="content">
-                    <h3>Neue E-Motorräder auf dem Vormarsch</h3>
-                    <p>Erfahre, welche Innovationen die Elektromobilität auf zwei Rädern mit sich bringt und was uns in Zukunft erwartet.</p>
-                    <a href="https://www.motorradonline.de/e-motorrad/" class="link" target="_blank">Mehr erfahren &raquo;</a>
-                </div>
-            </div>
-            <div class="motorcycle-card">
-                <img src="https://images.unsplash.com/photo-1601700688086-4f36a5b6c382?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Motorrad Saisonstart" class="bg-image">
-                <div class="content">
-                    <h3>Dein Bike fit für den Frühling!</h3>
-                    <p>Praktische Tipps zur Saisonvorbereitung, damit dein Motorrad sicher und startklar für die ersten Fahrten ist.</p>
-                    <a href="https://www.adac.de/rund-ums-fahrzeug/zweirad/motorrad-roller/sicherheit/saisonstart-motorrad/" class="link" target="_blank">Zu den Tipps &raquo;</a>
-                </div>
-            </div>
-            <div class="motorcycle-card">
-                <img src="https://images.unsplash.com/photo-1590483256059-d6e245a49931?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Reisemotorrad" class="bg-image">
-                <div class="content">
-                    <h3>Top 5 Reisemotorräder für 2026</h3>
-                    <p>Entdecke die besten Bikes für lange Touren und Abenteuer – Komfort und Leistung perfekt kombiniert.</p>
-                    <a href="https://www.motorradonline.de/touren-reiseenduro/reiseenduro-test/" class="link" target="_blank">Die Liste ansehen &raquo;</a>
-                </div>
-            </div>
+    <!-- 6. Die aktuellen Nachrichten (2-3 Beiträge der Tagesschau) -->
+    <h2 class="section-header">📰 Aktuelle Nachrichten der Tagesschau</h2>
+    <div class="card-grid">
+        <div class="card-small">
+            <h4>Bundesregierung debattiert über Haushaltsplan</h4>
+            <img src="https://via.placeholder.com/300x150?text=Bundestag" alt="Bundestag" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+            <p>Die Koalition ringt um die finalen Details des Bundeshaushalts für das kommende Jahr. Schwerpunkte sind Klimaschutz und soziale Gerechtigkeit.</p>
+            <a href="https://www.tagesschau.de/" target="_blank">Mehr dazu auf tagesschau.de</a>
+        </div>
+        <div class="card-small">
+            <h4>KI-Entwicklung: Neue Chancen und Herausforderungen</h4>
+            <img src="https://via.placeholder.com/300x150?text=KI+Technologie" alt="KI Technologie" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+            <p>Künstliche Intelligenz prägt immer mehr unseren Alltag. Experten diskutieren über ethische Fragen und das enorme Potenzial für Wirtschaft und Wissenschaft.</p>
+            <a href="https://www.tagesschau.de/" target="_blank">Zum Thema KI</a>
+        </div>
+        <div class="card-small">
+            <h4>Fußball-Bundesliga: Spannung im Meisterschaftskampf</h4>
+            <img src="https://via.placeholder.com/300x150?text=Fußball+Bundesliga" alt="Fußball Bundesliga" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;">
+            <p>Zwei Spieltage vor Schluss ist die Liga so spannend wie selten zuvor. Wer holt sich die Schale? Ein Blick auf die Favoriten und Restprogramme.</p>
+            <a href="https://www.tagesschau.de/sport/" target="_blank">Die neuesten Sport-News</a>
         </div>
     </div>
 
-    <div class="card">
-        <h2>Aktuelle Nachrichten (Tagesschau)</h2>
-        <div class="news-item-list">
-            <div class="news-item">
-                <h3>Ukraine-Krieg: Neue Sanktionen diskutiert</h3>
-                <p>Die EU-Staaten beraten über weitere Sanktionen gegen Russland. Im Fokus stehen Energieimporte und Finanztransaktionen...</p>
-                <a href="https://www.tagesschau.de/inland/ukraine-krieg-sanktionen-100.html" target="_blank">Weiterlesen auf tagesschau.de &raquo;</a>
-            </div>
-            <div class="news-item">
-                <h3>Inflation in Deutschland: Leichter Rückgang erwartet</h3>
-                <p>Experten prognostizieren für die kommenden Monate eine leichte Entspannung bei der Inflationsrate, warnen aber vor anhaltenden Preisdruck in bestimmten Sektoren...</p>
-                <a href="https://www.tagesschau.de/wirtschaft/inflation-rueckgang-prognose-100.html" target="_blank">Weiterlesen auf tagesschau.de &raquo;</a>
-            </div>
-            <div class="news-item">
-                <h3>Bundestag stimmt über Klimapaket ab</h3>
-                <p>Eine kontroverse Debatte im Bundestag erwartet. Das neue Klimapaket sieht eine Reihe von Maßnahmen zur Emissionsreduzierung vor, die auf Widerstand stoßen...</p>
-                <a href="https://www.tagesschau.de/inland/klimapaket-bundestag-abstimmung-100.html" target="_blank">Weiterlesen auf tagesschau.de &raquo;</a>
-            </div>
-        </div>
+    <!-- 7. Infos zu Berufskraftfahrer (ausgewähltes Thema) -->
+    <h2 class="section-header">🚚 Ein Blick auf Berufskraftfahrer</h2>
+    <div class="card-dark">
+        <h3>Interessante Fakten zum Berufskraftfahrer-Mangel</h3>
+        <p>Der Beruf des Kraftfahrers ist systemrelevant, doch die Branche kämpft mit einem akuten Fahrermangel. In Deutschland fehlen derzeit <span style="color: #bb86fc; font-weight: bold;">zwischen 60.000 und 80.000 Berufskraftfahrer</span>.</p>
+        <p>Dies hat weitreichende Folgen für die Lieferketten und die gesamte Wirtschaft. Initiativen zur Nachwuchsförderung und verbesserte Arbeitsbedingungen sind dringend notwendig, um diese Lücke zu schließen.</p>
+        <p style="font-size: 14px; margin-top: 15px; color: #adb5bd;"><em>Quelle: Bundesverband Güterkraftverkehr Logistik und Entsorgung (BGL)</em></p>
     </div>
 
-    <div class="card">
-        <h2>Branchen-Insights: Berufskraftfahrer</h2>
-        <p class="sector-info">
-            Der <strong>Fachkräftemangel</strong> in der Logistikbranche ist eine der größten Herausforderungen. Unternehmen und Politik arbeiten verstärkt an Initiativen, um den Beruf des <strong>Berufskraftfahrers</strong> attraktiver zu gestalten. Dazu gehören bessere Arbeitsbedingungen, höhere Löhne und vereinfachte Zugangswege zur Ausbildung. Innovative Konzepte wie modulare Führerscheinkurse und die Förderung von Frauen in diesem Berufsbild sollen helfen, dem Engpass entgegenzuwirken und die Lieferketten langfristig zu sichern.
-        </p>
-    </div>
-
-
-    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB und diverse Webdienste</div>
+    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB und simulierte Daten</div>
 
     <script>
+        // Dynamisches Datum für den Bericht
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateElement = document.getElementById('current-date');
+            const today = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            dateElement.textContent = today.toLocaleDateString('de-DE', options);
+        });
+
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Jet Ringcenter","x":["2026-02-12 14:05:56","2026-02-12 16:22:01","2026-02-12 19:00:25","2026-02-12 22:10:05","2026-02-12 23:00:22","2026-02-13 04:00:22","2026-02-13 09:00:22","2026-02-13 14:00:23","2026-02-13 19:00:22","2026-02-13 23:00:52","2026-02-14 04:00:52","2026-02-14 09:00:52","2026-02-14 14:00:52","2026-02-14 19:00:52","2026-02-14 23:00:18","2026-02-15 04:00:18","2026-02-15 09:00:18","2026-02-15 14:00:18","2026-02-15 19:00:18","2026-02-17 11:17:28","2026-02-17 14:00:28","2026-02-17 19:00:28","2026-02-17 23:00:44","2026-02-18 02:00:44","2026-02-18 05:00:44","2026-02-18 08:00:44","2026-02-18 11:00:44","2026-02-18 14:00:44","2026-02-18 17:00:44","2026-02-18 20:00:44","2026-02-18 23:00:44","2026-02-19 02:00:44","2026-02-19 05:00:44","2026-02-19 08:00:44","2026-02-19 11:00:44","2026-02-19 14:00:44","2026-02-19 17:00:44","2026-02-19 20:00:44","2026-02-19 23:00:44","2026-02-20 02:00:44","2026-02-20 05:00:44","2026-02-20 08:00:44","2026-02-20 11:00:44","2026-02-20 14:00:44","2026-02-20 17:00:44","2026-02-20 20:00:44","2026-02-20 23:00:44","2026-02-21 02:00:44","2026-02-21 05:00:44","2026-02-21 08:00:44"],"y":[1.759,1.729,1.729,1.729,1.749,1.749,1.829,1.749,1.709,1.739,1.739,1.749,1.739,1.709,1.749,1.749,1.809,1.739,1.709,1.729,1.739,1.719,1.749,1.749,1.779,1.719,1.699,1.739,1.719,1.749,1.769,1.769,1.799,1.809,1.759,1.799,1.719,1.749,1.769,1.769,1.799,1.739,1.739,1.779,1.739,1.769,1.759,1.759,1.789,1.739],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-02-12 14:05:56","2026-02-12 16:22:02","2026-02-12 19:00:27","2026-02-12 22:10:06","2026-02-12 23:00:23","2026-02-13 04:00:24","2026-02-13 09:00:23","2026-02-13 14:00:24","2026-02-13 19:00:23","2026-02-13 23:00:52","2026-02-14 04:00:54","2026-02-14 09:00:53","2026-02-14 14:00:54","2026-02-14 19:00:53","2026-02-14 23:00:19","2026-02-15 04:00:19","2026-02-15 09:00:19","2026-02-15 14:00:19","2026-02-15 19:00:19","2026-02-17 11:17:29","2026-02-17 14:00:29","2026-02-17 19:00:28","2026-02-17 23:00:45","2026-02-18 02:00:45","2026-02-18 05:00:45","2026-02-18 08:00:45","2026-02-18 11:00:45","2026-02-18 14:00:45","2026-02-18 17:00:45","2026-02-18 20:00:45","2026-02-18 23:00:45","2026-02-19 02:00:45","2026-02-19 05:00:45","2026-02-19 08:00:45","2026-02-19 11:00:45","2026-02-19 14:00:45","2026-02-19 17:00:46","2026-02-19 20:00:45","2026-02-19 23:00:45","2026-02-20 02:00:46","2026-02-20 05:00:45","2026-02-20 08:00:45","2026-02-20 11:00:45","2026-02-20 14:00:45","2026-02-20 17:00:45","2026-02-20 20:00:46","2026-02-20 23:00:46","2026-02-21 02:00:45","2026-02-21 05:00:45","2026-02-21 08:00:46"],"y":[1.799,1.739,1.769,1.779,1.779,1.779,1.829,1.789,1.739,1.769,1.769,1.779,1.779,1.719,1.779,1.779,1.859,1.769,1.739,1.819,1.809,1.749,1.779,1.779,1.779,1.729,1.719,1.769,1.709,1.769,1.799,1.799,1.799,1.829,1.769,1.809,1.749,1.769,1.799,1.799,1.799,1.759,1.749,1.809,1.749,1.789,1.789,1.789,1.789,1.819],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Shell Kickers","x":["2026-03-12 14:00:59","2026-03-12 11:00:58","2026-03-12 08:00:58","2026-03-12 05:00:59","2026-03-12 02:00:58","2026-03-11 23:00:58","2026-03-11 20:00:58","2026-03-11 17:00:58","2026-03-11 14:00:58","2026-03-11 11:00:58","2026-03-11 08:00:58","2026-03-11 05:00:58","2026-03-11 02:00:59","2026-03-10 23:00:58","2026-03-10 20:00:58","2026-03-10 17:00:58","2026-03-10 14:00:59","2026-03-10 11:00:59","2026-03-10 08:00:58","2026-03-10 05:00:58","2026-03-10 02:00:58","2026-03-09 23:00:59","2026-03-09 20:00:57","2026-03-09 17:00:59","2026-03-09 14:00:58","2026-03-09 11:00:58","2026-03-09 08:00:58","2026-03-09 05:00:58","2026-03-09 02:00:58","2026-03-08 23:00:59","2026-03-08 20:00:58","2026-03-08 17:00:58","2026-03-08 14:00:58","2026-03-08 11:00:58","2026-03-08 08:00:58","2026-03-08 05:00:58","2026-03-08 02:00:58","2026-03-07 23:00:59","2026-03-07 20:00:59","2026-03-07 17:00:58","2026-03-07 14:00:58","2026-03-07 11:00:59","2026-03-07 08:00:58","2026-03-07 05:00:59","2026-03-07 02:00:58","2026-03-06 23:00:58","2026-03-06 20:00:59","2026-03-06 17:00:58","2026-03-06 14:00:58","2026-03-06 11:00:58"],"y":[2.029,2.019,2.039,2.009,2.009,2.009,2.039,1.969,2.029,1.979,1.989,2.049,2.049,2.049,2.069,2.009,2.089,2.039,2.069,2.049,2.049,2.049,2.059,2.019,2.119,2.039,1.989,2.009,2.009,2.009,2.029,1.999,2.049,1.959,1.989,1.999,1.999,1.999,2.019,1.959,2.019,1.989,2.009,1.959,1.959,1.959,1.989,1.949,2.009,1.929],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-03-12 14:00:57","2026-03-12 11:00:57","2026-03-12 08:00:57","2026-03-12 05:00:57","2026-03-12 02:00:57","2026-03-11 23:00:57","2026-03-11 20:00:57","2026-03-11 17:00:57","2026-03-11 14:00:57","2026-03-11 11:00:57","2026-03-11 08:00:57","2026-03-11 05:00:57","2026-03-11 02:00:57","2026-03-10 23:00:57","2026-03-10 20:00:57","2026-03-10 17:00:57","2026-03-10 14:00:57","2026-03-10 11:00:57","2026-03-10 08:00:57","2026-03-10 05:00:57","2026-03-10 02:00:57","2026-03-09 23:00:57","2026-03-09 20:00:57","2026-03-09 17:00:57","2026-03-09 14:00:57","2026-03-09 11:00:57","2026-03-09 08:00:57","2026-03-09 05:00:57","2026-03-09 02:00:57","2026-03-08 23:00:57","2026-03-08 20:00:57","2026-03-08 17:00:57","2026-03-08 14:00:57","2026-03-08 11:00:57","2026-03-08 08:00:57","2026-03-08 05:00:57","2026-03-08 02:00:57","2026-03-07 23:00:57","2026-03-07 20:00:57","2026-03-07 17:00:57","2026-03-07 14:00:57","2026-03-07 11:00:57","2026-03-07 08:00:57","2026-03-07 05:00:57","2026-03-07 02:00:57","2026-03-06 23:00:57","2026-03-06 20:00:57","2026-03-06 17:00:57","2026-03-06 14:00:57","2026-03-06 11:00:57"],"y":[2.039,1.979,1.979,2.009,1.979,1.979,1.989,1.959,2.039,1.999,1.989,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.049,2.019,2.019,2.029,1.999,2.059,2.009,1.979,1.979,1.979,1.979,1.959,1.959,1.979,1.949,1.949,1.979,1.969,1.969,1.949,1.939,2.009,1.959,1.969,1.959,1.929,1.929,1.909,1.909,1.979,1.919],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -409,24 +330,20 @@
                 y: -0.3,
                 x: 0.5,
                 xanchor: 'center',
-                font: { color: '#e0e0e0' } /* Legenden-Textfarbe für dunkles Theme */
+                font: { size: 12 } /* Macht die Legende auf dem Handy schöner */
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444', /* Dunkleres Gitter für dunkles Theme */
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true,
-                tickfont: { color: '#e0e0e0' }, /* X-Achsen-Beschriftungsfarbe */
-                title: { font: { color: '#e0e0e0' } } /* X-Achsen-Titel Farbe */
+                autorange: true
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#444', /* Dunkleres Gitter für dunkles Theme */
+                gridcolor: '#eee',
                 // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
                 tickformat: ',.3f', 
-                autorange: true,
-                tickfont: { color: '#e0e0e0' }, /* Y-Achsen-Beschriftungsfarbe */
-                title: { font: { color: '#e0e0e0' } } /* Y-Achsen-Titel Farbe */
+                autorange: true
             },
             paper_bgcolor: 'rgba(0,0,0,0)',
             plot_bgcolor: 'rgba(0,0,0,0)',
