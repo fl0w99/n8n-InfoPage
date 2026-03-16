@@ -3,208 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Täglicher Bericht</title>
+    <title>Dein Tankstellen-Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #1a1a1a; /* Dunkler Hintergrund */
-            color: #e0e0e0; /* Helle Textfarbe */
+            background-color: #f8f9fa; /* Hintergrund für die Gesamtseite (hell) */
+            color: #212529;
             line-height: 1.6;
         }
         .card {
-            background: #2c2c2c; /* Etwas helleres Dunkel für die Kacheln */
+            background: white;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Dunklerer Schatten */
-            border: 1px solid #3c3c3c; /* Dezente Umrandung */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            color: #90caf9; /* Helles Blau für Überschriften */
-        }
-        .date {
-            color: #a0a0a0; /* Helleres Grau für das Datum */
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-        .gemini-text {
-            font-size: 16px;
-            white-space: pre-line;
-            color: #e0e0e0;
-        }
-        #chart {
-            width: 100%;
-            height: 400px;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #707070; /* Dunkleres Grau für den Footer */
-            margin-top: 20px;
-        }
-
-        /* Plotly Legendenanpassungen für dunkles Design und Mobilgeräte */
-        .legendtext {
-            font-size: 12px !important;
-            fill: #e0e0e0 !important; /* Plotly SVG Textfarbe */
-            color: #e0e0e0 !important; /* Fallback */
-        }
-
-        /* Wetterkachel-spezifische Stile */
-        .weather-cards-container {
-            display: flex;
-            flex-wrap: wrap; /* Ermöglicht Umbruch auf kleineren Bildschirmen */
-            gap: 20px; /* Abstand zwischen den Kacheln */
+        /* Dunkles Design für die Wetter-Kacheln */
+        .card-dark {
+            background: #2b2b2b; /* Dunkler Hintergrund */
+            color: #e0e0e0;      /* Helle Textfarbe */
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Etwas stärkerer Schatten */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        .weather-cards-container > .card {
-            flex: 1; /* Verteilt den Platz gleichmäßig */
-            min-width: 280px; /* Mindestbreite, bevor umbrochen wird */
-            margin-bottom: 0; /* Entfernt den unteren Rand, wenn in diesem Container */
-            padding: 15px; /* Etwas weniger Polsterung für Wetterkacheln */
-        }
-        .weather-header {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #90caf9; /* Helles Blau */
+        .card-dark h2 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #8ab4f8; /* Leuchtendes Blau für den Titel */
+            border-bottom: 1px solid rgba(255,255,255,0.1); /* Dezente Trennlinie */
+            padding-bottom: 10px;
         }
         .weather-main {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .weather-icon {
-            font-size: 40px; /* Große Emoji/Icon */
+            font-size: 48px; /* Größe des Icons */
             margin-right: 15px;
-            line-height: 1; /* Bessere vertikale Ausrichtung */
+            line-height: 1; /* Vertikale Ausrichtung verbessern */
         }
         .weather-temp {
-            font-size: 36px;
+            font-size: 40px;
             font-weight: bold;
             line-height: 1;
         }
         .weather-description {
-            font-size: 16px;
-            color: #a0a0a0;
-            margin-bottom: 15px;
+            font-size: 18px;
+            margin-left: 10px;
+            align-self: flex-end; /* Am unteren Rand der Temperatur ausrichten */
+            line-height: 1.2;
+            color: #b0b0b0;
         }
         .weather-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Zwei Spalten für Details */
-            gap: 8px 15px; /* Abstand zwischen Zeilen und Spalten */
+            display: flex;
+            flex-wrap: wrap; /* Ermöglicht Umbruch auf kleineren Bildschirmen */
+            justify-content: space-between;
             font-size: 14px;
+            margin-top: 10px;
         }
         .weather-detail-item {
+            flex: 1 1 auto; /* Flexibel in der Größe, mindestens so breit wie Inhalt */
+            min-width: 45%; /* Mindestbreite, damit 2 pro Zeile passen */
+            margin-bottom: 8px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 4px 0;
         }
-        .weather-detail-label {
-            color: #a0a0a0;
-            white-space: nowrap; /* Verhindert Zeilenumbruch des Labels */
-        }
-        .weather-detail-value {
-            font-weight: bold;
-            color: #e0e0e0;
-            text-align: right; /* Wert rechtsbündig ausrichten */
+        .weather-detail-item strong {
+            margin-right: 5px;
+            color: #c0c0c0;
         }
 
-        /* Responsive Anpassungen */
-        @media (max-width: 600px) {
-            .weather-cards-container {
-                flex-direction: column; /* Kacheln auf kleinen Bildschirmen vertikal stapeln */
-            }
-            .weather-cards-container > .card {
-                min-width: unset; /* Mindestbreite entfernen, um volle Breite einzunehmen */
-            }
-        }
+        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
+        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
+        .gemini-text { font-size: 16px; white-space: pre-line; }
+        #chart { width: 100%; height: 400px; }
+        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
+
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { font-size: 12px !important; }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Sonntag, 15. März 2026</div>
+    <div class="date">Montag, 16. März 2026</div>
 
-    <div class="weather-cards-container">
-        <!-- Wetter für Frankfurt -->
-        <div class="card weather-card">
-            <div class="weather-header">Wetter für Frankfurt</div>
-            <div class="weather-main">
-                <span class="weather-icon">🌧️</span> <!-- Beispiel-Icon, kann durch n8n ersetzt werden -->
-                <span class="weather-temp">12°C</span> <!-- Beispielwert, kann durch n8n ersetzt werden -->
-            </div>
-            <div class="weather-description">Leichter Regen</div> <!-- Beispielbeschreibung, kann durch n8n ersetzt werden -->
-            <div class="weather-details">
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Gefühlt:</span>
-                    <span class="weather-detail-value">10°C</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Wind:</span>
-                    <span class="weather-detail-value">15 km/h</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Max. Temp:</span>
-                    <span class="weather-detail-value">14°C</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Luftfeucht.:</span>
-                    <span class="weather-detail-value">85%</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Min. Temp:</span>
-                    <span class="weather-detail-value">8°C</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Sicht:</span>
-                    <span class="weather-detail-value">10 km</span> <!-- Beispielwert -->
-                </div>
-            </div>
+    <!-- Wetter-Kachel für Frankfurt -->
+    <div class="card-dark">
+        <h2>Wetter Frankfurt</h2>
+        <div class="weather-main">
+            <span class="weather-icon">☀️</span> <!-- Platzhalter für Wetter-Icon (z.B. ☀️, ☁️, 🌧️) -->
+            <span class="weather-temp">15°C</span>
+            <span class="weather-description">Leicht bewölkt</span>
         </div>
+        <div class="weather-details">
+            <div class="weather-detail-item"><strong>Tageshöchst:</strong> 18°C</div>
+            <div class="weather-detail-item"><strong>Tiefst:</strong> 9°C</div>
+            <div class="weather-detail-item"><strong>Wind:</strong> 15 km/h N</div>
+            <div class="weather-detail-item"><strong>Luftfeuchte:</strong> 70%</div>
+            <div class="weather-detail-item"><strong>Sonnenaufgang:</strong> 06:30</div>
+            <div class="weather-detail-item"><strong>Sonnenuntergang:</strong> 18:30</div>
+        </div>
+    </div>
 
-        <!-- Wetter für Offenbach Bieber -->
-        <div class="card weather-card">
-            <div class="weather-header">Wetter für Offenbach Bieber</div>
-            <div class="weather-main">
-                <span class="weather-icon">☁️</span> <!-- Beispiel-Icon, kann durch n8n ersetzt werden -->
-                <span class="weather-temp">13°C</span> <!-- Beispielwert, kann durch n8n ersetzt werden -->
-            </div>
-            <div class="weather-description">Bewölkt</div> <!-- Beispielbeschreibung, kann durch n8n ersetzt werden -->
-            <div class="weather-details">
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Gefühlt:</span>
-                    <span class="weather-detail-value">11°C</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Wind:</span>
-                    <span class="weather-detail-value">12 km/h</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Max. Temp:</span>
-                    <span class="weather-detail-value">15°C</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Luftfeucht.:</span>
-                    <span class="weather-detail-value">80%</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Min. Temp:</span>
-                    <span class="weather-detail-value">9°C</span> <!-- Beispielwert -->
-                </div>
-                <div class="weather-detail-item">
-                    <span class="weather-detail-label">Sicht:</span>
-                    <span class="weather-detail-value">12 km</span> <!-- Beispielwert -->
-                </div>
-            </div>
+    <!-- Wetter-Kachel für Offenbach Bieber -->
+    <div class="card-dark">
+        <h2>Wetter Offenbach Bieber</h2>
+        <div class="weather-main">
+            <span class="weather-icon">🌤️</span> <!-- Platzhalter für Wetter-Icon -->
+            <span class="weather-temp">14°C</span>
+            <span class="weather-description">Heiter bis wolkig</span>
         </div>
-    </div> <!-- /weather-cards-container -->
+        <div class="weather-details">
+            <div class="weather-detail-item"><strong>Tageshöchst:</strong> 17°C</div>
+            <div class="weather-detail-item"><strong>Tiefst:</strong> 8°C</div>
+            <div class="weather-detail-item"><strong>Wind:</strong> 12 km/h N</div>
+            <div class="weather-detail-item"><strong>Luftfeuchte:</strong> 75%</div>
+            <div class="weather-detail-item"><strong>Sonnenaufgang:</strong> 06:31</div>
+            <div class="weather-detail-item"><strong>Sonnenuntergang:</strong> 18:29</div>
+        </div>
+    </div>
 
     <div class="card">
         <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
@@ -216,7 +143,7 @@
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Shell Kickers","x":["2026-03-15 14:00:58","2026-03-15 11:00:58","2026-03-15 08:00:58","2026-03-15 05:00:58","2026-03-15 02:00:58","2026-03-14 23:00:58","2026-03-14 20:00:58","2026-03-14 17:00:58","2026-03-14 14:00:58","2026-03-14 11:00:58","2026-03-14 08:00:58","2026-03-14 05:00:58","2026-03-14 02:00:58","2026-03-13 23:00:58","2026-03-13 20:00:58","2026-03-13 17:00:58","2026-03-13 14:00:58","2026-03-13 11:00:58","2026-03-13 08:00:58","2026-03-13 05:00:58","2026-03-13 02:00:58","2026-03-12 23:00:59","2026-03-12 20:00:58","2026-03-12 17:00:58","2026-03-12 14:00:59","2026-03-12 11:00:58","2026-03-12 08:00:58","2026-03-12 05:00:59","2026-03-12 02:00:58","2026-03-11 23:00:58","2026-03-11 20:00:58","2026-03-11 17:00:58","2026-03-11 14:00:58","2026-03-11 11:00:58","2026-03-11 08:00:58","2026-03-11 05:00:58","2026-03-11 02:00:59","2026-03-10 23:00:58","2026-03-10 20:00:58","2026-03-10 17:00:58","2026-03-10 14:00:59","2026-03-10 11:00:59","2026-03-10 08:00:58","2026-03-10 05:00:58","2026-03-10 02:00:58","2026-03-09 23:00:59","2026-03-09 20:00:57","2026-03-09 17:00:59","2026-03-09 14:00:58","2026-03-09 11:00:58"],"y":[2.069,2.009,2.079,2.049,2.049,2.049,2.079,2.029,2.059,2.009,2.069,2.049,2.049,2.049,2.049,1.989,2.049,2.019,2.109,2.019,2.019,2.019,2.019,1.969,2.029,2.019,2.039,2.009,2.009,2.009,2.039,1.969,2.029,1.979,1.989,2.049,2.049,2.049,2.069,2.009,2.089,2.039,2.069,2.049,2.049,2.049,2.059,2.019,2.119,2.039],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-03-15 14:00:57","2026-03-15 11:00:57","2026-03-15 08:00:57","2026-03-15 05:00:57","2026-03-15 02:00:57","2026-03-14 23:00:57","2026-03-14 20:00:57","2026-03-14 17:00:57","2026-03-14 14:00:57","2026-03-14 11:00:57","2026-03-14 08:00:57","2026-03-14 05:00:57","2026-03-14 02:00:57","2026-03-13 23:00:57","2026-03-13 20:00:57","2026-03-13 17:00:57","2026-03-13 14:00:57","2026-03-13 11:00:57","2026-03-13 08:00:57","2026-03-13 05:00:57","2026-03-13 02:00:57","2026-03-12 23:00:57","2026-03-12 20:00:57","2026-03-12 17:00:57","2026-03-12 14:00:57","2026-03-12 11:00:57","2026-03-12 08:00:57","2026-03-12 05:00:57","2026-03-12 02:00:57","2026-03-11 23:00:57","2026-03-11 20:00:57","2026-03-11 17:00:57","2026-03-11 14:00:57","2026-03-11 11:00:57","2026-03-11 08:00:57","2026-03-11 05:00:57","2026-03-11 02:00:57","2026-03-10 23:00:57","2026-03-10 20:00:57","2026-03-10 17:00:57","2026-03-10 14:00:57","2026-03-10 11:00:57","2026-03-10 08:00:57","2026-03-10 05:00:57","2026-03-10 02:00:57","2026-03-09 23:00:57","2026-03-09 20:00:57","2026-03-09 17:00:57","2026-03-09 14:00:57","2026-03-09 11:00:57"],"y":[2.059,1.999,2.049,2.049,2.019,2.019,2.029,1.999,2.049,1.999,2.009,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.019,1.989,1.989,1.999,1.969,2.039,1.979,1.979,2.009,1.979,1.979,1.989,1.959,2.039,1.999,1.989,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.049,2.019,2.019,2.029,1.999,2.059,2.009],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Shell Kickers","x":["2026-03-16 02:00:58","2026-03-15 23:00:58","2026-03-15 20:00:58","2026-03-15 17:00:58","2026-03-15 14:00:58","2026-03-15 11:00:58","2026-03-15 08:00:58","2026-03-15 05:00:58","2026-03-15 02:00:58","2026-03-14 23:00:58","2026-03-14 20:00:58","2026-03-14 17:00:58","2026-03-14 14:00:58","2026-03-14 11:00:58","2026-03-14 08:00:58","2026-03-14 05:00:58","2026-03-14 02:00:58","2026-03-13 23:00:58","2026-03-13 20:00:58","2026-03-13 17:00:58","2026-03-13 14:00:58","2026-03-13 11:00:58","2026-03-13 08:00:58","2026-03-13 05:00:58","2026-03-13 02:00:58","2026-03-12 23:00:59","2026-03-12 20:00:58","2026-03-12 17:00:58","2026-03-12 14:00:59","2026-03-12 11:00:58","2026-03-12 08:00:58","2026-03-12 05:00:59","2026-03-12 02:00:58","2026-03-11 23:00:58","2026-03-11 20:00:58","2026-03-11 17:00:58","2026-03-11 14:00:58","2026-03-11 11:00:58","2026-03-11 08:00:58","2026-03-11 05:00:58","2026-03-11 02:00:59","2026-03-10 23:00:58","2026-03-10 20:00:58","2026-03-10 17:00:58","2026-03-10 14:00:59","2026-03-10 11:00:59","2026-03-10 08:00:58","2026-03-10 05:00:58","2026-03-10 02:00:58","2026-03-09 23:00:59"],"y":[2.049,2.049,2.079,2.029,2.069,2.009,2.079,2.049,2.049,2.049,2.079,2.029,2.059,2.009,2.069,2.049,2.049,2.049,2.049,1.989,2.049,2.019,2.109,2.019,2.019,2.019,2.019,1.969,2.029,2.019,2.039,2.009,2.009,2.009,2.039,1.969,2.029,1.979,1.989,2.049,2.049,2.049,2.069,2.009,2.089,2.039,2.069,2.049,2.049,2.049],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-03-16 02:00:57","2026-03-15 23:00:57","2026-03-15 20:00:57","2026-03-15 17:00:57","2026-03-15 14:00:57","2026-03-15 11:00:57","2026-03-15 08:00:57","2026-03-15 05:00:57","2026-03-15 02:00:57","2026-03-14 23:00:57","2026-03-14 20:00:57","2026-03-14 17:00:57","2026-03-14 14:00:57","2026-03-14 11:00:57","2026-03-14 08:00:57","2026-03-14 05:00:57","2026-03-14 02:00:57","2026-03-13 23:00:57","2026-03-13 20:00:57","2026-03-13 17:00:57","2026-03-13 14:00:57","2026-03-13 11:00:57","2026-03-13 08:00:57","2026-03-13 05:00:57","2026-03-13 02:00:57","2026-03-12 23:00:57","2026-03-12 20:00:57","2026-03-12 17:00:57","2026-03-12 14:00:57","2026-03-12 11:00:57","2026-03-12 08:00:57","2026-03-12 05:00:57","2026-03-12 02:00:57","2026-03-11 23:00:57","2026-03-11 20:00:57","2026-03-11 17:00:57","2026-03-11 14:00:57","2026-03-11 11:00:57","2026-03-11 08:00:57","2026-03-11 05:00:57","2026-03-11 02:00:57","2026-03-10 23:00:57","2026-03-10 20:00:57","2026-03-10 17:00:57","2026-03-10 14:00:57","2026-03-10 11:00:57","2026-03-10 08:00:57","2026-03-10 05:00:57","2026-03-10 02:00:57","2026-03-09 23:00:57"],"y":[2.019,2.019,2.029,1.999,2.059,1.999,2.049,2.049,2.019,2.019,2.029,1.999,2.049,1.999,2.009,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.019,1.989,1.989,1.999,1.969,2.039,1.979,1.979,2.009,1.979,1.979,1.989,1.959,2.039,1.999,1.989,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.049,2.019,2.019],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -225,36 +152,23 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center',
-                font: {
-                    color: '#e0e0e0' /* Legendentextfarbe für dunkles Design */
-                }
+                xanchor: 'center'
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444', /* Dunklere Gitterlinien */
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
-                autorange: true,
-                tickfont: {
-                    color: '#e0e0e0' /* X-Achsen-Beschriftungsfarbe */
-                }
+                autorange: true
             },
             yaxis: {
-                title: {
-                    text: 'Preis (€)',
-                    font: {
-                        color: '#e0e0e0' /* Y-Achsen-Titel-Farbe */
-                    }
-                },
-                gridcolor: '#444', /* Dunklere Gitterlinien */
-                tickformat: ',.3f', /* Zeigt 3 Nachkommastellen an (typisch für Tankstellen) */
-                autorange: true,
-                tickfont: {
-                    color: '#e0e0e0' /* Y-Achsen-Beschriftungsfarbe */
-                }
+                title: 'Preis (€)',
+                gridcolor: '#eee',
+                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
+                tickformat: ',.3f',
+                autorange: true
             },
-            paper_bgcolor: '#1a1a1a', /* Entspricht dem Body-Hintergrund */
-            plot_bgcolor: '#2c2c2c', /* Entspricht dem Kachel-Hintergrund */
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
             autosize: true
         };
 
