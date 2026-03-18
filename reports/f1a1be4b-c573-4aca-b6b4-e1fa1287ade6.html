@@ -10,40 +10,36 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #121212; /* Dark background */
-            color: #e0e0e0; /* Light text */
+            background-color: #1a1a1a; /* Dunkler Hintergrund */
+            color: #e0e0e0; /* Heller Text */
             line-height: 1.6;
         }
         .card {
-            background: #1e1e1e; /* Slightly lighter dark background for cards */
+            background: #2c2c2c; /* Etwas hellerer dunkler Ton für Kacheln */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Darker shadow */
-            color: #f0f0f0; /* Light text inside cards */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Starkerer Schatten für dunkles Design */
+            color: #e0e0e0; /* Sicherstellen, dass der Text in Kacheln hell ist */
         }
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             margin-bottom: 8px;
-            color: #8ab4f8; /* A pleasant light blue for headlines */
+            color: #8ab4f8; /* Helles Blau für Hauptüberschrift */
         }
-        h2.card-title { /* New style for card titles */
-            font-size: 18px;
-            margin-top: 0;
+        h2 {
+            font-size: 20px;
             margin-bottom: 15px;
-            color: #90caf9; /* Lighter blue for card titles */
-            border-bottom: 1px solid #333; /* Subtle separator */
-            padding-bottom: 10px;
+            color: #8ab4f8; /* Helles Blau für Kachelüberschriften */
         }
         .date {
-            color: #a0a0a0; /* Slightly darker light grey */
+            color: #a0a0a0;
             font-size: 14px;
             margin-bottom: 24px;
         }
         .gemini-text {
             font-size: 16px;
             white-space: pre-line;
-            color: #e0e0e0;
         }
         #chart {
             width: 100%;
@@ -52,136 +48,154 @@
         .footer {
             text-align: center;
             font-size: 12px;
-            color: #6a6a6a; /* Darker grey for footer */
+            color: #a0a0a0;
             margin-top: 20px;
         }
 
-        /* Makes the legend on mobile nicer */
+        /* Macht die Legende auf dem Handy schöner */
         .legendtext {
             font-size: 12px !important;
-            color: #e0e0e0 !important; /* Ensure legend text is light */
         }
 
-        /* Specific styles for new cards */
-        .weather-info {
+        /* Neue Stile für spezifische Kacheln */
+        .weather-card-content {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-top: 10px;
         }
         .weather-icon {
-            font-size: 48px;
-            line-height: 1;
+            font-size: 40px;
+            margin-right: 15px;
+            line-height: 1; /* Emoji besser ausrichten */
         }
-        .weather-details {
-            font-size: 1.1em;
+        .weather-details strong {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #e0e0e0;
         }
-        .weather-details p {
-            margin: 5px 0;
+        .weather-details span {
+            font-size: 16px;
+            color: #a0a0a0;
         }
 
-        .product-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 1.1em;
-        }
-        .status-indicator {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
+        .availability-status {
+            font-weight: bold;
             display: inline-block;
-            flex-shrink: 0; /* Prevents indicator from shrinking */
+            margin-left: 10px;
         }
-        .status-available { background-color: #28a745; } /* Green */
-        .status-unavailable { background-color: #dc3545; } /* Red */
-        .status-unknown { background-color: #ffc107; } /* Yellow */
-        .product-link {
-            color: #8ab4f8; /* Light blue link color */
+        .status-available { color: #82e0aa; } /* Grün */
+        .status-unavailable { color: #f28b82; } /* Rot */
+        .status-unknown { color: #fabc02; } /* Gelb für unbekannt */
+
+        .fuel-analysis-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .fuel-analysis-item {
+            display: flex;
+            align-items: flex-start; /* Text am oberen Rand ausrichten, falls er umbricht */
+            margin-bottom: 10px;
+        }
+        .fuel-analysis-item strong {
+            flex-shrink: 0;
+            width: 80px; /* Feste Breite für Beschriftung */
+            margin-right: 10px;
+            color: #e0e0e0;
+        }
+        .fuel-analysis-item span {
+            flex-grow: 1;
+            color: #a0a0a0;
+        }
+        .fuel-analysis-good { color: #82e0aa; } /* Grün für gute Ratschläge / niedrige Preise */
+        .fuel-analysis-bad { color: #f28b82; } /* Rot für schlechte Preise / hohe Preise */
+        .fuel-analysis-neutral { color: #fabc02; } /* Gelb für neutrale Trends */
+
+        a {
+            color: #8ab4f8; /* Linkfarbe für dunkles Design */
             text-decoration: none;
         }
-        .product-link:hover {
+        a:hover {
             text-decoration: underline;
-        }
-
-        .fuel-analysis-recommendation {
-            font-size: 1.1em;
-            margin-top: 20px;
-            padding: 12px 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .fuel-analysis-recommendation.good {
-            background-color: rgba(40, 167, 69, 0.2); /* Light green background */
-            color: #28a745;
-        }
-        .fuel-analysis-recommendation.ok {
-            background-color: rgba(255, 193, 7, 0.2); /* Light yellow background */
-            color: #ffc107;
-        }
-        .fuel-analysis-recommendation.bad {
-            background-color: rgba(220, 53, 69, 0.2); /* Light red background */
-            color: #dc3545;
         }
     </style>
 </head>
 <body>
+    <script>
+        // Setzt das dynamische Datum
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = today.toLocaleDateString('de-DE', options);
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateElement = document.querySelector('.date');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        });
+
+        // Simulierte Daten für n8n-Injektion. n8n würde hier die tatsächlichen Daten einfügen.
+        // Beispiel Wetter: { "location": "Berlin", "temperature": 18, "description": "Leicht bewölkt", "icon": "☁️" }
+        const weatherData = { "location": "Berlin", "temperature": 18, "description": "Leicht bewölkt", "icon": "☁️" };
+
+        // Beispiel Behringer Verfügbarkeit: { "isAvailable": true } oder { "isAvailable": false }
+        const behringerData = { "isAvailable": false };
+    </script>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Mittwoch, 18. März 2026</div> <!-- Datum sollte von n8n dynamisch gesetzt werden -->
+    <div class="date"></div> <!-- Datum wird durch JS gefüllt -->
 
-    <!-- 1. Wetter Kachel -->
+    <!-- Wetter Kachel -->
     <div class="card">
-        <h2 class="card-title">Aktuelles Wetter in Berlin</h2>
-        <div class="weather-info">
-            <span class="weather-icon">☀️</span> <!-- Symbol müsste dynamisch gesetzt werden (z.B. basierend auf OpenWeatherMap API) -->
+        <h2>Aktuelles Wetter</h2>
+        <div class="weather-card-content">
+            <span class="weather-icon"></span>
             <div class="weather-details">
-                <p><strong>22°C</strong>, Sonnig</p>
-                <p>Gefühlte Temperatur: 20°C</p>
-                <p>Wind: 10 km/h aus NO, Luftfeuchtigkeit: 65%</p>
+                <strong></strong>
+                <span></span>
             </div>
         </div>
-        <p style="font-size: 0.9em; color: #a0a0a0; margin-top: 15px;">(Wetterdaten sind Beispiele und müssten über eine API dynamisch von n8n geladen werden.)</p>
     </div>
 
-    <!-- 2. Spritpreise Plot Kachel (bestehend) -->
+    <!-- Spritpreise Plot -->
     <div class="card">
-        <h2 class="card-title">Preisvergleich Tankstellen</h2>
+        <h2>Preisvergleich Tankstellen</h2>
         <div id="chart"></div>
     </div>
 
-    <!-- 3. Spritpreise Analyse Kachel -->
+    <!-- Spritpreise Analyse Kachel -->
     <div class="card">
-        <h2 class="card-title">Spritpreise Analyse & Empfehlung</h2>
-        <div id="fuel-analysis-content">
-            <!-- Analyse-Text wird hier von JavaScript eingefügt -->
-            <p>Lade Spritpreisanalyse...</p>
-        </div>
-        <div id="fuel-analysis-recommendation" class="fuel-analysis-recommendation">
-            <!-- Empfehlung wird hier von JavaScript eingefügt -->
+        <h2>Spritpreis-Analyse</h2>
+        <ul class="fuel-analysis-list">
+            <li class="fuel-analysis-item">
+                <strong>Optimal Tanken:</strong> <span id="refuel-recommendation">Analysiere Daten...</span>
+            </li>
+            <li class="fuel-analysis-item">
+                <strong>Preisverlauf:</strong> <span id="price-trend">Analysiere Daten...</span>
+            </li>
+            <li class="fuel-analysis-item">
+                <strong>Preishoch/-tief:</strong> <span id="price-extremes">Analysiere Daten...</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Behringer Wing Rack Kachel -->
+    <div class="card">
+        <h2>Behringer Wing Rack B-Ware</h2>
+        <div>
+            Status bei Thomann:
+            <span id="behringer-availability">
+                <span class="availability-status status-unknown">Überprüfe...</span>
+            </span>
+            <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank" style="margin-left: 10px;">Zum Produkt</a>
         </div>
     </div>
 
-    <!-- 4. Behringer Wing Rack B-Ware Kachel -->
-    <div class="card">
-        <h2 class="card-title">Behringer Wing Rack B-Ware Status</h2>
-        <div class="product-status">
-            Status: <span id="wing-rack-status"><span class="status-indicator status-unknown"></span> Wird geladen...</span>
-        </div>
-        <p style="margin-top: 10px;">
-            <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank" class="product-link">Direkt zu Thomann</a>
-        </p>
-        <p style="font-size: 0.9em; color: #a0a0a0; margin-top: 15px;">(Der Status müsste von n8n per Web-Scraping dynamisch ermittelt werden, hier ist es eine Simulation.)</p>
-    </div>
-
-    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB, Thomann</div>
+    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB, OpenWeatherMap, Thomann</div>
 
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Shell Kickers","x":["2026-03-18 02:00:58","2026-03-17 23:00:58","2026-03-17 20:00:58","2026-03-17 17:00:58","2026-03-17 14:00:59","2026-03-17 11:00:58","2026-03-17 08:00:58","2026-03-17 05:00:58","2026-03-17 02:00:58","2026-03-16 23:00:58","2026-03-16 20:00:58","2026-03-16 17:00:58","2026-03-16 14:00:57","2026-03-16 11:00:58","2026-03-16 08:00:58","2026-03-16 05:00:58","2026-03-16 02:00:58","2026-03-15 23:00:58","2026-03-15 20:00:58","2026-03-15 17:00:58","2026-03-15 14:00:58","2026-03-15 11:00:58","2026-03-15 08:00:58","2026-03-15 05:00:58","2026-03-15 02:00:58","2026-03-14 23:00:58","2026-03-14 20:00:58","2026-03-14 17:00:58","2026-03-14 14:00:58","2026-03-14 11:00:58","2026-03-14 08:00:58","2026-03-14 05:00:58","2026-03-14 02:00:58","2026-03-13 23:00:58","2026-03-13 20:00:58","2026-03-13 17:00:58","2026-03-13 14:00:58","2026-03-13 11:00:58","2026-03-13 08:00:58","2026-03-13 05:00:58","2026-03-13 02:00:58","2026-03-12 23:00:59","2026-03-12 20:00:58","2026-03-12 17:00:58","2026-03-12 14:00:59","2026-03-12 11:00:58","2026-03-12 08:00:58","2026-03-12 05:00:59","2026-03-12 02:00:58","2026-03-11 23:00:58"],"y":[2.049,2.049,2.049,2.009,2.089,2.039,2.079,2.059,2.059,2.059,2.059,2.019,2.079,2.049,2.069,2.049,2.049,2.049,2.079,2.029,2.069,2.009,2.079,2.049,2.049,2.049,2.079,2.029,2.059,2.009,2.069,2.049,2.049,2.049,2.049,1.989,2.049,2.019,2.109,2.019,2.019,2.019,2.019,1.969,2.029,2.019,2.039,2.009,2.009,2.009],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-03-18 02:00:57","2026-03-17 23:00:57","2026-03-17 20:00:57","2026-03-17 17:00:57","2026-03-17 14:00:57","2026-03-17 11:00:57","2026-03-17 08:00:57","2026-03-17 05:00:57","2026-03-17 02:00:57","2026-03-16 23:00:57","2026-03-16 20:00:57","2026-03-16 17:00:57","2026-03-16 14:00:57","2026-03-16 11:00:57","2026-03-16 08:00:57","2026-03-16 05:00:57","2026-03-16 02:00:57","2026-03-15 23:00:57","2026-03-15 20:00:57","2026-03-15 17:00:57","2026-03-15 14:00:57","2026-03-15 11:00:57","2026-03-15 08:00:57","2026-03-15 05:00:57","2026-03-15 02:00:57","2026-03-14 23:00:57","2026-03-14 20:00:57","2026-03-14 17:00:57","2026-03-14 14:00:57","2026-03-14 11:00:57","2026-03-14 08:00:57","2026-03-14 05:00:57","2026-03-14 02:00:57","2026-03-13 23:00:57","2026-03-13 20:00:57","2026-03-13 17:00:57","2026-03-13 14:00:57","2026-03-13 11:00:57","2026-03-13 08:00:57","2026-03-13 05:00:57","2026-03-13 02:00:57","2026-03-12 23:00:57","2026-03-12 20:00:57","2026-03-12 17:00:57","2026-03-12 14:00:57","2026-03-12 11:00:57","2026-03-12 08:00:57","2026-03-12 05:00:57","2026-03-12 02:00:57","2026-03-11 23:00:57"],"y":[2.019,2.019,2.029,1.989,2.079,2.039,2.069,2.059,2.029,2.029,2.039,2.009,2.069,2.039,2.059,2.049,2.019,2.019,2.029,1.999,2.059,1.999,2.049,2.049,2.019,2.019,2.029,1.999,2.049,1.999,2.009,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.019,1.989,1.989,1.999,1.969,2.039,1.979,1.979,2.009,1.979,1.979],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Shell Kickers","x":["2026-03-18 14:00:58","2026-03-18 11:00:58","2026-03-18 08:00:58","2026-03-18 05:00:58","2026-03-18 02:00:58","2026-03-17 23:00:58","2026-03-17 20:00:58","2026-03-17 17:00:58","2026-03-17 14:00:59","2026-03-17 11:00:58","2026-03-17 08:00:58","2026-03-17 05:00:58","2026-03-17 02:00:58","2026-03-16 23:00:58","2026-03-16 20:00:58","2026-03-16 17:00:58","2026-03-16 14:00:57","2026-03-16 11:00:58","2026-03-16 08:00:58","2026-03-16 05:00:58","2026-03-16 02:00:58","2026-03-15 23:00:58","2026-03-15 20:00:58","2026-03-15 17:00:58","2026-03-15 14:00:58","2026-03-15 11:00:58","2026-03-15 08:00:58","2026-03-15 05:00:58","2026-03-15 02:00:58","2026-03-14 23:00:58","2026-03-14 20:00:58","2026-03-14 17:00:58","2026-03-14 14:00:58","2026-03-14 11:00:58","2026-03-14 08:00:58","2026-03-14 05:00:58","2026-03-14 02:00:58","2026-03-13 23:00:58","2026-03-13 20:00:58","2026-03-13 17:00:58","2026-03-13 14:00:58","2026-03-13 11:00:58","2026-03-13 08:00:58","2026-03-13 05:00:58","2026-03-13 02:00:58","2026-03-12 23:00:59","2026-03-12 20:00:58","2026-03-12 17:00:58","2026-03-12 14:00:59","2026-03-12 11:00:58"],"y":[2.079,2.039,2.069,2.049,2.049,2.049,2.049,2.009,2.089,2.039,2.079,2.059,2.059,2.059,2.059,2.019,2.079,2.049,2.069,2.049,2.049,2.049,2.079,2.029,2.069,2.009,2.079,2.049,2.049,2.049,2.079,2.029,2.059,2.009,2.069,2.049,2.049,2.049,2.049,1.989,2.049,2.019,2.109,2.019,2.019,2.019,2.019,1.969,2.029,2.019],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-03-18 14:00:57","2026-03-18 11:00:57","2026-03-18 08:00:57","2026-03-18 05:00:57","2026-03-18 02:00:57","2026-03-17 23:00:57","2026-03-17 20:00:57","2026-03-17 17:00:57","2026-03-17 14:00:57","2026-03-17 11:00:57","2026-03-17 08:00:57","2026-03-17 05:00:57","2026-03-17 02:00:57","2026-03-16 23:00:57","2026-03-16 20:00:57","2026-03-16 17:00:57","2026-03-16 14:00:57","2026-03-16 11:00:57","2026-03-16 08:00:57","2026-03-16 05:00:57","2026-03-16 02:00:57","2026-03-15 23:00:57","2026-03-15 20:00:57","2026-03-15 17:00:57","2026-03-15 14:00:57","2026-03-15 11:00:57","2026-03-15 08:00:57","2026-03-15 05:00:57","2026-03-15 02:00:57","2026-03-14 23:00:57","2026-03-14 20:00:57","2026-03-14 17:00:57","2026-03-14 14:00:57","2026-03-14 11:00:57","2026-03-14 08:00:57","2026-03-14 05:00:57","2026-03-14 02:00:57","2026-03-13 23:00:57","2026-03-13 20:00:57","2026-03-13 17:00:57","2026-03-13 14:00:57","2026-03-13 11:00:57","2026-03-13 08:00:57","2026-03-13 05:00:57","2026-03-13 02:00:57","2026-03-12 23:00:57","2026-03-12 20:00:57","2026-03-12 17:00:57","2026-03-12 14:00:57","2026-03-12 11:00:57"],"y":[2.059,2.029,2.069,2.049,2.019,2.019,2.029,1.989,2.079,2.039,2.069,2.059,2.029,2.029,2.039,2.009,2.069,2.039,2.059,2.049,2.019,2.019,2.029,1.999,2.059,1.999,2.049,2.049,2.019,2.019,2.029,1.999,2.049,1.999,2.009,2.049,2.019,2.019,2.029,1.999,2.079,2.029,2.039,2.019,1.989,1.989,1.999,1.969,2.039,1.979],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -191,27 +205,27 @@
                 y: -0.3,
                 x: 0.5,
                 xanchor: 'center',
-                font: { color: '#e0e0e0' } /* Legend text color for dark theme */
+                font: { color: '#e0e0e0' } /* Legenden-Textfarbe */
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#333', /* Darker grid lines for dark theme */
+                gridcolor: '#444', /* Dunklere Gitterlinien */
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true,
-                tickfont: { color: '#e0e0e0' } /* X-axis tick labels color for dark theme */
+                tickfont: { color: '#e0e0e0' } /* X-Achsen-Beschriftungsfarbe */
             },
             yaxis: {
                 title: {
                     text: 'Preis (€)',
-                    font: { color: '#e0e0e0' } /* Y-axis title color for dark theme */
+                    font: { color: '#e0e0e0' } /* Y-Achsen-Titel-Farbe */
                 },
-                gridcolor: '#333', /* Darker grid lines for dark theme */
+                gridcolor: '#444', /* Dunklere Gitterlinien */
                 tickformat: ',.3f',
                 autorange: true,
-                tickfont: { color: '#e0e0e0' } /* Y-axis tick labels color for dark theme */
+                tickfont: { color: '#e0e0e0' } /* Y-Achsen-Beschriftungsfarbe */
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Keep transparent */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Keep transparent */
+            paper_bgcolor: '#1a1a1a', /* Diagrammhintergrund wie Body */
+            plot_bgcolor: '#2c2c2c', /* Plotbereichshintergrund wie Kachel */
             autosize: true
         };
 
@@ -220,169 +234,91 @@
             displayModeBar: false
         };
 
-        // Plotly Chart erstellen
+        // Chart erstellen
         Plotly.newPlot('chart', traces, layout, config);
 
-        // --- JavaScript für zusätzliche Kacheln ---
+        // --- Logik für neue Kacheln ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wetter Kachel (Simulierte Daten, n8n würde hier reale Daten einfügen)
+            const weatherIconElem = document.querySelector('.weather-icon');
+            const weatherTempElem = document.querySelector('.weather-details strong');
+            const weatherDescLocElem = document.querySelector('.weather-details span');
 
-        // 1. Spritpreisanalyse Funktion
-        function analyzeFuelPrices(traces) {
-            let allPricesFlattened = []; // Speichert alle Preisdatenpunkte mit Zeitstempel und Station
-            let latestPricesPerStation = {}; // Speichert den aktuellsten Preis pro Station
+            if (weatherIconElem && weatherTempElem && weatherDescLocElem && typeof weatherData !== 'undefined') {
+                weatherIconElem.textContent = weatherData.icon;
+                weatherTempElem.textContent = `${weatherData.temperature}°C`;
+                weatherDescLocElem.textContent = `${weatherData.description} in ${weatherData.location}`;
+            }
 
-            const now = new Date();
-            // Analysiere Daten der letzten ~36 Stunden für eine gute Tages-Trendanalyse
-            const thirtySixHoursAgo = new Date(now.getTime() - (36 * 60 * 60 * 1000));
-            // Analysiere Daten der letzten ~7 Tage für eine längerfristige Trendanalyse
-            const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+            // Behringer Wing Rack Verfügbarkeit (Simulierte Daten, n8n würde hier reale Daten einfügen)
+            const availabilityElem = document.getElementById('behringer-availability');
+            if (availabilityElem && typeof behringerData !== 'undefined') {
+                const statusSpan = availabilityElem.querySelector('.availability-status');
+                if (behringerData.isAvailable) {
+                    statusSpan.textContent = 'Verfügbar!';
+                    statusSpan.classList.remove('status-unknown');
+                    statusSpan.classList.add('status-available');
+                } else {
+                    statusSpan.textContent = 'Derzeit nicht verfügbar.';
+                    statusSpan.classList.remove('status-unknown');
+                    statusSpan.classList.add('status-unavailable');
+                }
+            }
 
-            traces.forEach(station => {
-                let latestForThisStation = null;
-                station.x.forEach((timestampStr, index) => {
-                    const price = station.y[index];
-                    const timestamp = new Date(timestampStr);
+            // Spritpreis-Analyse
+            const refuelRecommendationElem = document.getElementById('refuel-recommendation');
+            const priceTrendElem = document.getElementById('price-trend');
+            const priceExtremesElem = document.getElementById('price-extremes');
 
-                    allPricesFlattened.push({ price, timestamp, station: station.name });
-
-                    // Finde den neuesten Preis für jede Station
-                    if (!latestForThisStation || timestamp > latestForThisStation.timestamp) {
-                        latestForThisStation = { price, timestamp };
-                    }
+            if (refuelRecommendationElem && priceTrendElem && priceExtremesElem && traces.length > 0) {
+                let allPrices = [];
+                traces.forEach(trace => {
+                    trace.y.forEach(price => allPrices.push(price));
                 });
-                if (latestForThisStation) {
-                    latestPricesPerStation[station.name] = latestForThisStation;
-                }
-            });
 
-            // Sortiere alle Preise chronologisch
-            allPricesFlattened.sort((a, b) => a.timestamp - b.timestamp);
+                if (allPrices.length > 0) {
+                    const minPrice = Math.min(...allPrices);
+                    const maxPrice = Math.max(...allPrices);
+                    // Annahme: Daten sind vom Neuesten zum Ältesten sortiert (wie in `traces` der Fall ist)
+                    const latestPrice = allPrices[0];
+                    const oldestPrice = allPrices[allPrices.length - 1];
 
-            const relevantPricesForDailyTrend = allPricesFlattened.filter(item => item.timestamp >= thirtySixHoursAgo);
+                    // Trend bestimmen
+                    let trendText;
+                    if (latestPrice < oldestPrice * 0.995) { // Deutlicher Rückgang
+                        trendText = `Die Preise sind im Laufe der letzten Tage <span class="fuel-analysis-good">deutlich gefallen</span>.`;
+                    } else if (latestPrice > oldestPrice * 1.005) { // Deutlicher Anstieg
+                        trendText = `Die Preise sind im Laufe der letzten Tage <span class="fuel-analysis-bad">deutlich gestiegen</span>.`;
+                    } else {
+                        trendText = `Die Preise waren in den letzten Tagen <span class="fuel-analysis-neutral">relativ stabil</span>.`;
+                    }
+                    priceTrendElem.innerHTML = trendText;
 
-            if (relevantPricesForDailyTrend.length === 0) {
-                return {
-                    analysisText: "<p>Leider keine aktuellen Daten für die Spritpreisanalyse verfügbar.</p>",
-                    recommendation: { text: "Keine Empfehlung möglich.", level: "ok" }
-                };
-            }
+                    // Empfehlung zum Tanken
+                    let recommendationText = '';
+                    const currentHour = new Date().getHours();
 
-            // Finde niedrigste und höchste Preise im relevanten Zeitfenster (36h)
-            let lowestPriceInWindow = Infinity;
-            let highestPriceInWindow = 0;
-            let lowestPriceTime = null;
-            let highestPriceTime = null;
+                    if (latestPrice === minPrice) {
+                        recommendationText = 'Aktuell ist der Preis sehr niedrig. <span class="fuel-analysis-good">Jetzt tanken!</span>';
+                    } else if (latestPrice === maxPrice) {
+                        recommendationText = 'Der Preis ist aktuell sehr hoch. <span class="fuel-analysis-bad">Warten Sie lieber.</span>';
+                    } else if (currentHour >= 18 && currentHour <= 22) {
+                        recommendationText = 'Abends sind die Preise tendenziell niedriger. <span class="fuel-analysis-good">Gute Zeit zum Tanken!</span>';
+                    } else if (currentHour >= 6 && currentHour <= 9) {
+                        recommendationText = 'Morgens sind die Preise oft am höchsten. <span class="fuel-analysis-bad">Warten Sie noch.</span>';
+                    } else {
+                        recommendationText = 'Der Preis ist durchschnittlich. Achten Sie auf fallende Tendenzen am Abend.';
+                    }
+                    refuelRecommendationElem.innerHTML = recommendationText;
 
-            relevantPricesForDailyTrend.forEach(item => {
-                if (item.price < lowestPriceInWindow) {
-                    lowestPriceInWindow = item.price;
-                    lowestPriceTime = item.timestamp;
-                }
-                if (item.price > highestPriceInWindow) {
-                    highestPriceInWindow = item.price;
-                    highestPriceTime = item.timestamp;
-                }
-            });
-
-            const currentPricesValues = Object.values(latestPricesPerStation).map(lp => lp.price);
-            const minCurrentPrice = Math.min(...currentPricesValues);
-
-            let analysisText = `<p>Aktuell liegt der günstigste Preis bei <strong>${minCurrentPrice.toFixed(3)} €</strong>.</p>`;
-            analysisText += `<p>In den letzten ~36 Stunden lag der niedrigste Preis bei <strong>${lowestPriceInWindow.toFixed(3)} €</strong> (ca. ${lowestPriceTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}) und der höchste Preis bei <strong>${highestPriceInWindow.toFixed(3)} €</strong> (ca. ${highestPriceTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}).</p>`;
-
-            let recommendation = { text: "Beobachten Sie den Markt.", level: "ok" };
-            const currentHour = now.getHours();
-
-            // Bewertung des aktuellen Preises im Verhältnis zum Tagesverlauf
-            const priceRange = highestPriceInWindow - lowestPriceInWindow;
-            // Vermeide Division durch Null, falls Preisspanne 0 ist
-            const pricePosition = priceRange > 0 ? (minCurrentPrice - lowestPriceInWindow) / priceRange : 0.5; // 0 = niedrigster Preis, 1 = höchster Preis
-
-            // Empfehlungen basierend auf typischen Preiszyklen und aktueller Position
-            if (currentHour >= 5 && currentHour <= 10) { // Früher Morgen bis Vormittag (oft steigend/hoch)
-                if (pricePosition > 0.75) {
-                    recommendation = { text: "Preise sind aktuell sehr hoch. Es lohnt sich, bis zum Abend zu warten.", level: "bad" };
-                } else if (pricePosition > 0.5) {
-                    recommendation = { text: "Preise sind überdurchschnittlich. Wenn möglich, später am Tag tanken.", level: "ok" };
+                    priceExtremesElem.innerHTML = `Niedrigster Preis: <span class="fuel-analysis-good">${minPrice.toFixed(3)}€</span>, Höchster Preis: <span class="fuel-analysis-bad">${maxPrice.toFixed(3)}€</span>`;
                 } else {
-                    recommendation = { text: "Preise sind im Mittelfeld, aber typischerweise steigen sie jetzt an. Beobachten.", level: "ok" };
+                    refuelRecommendationElem.textContent = 'Keine ausreichenden Daten für eine Analyse vorhanden.';
+                    priceTrendElem.textContent = 'Keine Daten.';
+                    priceExtremesElem.textContent = 'Keine Daten.';
                 }
-            } else if (currentHour >= 18 && currentHour <= 22) { // Abend (oft fallend)
-                 if (pricePosition < 0.25) {
-                    recommendation = { text: "Guter Zeitpunkt zum Tanken! Die Preise sind im niedrigen Bereich und könnten bald steigen.", level: "good" };
-                } else if (pricePosition < 0.5) {
-                    recommendation = { text: "Preise fallen. Ein guter Zeitpunkt, um nach den günstigsten Angeboten Ausschau zu halten.", level: "good" };
-                } else {
-                    recommendation = { text: "Die Preise sind im Mittelfeld. Es könnte noch günstiger werden.", level: "ok" };
-                }
-            } else if (currentHour > 22 || currentHour < 5) { // Späte Nacht / sehr früher Morgen (oft am niedrigsten)
-                if (pricePosition < 0.2) {
-                    recommendation = { text: "Optimaler Zeitpunkt zum Tanken! Die Preise sind sehr günstig.", level: "good" };
-                } else {
-                    recommendation = { text: "Preise sind niedrig. Jetzt könnte ein guter Zeitpunkt sein.", level: "good" };
-                }
-            } else { // Mittags (variabel, oft noch hoch)
-                if (pricePosition > 0.6) {
-                    recommendation = { text: "Preise sind tendenziell hoch. Abwarten bis zum Abend könnte sich lohnen.", level: "bad" };
-                } else {
-                    recommendation = { text: "Preise sind im Mittelfeld. Beobachten Sie die Entwicklung.", level: "ok" };
-                }
-            }
-
-            // Trend über die letzten Tage (z.B. 7 Tage)
-            const pricesLast7Days = allPricesFlattened.filter(item => item.timestamp >= sevenDaysAgo);
-
-            if (pricesLast7Days.length > 0) {
-                // Finde den ersten verfügbaren Preis im 7-Tages-Fenster
-                let firstPriceIn7Days = pricesLast7Days[0].price;
-                // Finde den letzten verfügbaren Preis (aktuellen Min-Preis)
-                const latestOverallPrice = minCurrentPrice; 
-
-                const priceChange7Days = latestOverallPrice - firstPriceIn7Days;
-
-                if (priceChange7Days > 0.05) { // Deutlicher Anstieg über 7 Tage
-                    analysisText += `<p>Über die letzten Tage (7d) zeigen die Preise einen <strong>deutlichen Aufwärtstrend</strong>.</p>`;
-                } else if (priceChange7Days < -0.05) { // Deutlicher Rückgang über 7 Tage
-                    analysisText += `<p>Über die letzten Tage (7d) zeigen die Preise einen <strong>deutlichen Abwärtstrend</strong>.</p>`;
-                } else if (Math.abs(priceChange7Days) > 0.01) { // Leichter Trend
-                    analysisText += `<p>Über die letzten Tage (7d) zeigen die Preise einen <strong>leichten ${priceChange7Days > 0 ? 'Aufwärts' : 'Abwärts'}trend</strong>.</p>`;
-                } else {
-                    analysisText += `<p>Die Preise sind über die letzten Tage (7d) <strong>relativ stabil</strong> geblieben.</p>`;
-                }
-            } else {
-                analysisText += `<p>Nicht genügend Daten für eine längerfristige Trendanalyse verfügbar.</p>`;
-            }
-
-            return { analysisText, recommendation };
-        }
-
-        // Führe die Analyse aus und zeige sie an
-        const { analysisText, recommendation } = analyzeFuelPrices(traces);
-        document.getElementById('fuel-analysis-content').innerHTML = analysisText;
-        const recommendationDiv = document.getElementById('fuel-analysis-recommendation');
-        recommendationDiv.innerHTML = `<strong>${recommendation.text}</strong>`;
-        recommendationDiv.classList.add(recommendation.level);
-
-
-        // 2. Behringer Wing Rack B-Ware Status (Simuliert)
-        async function checkThomannAvailability() {
-            // Diese Funktion würde serverseitig in n8n implementiert, um den tatsächlichen Status abzurufen.
-            // Für die clientseitige Simulation geben wir einen zufälligen Status zurück.
-            // In n8n würde man einen HTTP-Request an die URL senden und dann den HTML-Inhalt parsen
-            // (z.B. mit einer Bibliothek wie Cheerio.js), um den Verfügbarkeitstext zu überprüfen.
-            console.log("Simuliere Thomann Verfügbarkeitsprüfung...");
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Simuliere Netzwerkverzögerung
-            return Math.random() > 0.5; // True für verfügbar, False für nicht verfügbar
-        }
-
-        checkThomannAvailability().then(isAvailable => {
-            const statusElement = document.getElementById('wing-rack-status');
-            if (isAvailable) {
-                statusElement.innerHTML = '<span class="status-indicator status-available"></span> Verfügbar';
-            } else {
-                statusElement.innerHTML = '<span class="status-indicator status-unavailable"></span> Momentan nicht verfügbar';
             }
         });
-
     </script>
 </body>
 </html>
