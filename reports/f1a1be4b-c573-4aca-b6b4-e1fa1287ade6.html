@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Täglicher Bericht</title>
+    <title>Dein Tankstellen-Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #1a1a1a; /* Dunkler Hintergrund */
+            background-color: #1c1c1e; /* Dunkler Hintergrund */
             color: #e0e0e0; /* Helle Textfarbe */
             line-height: 1.6;
         }
         .card {
-            background: #2a2a2a; /* Etwas hellerer dunkler Hintergrund für Kacheln */
+            background: #2c2c2e; /* Etwas hellerer Kartenhintergrund */
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* Dunklerer Schatten */
-            border: 1px solid #3a3a3a; /* Subtiler Rand */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Dunklerer, stärkerer Schatten */
         }
         h1 { 
             font-size: 24px; 
             margin-bottom: 8px; 
-            color: #90caf9; /* Hellblau für Überschriften */
+            color: #8ab4f8; /* Helleres Blau für Dark Mode */
         }
         .date { 
-            color: #bbbbbb; 
+            color: #a0a0a0; /* Helleres Grau */
             font-size: 14px; 
             margin-bottom: 24px; 
         }
@@ -36,132 +35,139 @@
             font-size: 16px; 
             white-space: pre-line; 
         }
-        #chart { 
-            width: 100%; 
-            height: 400px; 
-        }
+        #chart { width: 100%; height: 400px; }
         .footer { 
             text-align: center; 
             font-size: 12px; 
-            color: #888888; 
+            color: #888; /* Helleres Grau */
             margin-top: 20px; 
         }
         
-        /* Macht Plotly Legende und Achsenbeschriftungen im Dark Mode heller */
-        .legendtext, .xtick, .ytick, .gtitle, .axistitle {
-            color: #e0e0e0 !important;
-        }
+        /* Macht die Legende auf dem Handy schöner */
+        .legendtext { font-size: 12px !important; color: #e0e0e0 !important; } /* Legendentext hell */
 
-        /* Zusätzliche Stile für die neuen Kacheln */
+        /* Zusätzliche Stile für neue Inhalte */
         .card-title {
             font-size: 18px;
             font-weight: bold;
-            color: #90caf9; /* Konsistente Überschriftenfarbe */
             margin-bottom: 15px;
-            display: block;
-        }
-        .weather-container {
-            display: flex;
-            align-items: center;
+            color: #e0e0e0; /* Kartentitel Farbe */
         }
         .weather-icon {
-            font-size: 48px; /* Emoji-Größe für Wetter-Icons */
-            line-height: 1; 
-            margin-right: 15px;
-        }
-        .weather-info p {
-            margin: 0;
-            font-size: 16px;
-        }
-        .weather-temp {
-            font-size: 28px;
-            font-weight: bold;
-            color: #a7d9ff; /* Spezielle Farbe für Temperatur */
-        }
-        .wing-status {
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 6px;
+            font-size: 32px;
+            margin-right: 10px;
+            vertical-align: middle;
+            line-height: 1; /* Vertikale Ausrichtung für Icons */
             display: inline-block;
-            margin-top: 10px;
-            font-size: 15px;
         }
         .status-available {
-            background-color: #4CAF50; /* Grün */
-            color: white;
+            color: #81c784; /* Grün für verfügbar */
+            font-weight: bold;
         }
         .status-unavailable {
-            background-color: #f44336; /* Rot */
+            color: #e57373; /* Rot für nicht verfügbar */
+            font-weight: bold;
+        }
+        .price-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        .price-recommend-buy {
+            background-color: #388e3c; /* Dunkelgrün */
             color: white;
         }
-        .wing-link {
-            color: #90caf9;
-            text-decoration: none;
-            font-weight: bold;
+        .price-recommend-wait {
+            background-color: #fdd835; /* Gelb */
+            color: #333;
         }
-        .wing-link:hover {
-            text-decoration: underline;
+        .price-trend-up {
+            color: #e57373; /* Rot */
         }
-        .fuel-analysis-point {
-            margin-bottom: 10px;
+        .price-trend-down {
+            color: #81c784; /* Grün */
         }
-        .fuel-analysis-point span {
-            font-weight: bold;
+        .price-trend-stable {
+            color: #8ab4f8; /* Blau */
         }
-        .text-green { color: #4CAF50; } /* Grün für gute Preise */
-        .text-red { color: #f44336; } /* Rot für schlechte Preise */
-        .text-orange { color: #FF9800; } /* Orange für moderate Preise */
+        .price-chart-legend {
+            font-size: 14px;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #444; /* Trennlinie für Legende */
+        }
+        .price-chart-legend span {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .price-chart-legend .bullet {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .bullet-low { background-color: #81c784; }
+        .bullet-high { background-color: #e57373; }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Samstag, 18. April 2026</div>
+    <div class="date">Donnerstag, 28. Mai 2026</div>
 
-    <!-- Wetter Kachel -->
+    <!-- Wetterbericht Kachel -->
     <div class="card">
-        <span class="card-title">Wetter heute</span>
-        <div class="weather-container">
-            <span class="weather-icon">☀️</span>
-            <div class="weather-info">
-                <p class="weather-temp">22°C</p>
-                <p>Sonnig und klar</p>
-                <p>Gefühlte Temperatur: 20°C</p>
-            </div>
-        </div>
-        <p style="margin-top: 15px; font-size: 14px; color: #bbbbbb;">Leichte Brise aus Nordost, Luftfeuchtigkeit 60%.</p>
-    </div>
-
-    <!-- Preisvergleich Tankstellen Kachel -->
-    <div class="card">
-        <span class="card-title">Preisvergleich Tankstellen</span>
-        <div id="chart"></div>
-    </div>
-
-    <!-- Spritpreis-Analyse Kachel -->
-    <div class="card">
-        <span class="card-title">Spritpreis-Analyse</span>
-        <div class="fuel-analysis-point">
-            Aktuell liegen die Preise bei <span class="text-orange">2.039 €</span> pro Liter, was im Vergleich zu den letzten Tagen eher im mittleren Bereich liegt.
-        </div>
-        <div class="fuel-analysis-point">
-            Die günstigsten Tankzeiten waren in den letzten 24 Stunden oft zwischen <span class="text-green">10:00 und 11:00 Uhr</span> sowie nach <span class="text-green">19:00 Uhr</span>.
-        </div>
-        <div class="fuel-analysis-point">
-            Preise neigen dazu, in den frühen Morgenstunden und zur Mittagszeit anzusteigen. Es könnte sich lohnen, am späteren Nachmittag oder Abend zu tanken, wenn keine dringende Betankung erforderlich ist.
-        </div>
-        <div class="fuel-analysis-point">
-            Der allgemeine Trend über die letzte Woche zeigt eine leichte Stabilisierung oder einen <span class="text-green">leichten Rückgang</span> der Preise, ausgehend von höheren Werten Anfang der Woche.
-        </div>
+        <div class="card-title">Wetterbericht</div>
+        <p><span class="weather-icon">☀️</span> Aktuell: <strong>20°C</strong>, Sonnig</p>
+        <p>Gefühlt: <strong>19°C</strong></p>
+        <p>Wind: <strong>15 km/h</strong> aus West</p>
+        <p>Aussichten für heute: Max <strong>24°C</strong>, Min <strong>12°C</strong>. Überwiegend sonnig mit leichter Bewölkung.</p>
     </div>
 
     <!-- Behringer Wing Rack B-Ware Kachel -->
     <div class="card">
-        <span class="card-title">Thomann B-Ware Check: Behringer Wing Rack</span>
-        <p>Status: <span class="wing-status status-unavailable">Nicht verfügbar</span></p>
-        <p style="margin-top: 10px;">Auf Thomann als B-Ware suchen:</p>
-        <p><a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" target="_blank" class="wing-link">Behringer Wing Rack B-Stock bei Thomann</a></p>
-        <p style="font-size: 14px; color: #bbbbbb; margin-top: 15px;">(Der Verfügbarkeitsstatus müsste von n8n dynamisch aktualisiert werden.)</p>
+        <div class="card-title">Behringer Wing Rack (B-Ware)</div>
+        <p>Status Thomann: <span class="status-unavailable">Aktuell nicht verfügbar</span></p>
+        <p>
+            <a href="https://www.thomann.de/de/behringer_wing_rack_b_stock.htm" style="color: #8ab4f8; text-decoration: none;">Zum Thomann Produkt</a>
+        </p>
+    </div>
+
+    <!-- Spritpreise Plot Kachel -->
+    <div class="card">
+        <strong style="display: block; margin-bottom: 15px;">Preisvergleich Tankstellen</strong>
+        <div id="chart"></div>
+    </div>
+
+    <!-- Analyse Spritpreise Kachel -->
+    <div class="card">
+        <div class="card-title">Analyse Spritpreise</div>
+        <p class="gemini-text">
+            Die Spritpreise zeigen in den letzten Tagen eine 
+            <span class="price-trend-stable">eher stabile Tendenz</span> 
+            mit üblichen Tagesschwankungen. 
+            <br><br>
+            <strong>Aktuelle Empfehlung:</strong>
+            <span class="price-indicator price-recommend-wait">Abwarten</span>
+            <br>
+            Obwohl die Preise aktuell im mittleren Bereich liegen (Jet: 1.969€, Shell: 1.979€), ist es ratsam, noch etwas zu warten.
+            Die günstigsten Tankzeiten liegen erfahrungsgemäß oft zwischen <strong>19:00 und 22:00 Uhr</strong>.
+            Achten Sie auf mögliche Preissenkungen in diesem Zeitfenster, da dies historisch die besten Zeiten sind.
+        </p>
+        <p class="price-chart-legend">
+            Die günstigsten Preise in den letzten Tagen lagen bei:
+            <span><span class="bullet bullet-low"></span> <strong>1.939 €</strong> (Jet Ringcenter am 26.05. 10:00 Uhr)</span>
+            <span><span class="bullet bullet-low"></span> <strong>1.939 €</strong> (Shell Kickers am 26.05. 10:00 Uhr und 27.05. 10:00 Uhr)</span>
+            <br>
+            Der höchste Preis im gleichen Zeitraum war:
+            <span><span class="bullet bullet-high"></span> <strong>2.069 €</strong> (Jet Ringcenter am 22.05. 13:00 Uhr)</span>
+            <span><span class="bullet bullet-high"></span> <strong>2.079 €</strong> (Shell Kickers am 22.05. 13:00 Uhr)</span>
+        </p>
     </div>
 
     <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
@@ -169,7 +175,7 @@
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Shell Kickers","x":["2026-04-18 16:00:16","2026-04-18 13:00:20","2026-04-18 10:00:20","2026-04-18 07:00:17","2026-04-18 04:00:20","2026-04-18 01:00:21","2026-04-17 22:00:16","2026-04-17 19:00:15","2026-04-17 16:00:20","2026-04-17 13:00:20","2026-04-17 10:00:20","2026-04-17 07:00:18","2026-04-17 04:00:21","2026-04-17 01:00:16","2026-04-16 22:00:17","2026-04-16 19:00:16","2026-04-16 16:00:16","2026-04-16 13:00:17","2026-04-16 10:00:17","2026-04-16 07:00:17","2026-04-16 04:00:16","2026-04-16 01:00:16","2026-04-15 22:00:16","2026-04-15 19:00:17","2026-04-15 16:00:16","2026-04-15 13:00:17","2026-04-15 10:00:19","2026-04-15 07:00:16","2026-04-15 04:00:17","2026-04-15 01:00:17","2026-04-14 22:00:17","2026-04-14 19:00:16","2026-04-14 16:00:15","2026-04-14 13:00:16","2026-04-14 10:00:17","2026-04-14 07:00:17","2026-04-14 04:00:16","2026-04-14 01:00:16","2026-04-13 22:00:17","2026-04-13 19:00:16","2026-04-13 16:00:15","2026-04-13 13:00:17","2026-04-13 10:00:16","2026-04-13 07:00:16","2026-04-13 04:00:16","2026-04-13 01:00:17","2026-04-12 22:00:17","2026-04-12 19:00:19","2026-04-12 16:00:21","2026-04-12 13:00:16"],"y":[2.039,2.039,2.029,2.029,2.049,2.049,2.049,2.049,2.049,2.059,2.039,2.049,2.069,2.069,2.069,2.069,2.069,2.079,2.049,2.059,2.069,2.069,2.069,2.069,2.069,2.109,2.069,2.069,2.079,2.079,2.079,2.079,2.079,2.119,2.159,2.089,2.109,2.109,2.109,2.109,2.119,2.139,2.059,2.069,2.069,2.069,2.069,2.069,2.069,2.069],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-04-18 16:00:15","2026-04-18 13:00:15","2026-04-18 10:00:15","2026-04-18 07:00:15","2026-04-18 04:00:15","2026-04-18 01:00:15","2026-04-17 22:00:15","2026-04-17 19:00:15","2026-04-17 16:00:15","2026-04-17 13:00:15","2026-04-17 10:00:15","2026-04-17 07:00:15","2026-04-17 04:00:15","2026-04-17 01:00:15","2026-04-16 22:00:15","2026-04-16 19:00:15","2026-04-16 16:00:15","2026-04-16 13:00:15","2026-04-16 10:00:15","2026-04-16 07:00:15","2026-04-16 04:00:15","2026-04-16 01:00:15","2026-04-15 22:00:15","2026-04-15 19:00:15","2026-04-15 16:00:15","2026-04-15 13:00:15","2026-04-15 10:00:15","2026-04-15 07:00:15","2026-04-15 04:00:15","2026-04-15 01:00:15","2026-04-14 22:00:15","2026-04-14 19:00:15","2026-04-14 16:00:15","2026-04-14 13:00:15","2026-04-14 10:00:15","2026-04-14 07:00:15","2026-04-14 04:00:15","2026-04-14 01:00:15","2026-04-13 22:00:15","2026-04-13 19:00:15","2026-04-13 16:00:15","2026-04-13 13:00:15","2026-04-13 10:00:15","2026-04-13 07:00:15","2026-04-13 04:00:15","2026-04-13 01:00:15","2026-04-12 22:00:15","2026-04-12 19:00:18","2026-04-12 16:00:15","2026-04-12 13:00:15"],"y":[2.039,2.039,2.029,2.029,2.039,2.039,2.039,2.039,2.039,2.049,2.039,2.049,2.059,2.059,2.059,2.059,2.059,2.109,2.039,2.049,2.059,2.059,2.059,2.059,2.059,2.059,2.059,2.069,2.069,2.069,2.069,2.069,2.069,2.149,2.089,2.089,2.099,2.099,2.099,2.099,2.099,2.129,2.049,2.059,2.059,2.059,2.059,2.059,2.059,2.059],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Jet Ringcenter","x":["2026-05-28 04:00:15","2026-05-28 01:00:15","2026-05-27 22:00:15","2026-05-27 19:00:15","2026-05-27 16:00:15","2026-05-27 13:00:15","2026-05-27 10:00:15","2026-05-27 07:00:15","2026-05-27 04:00:15","2026-05-27 01:00:15","2026-05-26 22:00:15","2026-05-26 19:00:15","2026-05-26 16:00:15","2026-05-26 13:00:15","2026-05-26 10:00:15","2026-05-26 07:00:15","2026-05-26 04:00:15","2026-05-26 01:00:15","2026-05-25 22:00:15","2026-05-25 19:00:15","2026-05-25 16:00:15","2026-05-25 13:00:15","2026-05-25 10:00:15","2026-05-25 07:00:15","2026-05-25 04:00:15","2026-05-25 01:00:15","2026-05-24 22:00:15","2026-05-24 19:00:15","2026-05-24 16:00:15","2026-05-24 13:00:15","2026-05-24 10:00:15","2026-05-24 07:00:15","2026-05-24 04:00:15","2026-05-24 01:00:15","2026-05-23 22:00:15","2026-05-23 19:00:15","2026-05-23 16:00:15","2026-05-23 13:00:15","2026-05-23 10:00:15","2026-05-23 07:00:15","2026-05-23 04:00:15","2026-05-23 01:00:15","2026-05-22 22:00:15","2026-05-22 19:00:15","2026-05-22 16:00:15","2026-05-22 13:00:15","2026-05-22 10:00:15","2026-05-22 07:00:15","2026-05-22 04:00:15","2026-05-22 01:00:15"],"y":[1.969,1.969,1.969,1.969,1.969,1.989,1.969,1.989,1.989,1.989,1.989,1.989,2.009,2.039,1.939,1.949,1.969,1.969,1.969,1.969,1.979,1.989,1.959,1.979,1.979,1.979,1.979,1.979,1.979,1.989,1.969,1.989,1.989,1.989,1.989,1.989,2.009,2.039,1.969,1.989,1.989,1.989,1.989,1.989,2.029,2.069,1.989,2.009,2.029,2.029],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Shell Kickers","x":["2026-05-28 01:00:20","2026-05-27 22:00:18","2026-05-27 19:00:19","2026-05-27 16:00:20","2026-05-27 13:00:19","2026-05-27 10:00:20","2026-05-27 07:00:21","2026-05-27 04:00:21","2026-05-27 01:00:17","2026-05-26 22:00:20","2026-05-26 19:00:20","2026-05-26 16:00:21","2026-05-26 13:00:19","2026-05-26 10:00:20","2026-05-26 07:00:21","2026-05-26 04:00:20","2026-05-26 01:00:20","2026-05-25 22:00:20","2026-05-25 19:00:16","2026-05-25 16:00:20","2026-05-25 13:00:19","2026-05-25 10:00:20","2026-05-25 07:00:16","2026-05-25 04:00:20","2026-05-25 01:00:16","2026-05-24 22:00:17","2026-05-24 19:00:21","2026-05-24 16:00:16","2026-05-24 13:00:21","2026-05-24 10:00:20","2026-05-24 07:00:18","2026-05-24 04:00:20","2026-05-24 01:00:20","2026-05-23 22:00:16","2026-05-23 19:00:20","2026-05-23 16:00:20","2026-05-23 13:00:16","2026-05-23 10:00:16","2026-05-23 07:00:16","2026-05-23 04:00:20","2026-05-23 01:00:16","2026-05-22 22:00:20","2026-05-22 19:00:19","2026-05-22 16:00:16","2026-05-22 13:00:20","2026-05-22 10:00:18","2026-05-22 07:00:21","2026-05-22 04:00:20","2026-05-22 01:00:16","2026-05-21 22:00:16"],"y":[1.979,1.979,1.979,1.979,1.989,1.939,1.949,1.949,1.949,1.949,1.949,1.949,2.049,1.939,1.959,1.989,1.989,1.989,1.989,1.989,2.009,1.959,1.979,1.989,1.989,1.989,1.989,1.989,2.009,1.969,1.989,1.999,1.999,1.999,1.999,1.999,2.069,1.969,1.989,2.009,2.009,2.009,2.009,2.039,2.079,1.969,1.989,1.989,1.989,1.989],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -180,32 +186,34 @@
                 x: 0.5,
                 xanchor: 'center',
                 font: {
-                    color: '#e0e0e0' /* Legenden-Textfarbe für Dark Mode */
+                    color: '#e0e0e0' // Helle Farbe für Legendentext
                 }
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444', /* Dunklere Gitterlinien für Dark Mode */
+                gridcolor: '#444', // Dunkelgraue Gitternetzlinien
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true,
                 tickfont: {
-                    color: '#e0e0e0' /* X-Achsenbeschriftung für Dark Mode */
+                    color: '#e0e0e0' // Helle Farbe für X-Achsenbeschriftung
                 }
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#444', /* Dunklere Gitterlinien für Dark Mode */
-                tickformat: ',.3f',
+                gridcolor: '#444', // Dunkelgraue Gitternetzlinien
+                tickformat: ',.3f', 
                 autorange: true,
                 tickfont: {
-                    color: '#e0e0e0' /* Y-Achsenbeschriftung für Dark Mode */
+                    color: '#e0e0e0' // Helle Farbe für Y-Achsenbeschriftung
                 },
-                titlefont: {
-                    color: '#e0e0e0' /* Y-Achsen-Titel für Dark Mode */
+                title: {
+                    font: {
+                        color: '#e0e0e0' // Helle Farbe für Y-Achsentitel
+                    }
                 }
             },
-            paper_bgcolor: 'rgba(0,0,0,0)', /* Transparent für den Body-Hintergrund */
-            plot_bgcolor: 'rgba(0,0,0,0)', /* Transparent für den Kachel-Hintergrund */
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
             autosize: true
         };
 
