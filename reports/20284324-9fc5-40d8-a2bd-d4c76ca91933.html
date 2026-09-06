@@ -10,314 +10,354 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: #f0f2f5; /* Leicht hellerer Hintergrund */
-            color: #2c3e50; /* Dunklerer Text für besseren Kontrast */
+            background-color: #f0f2f5; /* Slightly lighter background */
+            color: #212529;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .container {
+            max-width: 600px; /* Constrain width for better readability on larger screens */
+            margin: 0 auto;
+            padding: 0;
         }
         .card {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px; /* Slightly more rounded corners */
             padding: 20px;
-            margin-bottom: 16px; /* Etwas weniger Platz zwischen den Kacheln */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Modernerer, stärkerer Schatten */
-            border: 1px solid #e0e0e0; /* Dezenter Rahmen */
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Stronger, softer shadow */
+            overflow: hidden; /* Ensures content respects border-radius */
         }
-        .card h2 {
-            font-size: 20px;
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #34495e; /* Überschriftenfarbe für Kacheln */
-            border-bottom: 1px solid #eceff1; /* Trennlinie für Kacheltitel */
-            padding-bottom: 10px;
-            display: flex; /* Für Icons neben dem Titel */
+        h1 { 
+            font-size: 28px; 
+            margin-bottom: 8px; 
+            color: #1a73e8; 
+            font-weight: 700; /* Bolder title */
+        }
+        h2 { 
+            font-size: 20px; 
+            margin-top: 0; 
+            margin-bottom: 15px; 
+            color: #343a40; 
+            font-weight: 600;
+            display: flex;
             align-items: center;
-            gap: 8px; /* Abstand zwischen Icon und Text */
         }
-        h1 {
-            font-size: 28px; /* Größerer Haupttitel */
+        h2 .icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .date { 
+            color: #6c757d; 
+            font-size: 15px; 
+            margin-bottom: 24px; 
+            font-weight: 400;
+        }
+        .gemini-text { 
+            font-size: 16px; 
+            white-space: pre-line; 
+        }
+        #chart { 
+            width: 100%; 
+            height: 400px; 
+            margin-top: 10px;
             margin-bottom: 10px;
-            color: #1a73e8;
-            text-align: center; /* Haupttitel zentrieren */
         }
-        .date {
-            color: #7f8c8d;
-            font-size: 15px;
-            margin-bottom: 24px;
-            text-align: center; /* Datum zentrieren */
-            display: block; /* Stellt sicher, dass es die volle Breite einnimmt */
-        }
-        .gemini-text { font-size: 16px; white-space: pre-line; }
-        #chart { width: 100%; height: 400px; }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #95a5a6;
-            margin-top: 25px; /* Mehr Platz für den Footer */
-            padding-top: 10px;
-            border-top: 1px solid #eceff1;
+        .footer { 
+            text-align: center; 
+            font-size: 13px; 
+            color: #adb5bd; 
+            margin-top: 30px; 
+            padding-bottom: 10px;
         }
         
-        /* Plotly Legende auf dem Handy schöner */
+        /* Macht die Legende auf dem Handy schöner */
         .legendtext { font-size: 12px !important; }
 
-        /* Wetter-Karten Spezifika */
-        .weather-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Flexible Spalten */
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .weather-item {
-            background-color: #f7f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-        }
-        .weather-item .icon {
-            font-size: 30px;
+        /* Weather Card Specifics */
+        .weather-card .location {
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 8px;
+            color: #495057;
         }
-        .weather-item .temp {
-            font-size: 22px;
-            font-weight: bold;
-            color: #2c3e50;
+        .weather-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
         }
-        .weather-item .desc {
-            font-size: 14px;
-            color: #7f8c8d;
+        .weather-icon {
+            font-size: 48px;
+            margin-right: 15px;
+            line-height: 1; /* Align emoji better */
+        }
+        .temperature {
+            font-size: 36px;
+            font-weight: 700;
+            color: #212529;
+            line-height: 1;
+        }
+        .condition {
+            font-size: 18px;
+            color: #6c757d;
+            margin-left: 10px;
+        }
+        .weather-details {
+            font-size: 15px;
+            color: #495057;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+        .weather-details div {
             margin-bottom: 5px;
         }
-        .weather-item .details {
-            font-size: 12px;
-            color: #95a5a6;
+        .weather-details strong {
+            display: inline-block;
+            width: 80px;
+            color: #6c757d;
         }
 
-        /* WM Tipps Tabelle */
-        .wm-table {
+        /* WM Tipps Card Specifics */
+        .wm-card table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
-            font-size: 14px;
         }
-        .wm-table th, .wm-table td {
-            border: 1px solid #e0e0e0;
+        .wm-card th, .wm-card td {
+            border: 1px solid #dee2e6;
             padding: 10px;
             text-align: left;
+            font-size: 14px;
         }
-        .wm-table th {
-            background-color: #f4f6f9;
-            font-weight: bold;
-            color: #34495e;
+        .wm-card th {
+            background-color: #e9ecef;
+            font-weight: 600;
+            color: #495057;
         }
-        .wm-table tr:nth-child(even) {
-            background-color: #f9fbfd;
+        .wm-card tr:nth-child(even) {
+            background-color: #f8f9fa;
         }
-        .wm-table .tip-strong {
-            font-weight: bold;
+        .wm-card .score {
+            font-weight: 700;
             color: #1a73e8;
         }
-        .wm-table .prediction {
-            font-style: italic;
-            color: #7f8c8d;
-        }
 
-        /* Spritpreis-Analyse */
-        .fuel-analysis p {
-            margin-bottom: 8px;
+        /* Spritpreisanalyse Card Specifics */
+        .fuel-analysis-card p {
+            margin-bottom: 10px;
+            font-size: 16px;
         }
-        .fuel-analysis .highlight {
-            font-weight: bold;
+        .fuel-analysis-card .highlight-good {
+            color: #28a745; /* Green */
+            font-weight: 600;
         }
-        .fuel-analysis .positive {
-            color: #28a745; /* Grün */
+        .fuel-analysis-card .highlight-bad {
+            color: #dc3545; /* Red */
+            font-weight: 600;
         }
-        .fuel-analysis .negative {
-            color: #dc3545; /* Rot */
-        }
-        .fuel-analysis .neutral {
-            color: #ffc107; /* Gelb/Orange */
-        }
-
-        /* DIY Ideen */
-        .diy-list {
-            list-style-type: none;
-            padding: 0;
+        .fuel-analysis-card .trend {
+            display: flex;
+            align-items: center;
             margin-top: 15px;
+            font-size: 15px;
+            color: #495057;
         }
-        .diy-list li {
-            background-color: #f7f9fa;
-            border-left: 4px solid #1a73e8;
+        .fuel-analysis-card .trend-icon {
+            font-size: 24px;
+            margin-right: 8px;
+        }
+
+        /* DIY Ideas Card Specifics */
+        .diy-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .diy-card li {
+            background-color: #f8f9fa;
+            border-left: 5px solid #007bff;
             padding: 12px 15px;
             margin-bottom: 10px;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease-in-out;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
         }
-        .diy-list li:hover {
-            transform: translateX(5px);
+        .diy-card li strong {
+            color: #007bff;
+            margin-right: 8px;
+            font-size: 16px;
         }
-        .diy-list li strong {
-            color: #34495e;
-            display: block;
-            margin-bottom: 4px;
+        .diy-card li .idea-icon {
+            font-size: 20px;
+            margin-right: 10px;
+            color: #007bff;
         }
-        .diy-list li span {
-            font-size: 14px;
-            color: #555;
-        }
-
-        /* Responsive Anpassungen */
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .card { padding: 15px; margin-bottom: 12px; }
-            h1 { font-size: 24px; }
-            .card h2 { font-size: 18px; margin-bottom: 10px; padding-bottom: 8px; }
-            .weather-grid { grid-template-columns: 1fr; } /* Stapelt Elemente auf kleinen Bildschirmen */
-            .wm-table th, .wm-table td { padding: 8px; font-size: 13px; }
+        .diy-card li p {
+            margin: 0;
+            font-size: 15px;
+            flex-grow: 1;
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Guten Morgen!</h1>
+        <div class="date">Sonntag, 6. September 2026</div>
 
-    <h1>Guten Morgen!</h1>
-    <div class="date">Freitag, 4. September 2026</div>
+        <!-- Existing Spritpreise Plot -->
+        <div class="card">
+            <h2><span class="icon">⛽</span> Preisvergleich Tankstellen</h2>
+            <div id="chart"></div>
+        </div>
 
-    <div class="card">
-        <h2>📊 Preisvergleich Tankstellen</h2>
-        <div id="chart"></div>
-    </div>
-
-    <!-- Spritpreisanalyse Card -->
-    <div class="card fuel-analysis">
-        <h2>⛽ Spritpreisanalyse & Tank-Tipp</h2>
-        <p>Basierend auf den letzten Tagen lassen sich folgende Muster erkennen:</p>
-        <p>Die Preise für Super E5 zeigen typische Schwankungen. <span class="highlight neutral">Tagsüber steigen die Preise oft an und erreichen ihren Höhepunkt meist am späten Vormittag oder Nachmittag.</span></p>
-        <p><span class="highlight positive">Die besten Tankzeiten sind oft am <strong class="positive">frühen Morgen (ca. 6-8 Uhr)</strong> oder am <strong class="positive">späten Abend (nach 20 Uhr)</strong>.</span> Hier fallen die Preise tendenziell.</p>
-        <p>Im aktuellen Verlauf sehen wir eine leichte <span class="highlight negative">Tendenz zu höheren Preisen am 4. September im Vergleich zum 1. September.</span> Die Jet Ringcenter war meist die günstigere Option.</p>
-        <p><strong>Dein Tank-Tipp für heute:</strong> Solltest du dringend tanken müssen, versuche es <span class="highlight positive">zwischen 20:00 und 22:00 Uhr</span>. Wenn möglich, warte bis zum <span class="highlight positive">frühen Morgen des 5. Septembers</span> auf niedrigere Preise.</p>
-    </div>
-
-    <!-- Wetter für Frankfurt Card -->
-    <div class="card">
-        <h2>☀️ Wetter in Frankfurt</h2>
-        <div class="weather-grid">
-            <div class="weather-item">
-                <div class="icon">☀️</div>
-                <div class="temp">24°C</div>
-                <div class="desc">Sonnig und klar</div>
-                <div class="details">Wind: 10 km/h O | Luftfeuchte: 60%</div>
+        <!-- Spritpreisanalyse Card -->
+        <div class="card fuel-analysis-card">
+            <h2><span class="icon">📊</span> Spritpreisanalyse</h2>
+            <p>Die Spritpreise zeigen über die letzten Tage eine klare Tendenz: <span class="highlight-bad">Nachmittags und am frühen Abend sind die Preise am höchsten</span>, oft mit einem deutlichen Anstieg um die Mittagszeit (ca. 12-15 Uhr).</p>
+            <p>Die <span class="highlight-good">günstigsten Tankzeiten</span> liegen meist in den frühen Morgenstunden (vor 9 Uhr) oder am späten Abend (nach 18 Uhr), besonders aber <span class="highlight-good">zwischen 18:00 und 22:00 Uhr</span>, bevor sie über Nacht stabil bleiben und dann morgens wieder steigen.</p>
+            <p>Achten Sie auf die Station <strong style="color: #6C5CE7;">Jet Ringcenter</strong>, die in unserem Chart oft die niedrigsten Spitzenpreise hat und auch morgens häufig gut liegt.</p>
+            <div class="trend">
+                <span class="trend-icon">📈</span> Aktueller Trend: Leichter Anstieg über den Vormittag.
             </div>
-            <div class="weather-item">
-                <div class="icon">📈</div>
-                <div class="desc">Tendenz</div>
-                <div class="details">Leicht steigende Temperaturen im Tagesverlauf.</div>
+            <div class="trend">
+                <span class="trend-icon">💡</span> Tipp: Tanken Sie am besten zwischen 18:00 und 22:00 Uhr!
             </div>
         </div>
-    </div>
 
-    <!-- Wetter für Offenbach Bieber Card -->
-    <div class="card">
-        <h2>🌤️ Wetter in Offenbach Bieber</h2>
-        <div class="weather-grid">
-            <div class="weather-item">
-                <div class="icon">🌤️</div>
-                <div class="temp">23°C</div>
-                <div class="desc">Heiter bis wolkig</div>
-                <div class="details">Wind: 8 km/h SO | Luftfeuchte: 65%</div>
+        <!-- Weather for Frankfurt -->
+        <div class="card weather-card">
+            <h2><span class="icon">☀️</span> Wetter für Frankfurt</h2>
+            <div class="location">Frankfurt am Main</div>
+            <div class="weather-info">
+                <span class="weather-icon">☀️</span>
+                <span class="temperature">24°C</span>
+                <span class="condition">Klar & Sonnig</span>
             </div>
-            <div class="weather-item">
-                <div class="icon">💧</div>
-                <div class="desc">Regenrisiko</div>
-                <div class="details">Geringes Risiko (ca. 15%) am späten Nachmittag.</div>
+            <div class="weather-details">
+                <div><strong>Gefühlt:</strong> 25°C</div>
+                <div><strong>Wind:</strong> 10 km/h aus NW</div>
+                <div><strong>Luftfeuchte:</strong> 60%</div>
+                <div><strong>Niederschlag:</strong> 0%</div>
             </div>
         </div>
-    </div>
 
-    <!-- Allgemeines Wetter Card -->
-    <div class="card">
-        <h2>🌍 Regionales Wetter-Update</h2>
-        <p>Die gesamte Rhein-Main-Region profitiert heute von einem Hochdruckgebiet. Es erwartet uns ein <span class="highlight positive">meist sonniger und milder Herbsttag</span>. Lediglich am Abend könnten sich lokal leichte Wolkenfelder bilden. Die Temperaturen bewegen sich zwischen 22°C und 25°C. Perfektes Wetter für Outdoor-Aktivitäten!</p>
-    </div>
+        <!-- Weather for Offenbach Bieber -->
+        <div class="card weather-card">
+            <h2><span class="icon">🌤️</span> Wetter für Offenbach Bieber</h2>
+            <div class="location">Offenbach-Bieber</div>
+            <div class="weather-info">
+                <span class="weather-icon">🌤️</span>
+                <span class="temperature">22°C</span>
+                <span class="condition">Teilweise bewölkt</span>
+            </div>
+            <div class="weather-details">
+                <div><strong>Gefühlt:</strong> 23°C</div>
+                <div><strong>Wind:</strong> 12 km/h aus W</div>
+                <div><strong>Luftfeuchte:</strong> 65%</div>
+                <div><strong>Niederschlag:</strong> 10%</div>
+            </div>
+        </div>
 
-    <!-- WM Tipps Card -->
-    <div class="card">
-        <h2>⚽ WM 2026 Tipps - Nächster Spieltag</h2>
-        <p>Ein Blick auf die kommenden (fiktiven) Begegnungen der WM 2026. Hier sind Geminis Einschätzungen für den nächsten Spieltag:</p>
-        <table class="wm-table">
-            <thead>
-                <tr>
-                    <th>Datum</th>
-                    <th>Begegnung</th>
-                    <th>Geminis Tipp</th>
-                    <th>Ergebnis-Prognose</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>05. Sept.</td>
-                    <td>Deutschland vs. Japan</td>
-                    <td><span class="tip-strong">Sieg Deutschland</span></td>
-                    <td class="prediction">2:1</td>
-                </tr>
-                <tr>
-                    <td>05. Sept.</td>
-                    <td>Brasilien vs. Argentinien</td>
-                    <td><span class="tip-strong">Unentschieden</span></td>
-                    <td class="prediction">1:1</td>
-                </tr>
-                <tr>
-                    <td>06. Sept.</td>
-                    <td>USA vs. Mexiko</td>
-                    <td><span class="tip-strong">Sieg USA</span></td>
-                    <td class="prediction">3:2</td>
-                </tr>
-                <tr>
-                    <td>06. Sept.</td>
-                    <td>Frankreich vs. England</td>
-                    <td><span class="tip-strong">Sieg Frankreich</span></td>
-                    <td class="prediction">2:0</td>
-                </tr>
-            </tbody>
-        </table>
-        <p style="font-size: 12px; color: #7f8c8d; margin-top: 15px;"><em>Hinweis: Dies sind KI-generierte Prognosen und dienen lediglich der Unterhaltung. Der tatsächliche Spielausgang kann abweichen.</em></p>
-    </div>
+        <!-- General Weather Card -->
+        <div class="card weather-card">
+            <h2><span class="icon">🌍</span> Aktuelles Wetter (Allgemein)</h2>
+            <div class="location">Regionale Übersicht</div>
+            <p>Die Region erlebt heute einen überwiegend sonnigen Tag mit angenehmen Temperaturen. Es sind keine größeren Niederschläge zu erwarten.</p>
+            <div class="weather-details">
+                <div><strong>Sonnenscheindauer:</strong> ca. 10 Stunden</div>
+                <div><strong>UV-Index:</strong> Moderat (5)</div>
+                <div><strong>Luftqualität:</strong> Gut</div>
+            </div>
+        </div>
 
-    <!-- DIY Ideen Card -->
-    <div class="card">
-        <h2>🧑‍🍳 DIY Ideen: Köstliches selbstgemacht</h2>
-        <p>Abseits von Standardprodukten – entdecke, was du noch alles selbst zaubern kannst!</p>
-        <ul class="diy-list">
-            <li>
-                <strong>Kürbis-Chutney aus dem Garten</strong>
-                <span>Nutze Herbstkürbisse und Äpfel für ein würzig-süßes Chutney, perfekt zu Käse oder Gegrilltem.</span>
-            </li>
-            <li>
-                <strong>Hausgemachter Kräuteressig</strong>
-                <span>Sammle frische Kräuter (Rosmarin, Thymian, Estragon) aus dem Garten und lege sie in gutem Essig ein. Ideal für Salate.</span>
-            </li>
-            <li>
-                <strong>Fruchtleder aus Beeren & Äpfeln</strong>
-                <span>Ein gesunder Snack! Püriere reife Früchte, streiche sie dünn auf Backpapier und trockne sie im Ofen bei niedriger Temperatur.</span>
-            </li>
-            <li>
-                <strong>Pflanzliche Milch-Alternativen</strong>
-                <span>Aus Hafer, Mandeln oder Cashews lässt sich im Handumdrehen frische Pflanzenmilch herstellen. Günstiger und ohne Zusatzstoffe!</span>
-            </li>
-            <li>
-                <strong>Fermentiertes Gemüse (Kimchi/Sauerkraut)</strong>
-                <span>Eine tolle Methode, Gemüse haltbar zu machen und Probiotika zu gewinnen. Einfach Kohl oder anderes Gemüse mit Salz und Gewürzen fermentieren.</span>
-            </li>
-        </ul>
-    </div>
+        <!-- WM Tipps Card -->
+        <div class="card wm-card">
+            <h2><span class="icon">⚽</span> Deine WM 2026 Tipps</h2>
+            <p>Nächster Spieltag: Dienstag, 9. September 2026</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Spiel</th>
+                        <th>Tipp</th>
+                        <th>Begründung</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🇩🇪 Deutschland vs. 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</td>
+                        <td class="score">2:1</td>
+                        <td>Klassiker mit Heimvorteil für Deutschland in der Gruppenphase, knapper Sieg dank starker Offensive.</td>
+                    </tr>
+                    <tr>
+                        <td>🇧🇷 Brasilien vs. 🇦🇷 Argentinien</td>
+                        <td class="score">1:1</td>
+                        <td>Das Südamerika-Derby wird eng, beide Teams neutralisieren sich. Viele gelbe Karten erwartet!</td>
+                    </tr>
+                    <tr>
+                        <td>🇫🇷 Frankreich vs. 🇪🇸 Spanien</td>
+                        <td class="score">2:0</td>
+                        <td>Frankreichs junge Talente sind in Topform, Spanien tut sich gegen physisch starke Gegner oft schwer.</td>
+                    </tr>
+                    <tr>
+                        <td>🇵🇹 Portugal vs. 🇺🇾 Uruguay</td>
+                        <td class="score">3:1</td>
+                        <td>Portugals Offensive um Ronaldo (im letzten Turnier?) ist nicht zu stoppen, Uruguay's Abwehr wackelt.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB, (fiktive) Wetterdienste, (fiktive) Sportanalysen</div>
+        <!-- DIY Ideen Card -->
+        <div class="card diy-card">
+            <h2><span class="icon">🍎</span> DIY Ideen für die Küche</h2>
+            <ul>
+                <li>
+                    <span class="idea-icon">🍯</span>
+                    <div>
+                        <strong>Hausgemachte Marmelade/Gelee:</strong>
+                        <p>Nutze reife Früchte aus dem Garten (Äpfel, Beeren, Zwetschgen) und koche sie mit Gelierzucker zu köstlicher Marmelade ein. Perfekt für den Winter!</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="idea-icon">🌿</span>
+                    <div>
+                        <strong>Kräuterbutter/Kräuteröle:</strong>
+                        <p>Frische Kräuter wie Rosmarin, Thymian oder Petersilie aus dem Garten lassen sich wunderbar zu aromatischer Kräuterbutter verarbeiten oder in Olivenöl einlegen.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="idea-icon">🥕</span>
+                    <div>
+                        <strong>Eingelegtes Gemüse:</strong>
+                        <p>Gurken, Zucchini, Karotten oder Bohnen lassen sich prima in Essig und Gewürzen einlegen. Ein leckerer Vorrat und ideal für Beilagen oder Salate.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="idea-icon">🧀</span>
+                    <div>
+                        <strong>Ricotta selbst machen:</strong>
+                        <p>Mit nur zwei Zutaten (Milch und etwas Säure wie Zitrone oder Essig) lässt sich frischer Ricotta-Käse einfach zu Hause herstellen. Schmeckt fantastisch!</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="idea-icon">🍜</span>
+                    <div>
+                        <strong>Eigene Nudeln:</strong>
+                        <p>Mit Mehl, Eiern und etwas Wasser lassen sich frische Pasta-Sorten wie Tagliatelle oder Spaghetti ganz einfach selbst herstellen. Der Aufwand lohnt sich!</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB & Prognosen</div>
+    </div>
 
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Shell Kickers","x":["2026-09-04 21:00:02","2026-09-04 18:00:03","2026-09-04 15:00:02","2026-09-04 12:00:02","2026-09-04 09:00:02","2026-09-04 06:00:02","2026-09-04 03:00:01","2026-09-04 00:00:02","2026-09-03 21:00:04","2026-09-03 18:00:03","2026-09-03 15:00:02","2026-09-03 12:00:02","2026-09-03 09:00:02","2026-09-03 06:00:02","2026-09-03 03:00:02","2026-09-03 00:00:01","2026-09-02 21:00:02","2026-09-02 18:00:02","2026-09-02 15:00:02","2026-09-02 12:00:02","2026-09-02 09:00:03","2026-09-02 06:00:01","2026-09-02 03:00:03","2026-09-02 00:00:02","2026-09-01 18:00:02","2026-09-01 15:00:03","2026-09-01 12:00:02","2026-09-01 09:00:02","2026-09-01 06:00:03","2026-09-01 03:00:02","2026-09-01 00:00:02"],"y":[2.269,2.269,2.309,2.249,2.259,2.259,2.259,2.259,2.259,2.259,2.269,2.219,2.219,2.219,2.219,2.219,2.219,2.219,2.319,2.179,2.179,2.219,2.219,2.219,2.219,2.229,2.159,2.159,2.159,2.159,2.159],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-09-04 21:00:01","2026-09-04 18:00:01","2026-09-04 15:00:01","2026-09-04 12:00:01","2026-09-04 09:00:01","2026-09-04 06:00:01","2026-09-04 03:00:01","2026-09-04 00:00:01","2026-09-03 21:00:01","2026-09-03 18:00:01","2026-09-03 15:00:01","2026-09-03 12:00:01","2026-09-03 09:00:01","2026-09-03 06:00:01","2026-09-03 03:00:01","2026-09-03 00:00:01","2026-09-02 21:00:01","2026-09-02 18:00:01","2026-09-02 15:00:01","2026-09-02 12:00:01","2026-09-02 09:00:01","2026-09-02 06:00:01","2026-09-02 03:00:01","2026-09-02 00:00:01","2026-09-01 21:00:01","2026-09-01 18:00:01","2026-09-01 15:00:01","2026-09-01 12:00:01","2026-09-01 09:00:01","2026-09-01 06:00:01","2026-09-01 03:00:01","2026-09-01 00:00:01","2026-08-31 20:57:17","2026-08-31 20:51:24"],"y":[2.239,2.249,2.269,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.249,2.179,2.179,2.179,2.179,2.179,2.179,2.199,2.309,2.149,2.149,2.149,2.149,2.149,2.149,2.149,2.159,2.139,2.139,2.139,2.139,2.139,2.139,2.139],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Shell Kickers","x":["2026-09-06 09:00:02","2026-09-06 06:00:02","2026-09-06 03:00:03","2026-09-06 00:00:02","2026-09-05 21:00:03","2026-09-05 18:00:03","2026-09-05 15:00:02","2026-09-05 12:00:02","2026-09-05 09:00:02","2026-09-05 06:00:02","2026-09-05 00:00:02","2026-09-04 21:00:02","2026-09-04 18:00:03","2026-09-04 15:00:02","2026-09-04 12:00:02","2026-09-04 09:00:02","2026-09-04 06:00:02","2026-09-04 03:00:01","2026-09-04 00:00:02","2026-09-03 21:00:04","2026-09-03 18:00:03","2026-09-03 15:00:02","2026-09-03 12:00:02","2026-09-03 09:00:02","2026-09-03 06:00:02","2026-09-03 03:00:02","2026-09-03 00:00:01","2026-09-02 21:00:02","2026-09-02 18:00:02","2026-09-02 15:00:02","2026-09-02 12:00:02","2026-09-02 09:00:03","2026-09-02 06:00:01","2026-09-02 03:00:03","2026-09-02 00:00:02","2026-09-01 18:00:02","2026-09-01 15:00:03","2026-09-01 12:00:02","2026-09-01 09:00:02","2026-09-01 06:00:03","2026-09-01 03:00:02","2026-09-01 00:00:02"],"y":[2.259,2.259,2.259,2.259,2.259,2.259,2.359,2.259,2.259,2.269,2.269,2.269,2.269,2.309,2.249,2.259,2.259,2.259,2.259,2.259,2.259,2.269,2.219,2.219,2.219,2.219,2.219,2.219,2.219,2.319,2.179,2.179,2.219,2.219,2.219,2.219,2.229,2.159,2.159,2.159,2.159,2.159],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-09-06 09:00:01","2026-09-06 06:00:01","2026-09-06 03:00:01","2026-09-06 00:00:01","2026-09-05 21:00:01","2026-09-05 18:00:01","2026-09-05 15:00:01","2026-09-05 12:00:01","2026-09-05 09:00:01","2026-09-05 06:00:01","2026-09-05 03:00:01","2026-09-05 00:00:01","2026-09-04 21:00:01","2026-09-04 18:00:01","2026-09-04 15:00:01","2026-09-04 12:00:01","2026-09-04 09:00:01","2026-09-04 06:00:01","2026-09-04 03:00:01","2026-09-04 00:00:01","2026-09-03 21:00:01","2026-09-03 18:00:01","2026-09-03 15:00:01","2026-09-03 12:00:01","2026-09-03 09:00:01","2026-09-03 06:00:01","2026-09-03 03:00:01","2026-09-03 00:00:01","2026-09-02 21:00:01","2026-09-02 18:00:01","2026-09-02 15:00:01","2026-09-02 12:00:01","2026-09-02 09:00:01","2026-09-02 06:00:01","2026-09-02 03:00:01","2026-09-02 00:00:01","2026-09-01 21:00:01","2026-09-01 18:00:01","2026-09-01 15:00:01","2026-09-01 12:00:01","2026-09-01 09:00:01","2026-09-01 06:00:01","2026-09-01 03:00:01","2026-09-01 00:00:01","2026-08-31 20:57:17","2026-08-31 20:51:24"],"y":[2.209,2.209,2.209,2.209,2.209,2.239,2.319,2.189,2.209,2.219,2.219,2.219,2.239,2.249,2.269,2.209,2.209,2.209,2.209,2.209,2.209,2.249,2.179,2.179,2.179,2.179,2.179,2.179,2.179,2.199,2.309,2.149,2.149,2.149,2.149,2.149,2.149,2.149,2.159,2.139,2.139,2.139,2.139,2.139,2.139,2.139],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Aral Bieberer Straße","x":["2026-09-06 09:00:01","2026-09-06 06:00:01","2026-09-06 03:00:01","2026-09-06 00:00:01"],"y":[2.219,2.219,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"ESSO Waldstraße","x":["2026-09-06 09:00:01","2026-09-06 06:00:01","2026-09-06 03:00:01","2026-09-06 00:00:01"],"y":[2.219,2.219,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -330,13 +370,13 @@
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#e0e0e0', /* Hellere Gitterlinien */
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#e0e0e0', /* Hellere Gitterlinien */
+                gridcolor: '#eee',
                 tickformat: ',.3f', 
                 autorange: true
             },
