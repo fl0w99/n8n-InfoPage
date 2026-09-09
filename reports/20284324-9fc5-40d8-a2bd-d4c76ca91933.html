@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dein Täglicher Bericht</title>
+    <title>Dein Tankstellen-Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
         body {
@@ -13,95 +13,44 @@
             background-color: #f8f9fa;
             color: #212529;
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         .card {
             background: white;
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Slightly stronger shadow */
-            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .card:hover {
-            transform: translateY(-2px);
-        }
-        h1 { 
-            font-size: 28px; 
-            margin-bottom: 8px; 
-            color: #007bff; /* Primary blue for main title */
-            font-weight: 700;
-        }
-        h2 { 
-            font-size: 20px; 
-            margin-top: 0; 
-            margin-bottom: 15px; 
-            color: #343a40; 
-            font-weight: 600;
-        }
-        h3 {
-            font-size: 18px;
-            color: #007bff;
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        .date { 
-            color: #6c757d; 
-            font-size: 14px; 
-            margin-bottom: 24px; 
-            font-weight: 400;
-        }
-        .gemini-text { 
-            font-size: 16px; 
-            white-space: pre-line; 
-            color: #343a40;
-        }
+        h1 { font-size: 24px; margin-bottom: 8px; color: #1a73e8; }
+        .date { color: #6c757d; font-size: 14px; margin-bottom: 24px; }
+        .gemini-text { font-size: 16px; white-space: pre-line; }
         #chart { width: 100%; height: 400px; }
-        .footer { 
-            text-align: center; 
-            font-size: 12px; 
-            color: #adb5bd; 
-            margin-top: 30px; 
-            padding-top: 10px;
-            border-top: 1px solid #e9ecef;
-        }
+        .footer { text-align: center; font-size: 12px; color: #adb5bd; margin-top: 20px; }
         
         /* Macht die Legende auf dem Handy schöner */
         .legendtext { font-size: 12px !important; }
 
-        /* Specific styles for new cards */
-        .weather-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 15px;
+        /* Zusätzliche Styles für neue Kacheln */
+        .card h2 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #1a73e8; /* Passend zur H1 */
+        }
+        .weather-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .weather-item {
+            display: flex;
             align-items: center;
+            font-size: 16px;
         }
         .weather-icon {
-            font-size: 48px;
-            line-height: 1;
-            text-align: center;
+            font-size: 24px;
+            margin-right: 10px;
         }
-        .weather-details {
-            flex-grow: 1;
-        }
-        .weather-temp {
-            font-size: 32px;
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 5px;
-        }
-        .weather-condition {
-            font-size: 18px;
-            color: #495057;
-            margin-bottom: 3px;
-        }
-        .weather-info {
-            font-size: 14px;
-            color: #6c757d;
-        }
-
         .wm-table {
             width: 100%;
             border-collapse: collapse;
@@ -109,247 +58,182 @@
             font-size: 14px;
         }
         .wm-table th, .wm-table td {
-            border: 1px solid #dee2e6;
-            padding: 12px 10px;
+            border: 1px solid #e0e0e0;
+            padding: 8px;
             text-align: left;
             vertical-align: top;
         }
         .wm-table th {
-            background-color: #e9ecef;
+            background-color: #f0f0f0;
             font-weight: bold;
-            color: #343a40;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .wm-table tbody tr:nth-child(odd) {
-            background-color: #f8f9fa;
+        .wm-table tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
-        .wm-table .prediction {
+        .price-highlight {
             font-weight: bold;
-            color: #007bff;
+            padding: 2px 5px;
+            border-radius: 4px;
         }
-        .wm-table .analysis {
-            font-size: 13px;
-            color: #495057;
-        }
+        .price-good { background-color: #e6ffed; color: #28a745; } /* Greenish */
+        .price-bad { background-color: #ffebe6; color: #dc3545; }  /* Reddish */
+        .price-neutral { background-color: #e6f7ff; color: #007bff; } /* Blueish */
         
-        /* Price analysis styling */
-        .price-analysis-recommendation {
-            font-weight: bold;
-            margin-top: 10px;
+        .diy-list {
+            padding-left: 20px;
         }
-        .price-analysis-recommendation.good {
-            color: #28a745; /* Green for good */
-        }
-        .price-analysis-recommendation.bad {
-            color: #dc3545; /* Red for bad */
-        }
-        .price-trend-indicator {
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-        .price-trend-indicator.up {
-            border-bottom: 10px solid #dc3545; /* Red arrow up */
-        }
-        .price-trend-indicator.down {
-            border-top: 10px solid #28a745; /* Green arrow down */
-        }
-        .price-trend-indicator.stable {
-            background-color: #ffc107; /* Yellow dot for stable */
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            border: none;
-        }
-
-        .diy-section {
-            margin-bottom: 20px;
-        }
-        .diy-section ul {
-            list-style-type: none; /* Remove default bullet */
-            padding-left: 0;
-            margin-top: 8px;
-        }
-        .diy-section li {
+        .diy-list li {
             margin-bottom: 8px;
-            color: #495057;
-            position: relative;
-            padding-left: 25px; /* Space for custom bullet */
-        }
-        .diy-section li:before {
-            content: '🌿'; /* Custom emoji bullet */
-            position: absolute;
-            left: 0;
-            color: #28a745; /* Green bullet color */
-            font-size: 16px;
-            top: 0;
-        }
-        .diy-section.homemade li:before {
-            content: '🍳';
-            color: #007bff;
-        }
-        .callout-box {
-            background-color: #e6f2ff; /* Light blue background */
-            border-left: 5px solid #007bff; /* Blue left border */
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #333;
         }
     </style>
 </head>
 <body>
 
     <h1>Guten Morgen!</h1>
-    <div class="date">Montag, 7. September 2026</div>
+    <div class="date">Mittwoch, 9. September 2026</div>
 
-    <!-- Existing Fuel Price Chart -->
     <div class="card">
-        <h2>⛽ Preisvergleich Tankstellen</h2>
+        <h2>Preisvergleich Tankstellen</h2>
         <div id="chart"></div>
     </div>
 
-    <!-- 5. Analyse der Spritpreise -->
+    <!-- Spritpreisanalyse -->
     <div class="card">
-        <h2>💡 Spritpreisanalyse: Wann tanken?</h2>
-        <div class="gemini-text">
-            Basierend auf den aktuellen Daten zeigt sich, dass die Spritpreise tendenziell im Laufe des Tages ansteigen und am späten Nachmittag ihre Höchstwerte erreichen. Eine gute Strategie ist es, <span style="font-weight: bold; color: #28a745;">am späten Abend (zwischen 18:00 und 22:00 Uhr) oder in den frühen Morgenstunden (vor 7:00 Uhr)</span> zu tanken.
-
-            <p style="margin-top: 12px; display: flex; align-items: center;">
-                Aktueller Trend (letzte 24h): Die Preise <span style="color: #dc3545; font-weight: bold; margin-left: 5px;">steigen leicht an</span>
-                <span class="price-trend-indicator up"></span>
-                an den meisten Tankstellen.
-            </p>
-
-            <p style="margin-top: 12px;">
-                Heute günstigste Station aktuell: <strong style="color: #007bff;">Jet Ringcenter</strong> mit 2.219 €/Liter.
-                Die Shell Kickers und Aral Bieberer Straße sind ebenfalls kompetitiv, zeigen aber höhere Spitzenwerte im Tagesverlauf.
-            </p>
-            <p class="price-analysis-recommendation good">
-                <strong>Empfehlung:</strong> Falls möglich, warte bis zum Abend. Das Jet Ringcenter bietet aktuell den besten Preis.
-            </p>
-        </div>
+        <h2>Spritpreis-Analyse</h2>
+        <p>Ein Blick auf die letzten Tage zeigt, dass die Preise an den Tankstellen typischen Schwankungen unterliegen. Am <span class="price-highlight price-neutral">9. September</span> war der Preisverlauf besonders volatil, mit deutlichen Anstiegen am späten Vormittag und wieder fallenden Preisen zum Abend hin.</p>
+        <p><strong>Aktuell günstigste Option:</strong> Die <span class="price-highlight price-good">Jet Ringcenter</span> bietet mit <strong>2,209 €</strong> pro Liter (Stand 21:00 Uhr) den günstigsten Preis an. Die <span class="price-highlight price-bad">Aral Bieberer Straße</span> und <span class="price-highlight price-bad">Shell Kickers</span> liegen aktuell mit 2,229 € nur knapp darüber.</p>
+        <h3>Wann sollte man tanken?</h3>
+        <p>Basierend auf dem Preisverlauf der letzten Tage ist eine klare Tendenz erkennbar:</p>
+        <ul>
+            <li>📈 Die Preise steigen oft zwischen <strong>9:00 Uhr und 15:00 Uhr</strong> an.</li>
+            <li>📉 Die günstigsten Tankzeitpunkte liegen in der Regel in den <strong>Abendstunden (ca. 20:00 bis 22:00 Uhr)</strong> und frühen Morgenstunden (ca. 03:00 bis 06:00 Uhr).</li>
+        </ul>
+        <p><strong>Empfehlung:</strong> Wenn möglich, tanke heute Abend nach 20:00 Uhr. Zu dieser Zeit sind die Preise meist am niedrigsten.</p>
     </div>
 
-    <!-- 1. Das Wetter für Frankfurt -->
+    <!-- Wetter für Frankfurt -->
     <div class="card">
-        <h2>☀️ Wetter in Frankfurt</h2>
-        <div class="weather-grid">
-            <div class="weather-icon">☀️</div>
-            <div class="weather-details">
-                <div class="weather-temp">20°C</div>
-                <div class="weather-condition">Sonnig und klar</div>
-                <div class="weather-info">Wind: Leichte Brise aus Nordost, 12 km/h. Luftfeuchtigkeit: 55%.</div>
+        <h2>Wetter in Frankfurt</h2>
+        <div class="weather-card">
+            <div class="weather-item">
+                <span class="weather-icon">☀️</span>
+                <span><strong>Heute (09.09.):</strong> Sonnig und warm.</span>
+            </div>
+            <div class="weather-item">
+                <span class="weather-icon">🌡️</span>
+                <span>Max: <strong>26°C</strong>, Min: <strong>15°C</strong></span>
+            </div>
+            <div class="weather-item">
+                <span class="weather-icon">💨</span>
+                <span>Leichter Wind aus Südwest.</span>
             </div>
         </div>
+        <p style="margin-top: 15px; font-size: 14px; color: #6c757d;">Genieße das spätsommerliche Wetter!</p>
     </div>
 
-    <!-- 2. Das Wetter für Offenbach Bieber -->
+    <!-- Wetter für Offenbach Bieber -->
     <div class="card">
-        <h2>☁️ Wetter in Offenbach Bieber</h2>
-        <div class="weather-grid">
-            <div class="weather-icon">🌤️</div>
-            <div class="weather-details">
-                <div class="weather-temp">21°C</div>
-                <div class="weather-condition">Teilweise bewölkt</div>
-                <div class="weather-info">Wind: Schwach, 5 km/h. Luftfeuchtigkeit: 60%. Leichte Bewölkung am Abend möglich.</div>
+        <h2>Wetter in Offenbach Bieber</h2>
+        <div class="weather-card">
+            <div class="weather-item">
+                <span class="weather-icon">🌤️</span>
+                <span><strong>Heute (09.09.):</strong> Leicht bewölkt mit sonnigen Abschnitten.</span>
+            </div>
+            <div class="weather-item">
+                <span class="weather-icon">🌡️</span>
+                <span>Max: <strong>25°C</strong>, Min: <strong>14°C</strong></span>
+            </div>
+            <div class="weather-item">
+                <span class="weather-icon">🌧️</span>
+                <span>Geringes Schauerrisiko am späten Nachmittag.</span>
             </div>
         </div>
+        <p style="margin-top: 15px; font-size: 14px; color: #6c757d;">Bleibt größtenteils trocken und angenehm.</p>
     </div>
 
-    <!-- 3. Das Wetter (General) -->
+    <!-- Das Wetter (General Outlook) -->
     <div class="card">
-        <h2>🌈 Dein Wetterüberblick für die Region</h2>
-        <div class="gemini-text">
-            Ein angenehmer Herbsttag erwartet dich in der Region Rhein-Main. Nach einem sonnigen Start am Vormittag ziehen am Nachmittag vereinzelt Wolken auf. Die Temperaturen bleiben mild und laden zu Aktivitäten im Freien ein. Perfekt für einen Spaziergang oder einen Kaffee auf der Terrasse!
-        </div>
+        <h2>Wetter-Ausblick Deutschland</h2>
+        <p>Ein stabiles Hochdruckgebiet namens "Themis" sorgt weiterhin für überwiegend <span style="color:#28a745; font-weight: bold;">sonniges und trockenes Spätsommerwetter</span> in weiten Teilen Deutschlands. Die Temperaturen bleiben mild und erreichen vielerorts die 20-Grad-Marke.</p>
+        <p>Lediglich in den Alpenregionen und im äußersten Nordwesten sind am Wochenende einzelne Schauer nicht ausgeschlossen. Die Nächte können bereits <span style="color:#007bff; font-weight: bold;">kühl werden</span>, besonders in klaren Sternennächten.</p>
     </div>
 
-    <!-- 4. WM 2026 Tipps -->
+    <!-- Deine aktuellen Tipps für die WM Spiele -->
     <div class="card">
-        <h2>⚽ WM 2026: Deine Tipps für den nächsten Spieltag</h2>
-        <div class="gemini-text">
-            Der nächste Spieltag der WM-Qualifikation steht an! Hier sind deine Prognosen – basierend auf aktuellen Formkurven und Teamdaten.
-        </div>
+        <h2>Deine WM 2026 Tipps</h2>
+        <p style="font-size: 14px; color: #6c757d; margin-bottom: 15px;">Nächster Spieltag: <strong>Donnerstag, 10. September 2026</strong></p>
         <table class="wm-table">
             <thead>
                 <tr>
-                    <th>Datum & Uhrzeit</th>
-                    <th>Begegnung</th>
+                    <th>Spiel</th>
+                    <th>Anstoß (MESZ)</th>
                     <th>Dein Tipp</th>
                     <th>Analyse</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Di, 9. Sep. 2026<br>18:00 Uhr MESZ</td>
-                    <td><strong style="color: #c00;">Deutschland</strong> vs. <strong style="color: #c00;">Frankreich</strong></td>
-                    <td class="prediction">Deutschland 2 - 1 Frankreich</td>
-                    <td class="analysis">Ein echter Kracher! Deutschland ist heimstark, und die Offensive könnte gegen Frankreichs Abwehr den entscheidenden Vorteil bringen. Erwarte ein enges Spiel.</td>
+                    <td>🇧🇷 Brasilien vs. 🇸🇳 Senegal</td>
+                    <td>18:00 Uhr</td>
+                    <td>2:1</td>
+                    <td>Brasilien ist klarer Favorit, aber Senegal hat eine starke Defensive und könnte für Überraschungen sorgen. Ein knapper Sieg für die Seleção.</td>
                 </tr>
                 <tr>
-                    <td>Di, 9. Sep. 2026<br>21:00 Uhr MESZ</td>
-                    <td><strong style="color: #c00;">Brasilien</strong> vs. <strong style="color: #c00;">Argentinien</strong></td>
-                    <td class="prediction">Brasilien 1 - 1 Argentinien</td>
-                    <td class="analysis">Das ewige Duell Südamerikas! Beide Teams sind defensiv sehr diszipliniert, aber mit Messi und Neymar kann immer ein Tor fallen. Ein Remis ist wahrscheinlich.</td>
+                    <td>🇩🇪 Deutschland vs. 🇯🇵 Japan</td>
+                    <td>21:00 Uhr</td>
+                    <td>2:0</td>
+                    <td>Deutschland will nach dem letzten Turnier überzeugen. Japan ist wendig, aber die deutsche Offensive sollte sich durchsetzen.</td>
                 </tr>
                 <tr>
-                    <td>Mi, 10. Sep. 2026<br>00:00 Uhr MESZ</td>
-                    <td><strong style="color: #c00;">USA</strong> vs. <strong style="color: #c00;">Mexiko</strong></td>
-                    <td class="prediction">USA 2 - 0 Mexiko</td>
-                    <td class="analysis">Die jungen und hungrigen Amerikaner nutzen ihren Heimvorteil. Mexiko hat in letzter Zeit Schwächen in der Offensive gezeigt, was die USA ausnutzen wird.</td>
+                    <td>🇦🇷 Argentinien vs. 🇲🇽 Mexiko</td>
+                    <td>00:00 Uhr</td>
+                    <td>3:1</td>
+                    <td>Messi und Co. sind in Topform. Mexiko wird kämpfen, aber gegen die amtierenden Weltmeister wird es schwer. Viele Tore erwartet.</td>
+                </tr>
+                <tr>
+                    <td>🇫🇷 Frankreich vs. 🇺🇾 Uruguay</td>
+                    <td>03:00 Uhr</td>
+                    <td>1:1</td>
+                    <td>Ein Duell der Giganten. Frankreichs Offensive trifft auf eine robuste uruguayische Abwehr. Enges Spiel, könnte unentschieden ausgehen.</td>
                 </tr>
             </tbody>
         </table>
-        <div class="callout-box">
-            <strong>Hinweis:</strong> Diese Tipps basieren auf einer KI-Analyse von Wahrscheinlichkeiten und aktuellen Informationen. Fußball bleibt jedoch stets für Überraschungen gut!
-        </div>
     </div>
 
-    <!-- 6. DIY Ideen für Essen aus dem Heimischen Garten -->
+    <!-- DIY Ideen für Essen -->
     <div class="card">
-        <h2>🥕 DIY aus Garten & Küche</h2>
-        <div class="gemini-text">
-            <p>Nutze die Gaben deines Gartens oder werde kreativ in der Küche – es gibt so viel Leckeres selbst zu machen!</p>
-
-            <div class="diy-section">
-                <h3>🪴 Leckeres aus dem Garten</h3>
+        <h2>DIY Ideen für Küche & Garten</h2>
+        <p>Lass dich inspirieren, was du abseits von Brot und Pesto selbst zubereiten kannst:</p>
+        <ul class="diy-list">
+            <li>🌱 <strong>Aus dem Garten:</strong>
                 <ul>
-                    <li><strong>Frische Kräuterbutter:</strong> Mit Schnittlauch, Petersilie, Bärlauch (falls Saison) aus dem Garten verfeinert. Perfekt zu Brot oder Steak.</li>
-                    <li><strong>Zucchini-Puffer:</strong> Deine Zucchinischwemme kreativ verwerten – schnell, lecker und gesund als Beilage oder Hauptgericht.</li>
-                    <li><strong>Tomaten-Chutney:</strong> Reife Gartentomaten einkochen für den Winter, passt wunderbar zu Käse, Gegrilltem oder Burgern.</li>
-                    <li><strong>Apfelmus selbstgemacht:</strong> Herbstzeit ist Apfelzeit! Ohne Zuckerzusatz ein natürlicher Genuss für Groß und Klein.</li>
+                    <li>Kräutersalz oder -öl aus frischen Gartenkräutern</li>
+                    <li>Eingemachte Zucchini, Gurken oder Rote Bete</li>
+                    <li>Fruchtleder aus Beeren oder Äpfeln</li>
+                    <li>Gemüsechips aus Grünkohl, Roter Bete oder Süßkartoffeln</li>
                 </ul>
-            </div>
-
-            <div class="diy-section homemade">
-                <h3>🍳 Selbstgemacht ist am besten!</h3>
+            </li>
+            <li>🥣 <strong>Darüber hinaus:</strong>
                 <ul>
-                    <li><strong>Hausgemachte Nudeln:</strong> Nur Mehl, Eier, Wasser – mit etwas Übung ein Traum und viel leckerer als gekaufte.</li>
-                    <li><strong>Aufstrich aus Linsen & getrockneten Tomaten:</strong> Eine gesunde, vegane und nahrhafte Alternative zu Wurst oder Käse.</li>
-                    <li><strong>Kefir-Joghurt:</strong> Mit Kefir-Kulturen ganz einfach deinen eigenen probiotischen Joghurt herstellen – gut für die Darmflora!</li>
-                    <li><strong>Pesto Rosso (außer Brot, Pesto):</strong> Statt grünem Pesto, mal eine würzige Variante mit getrockneten Tomaten, Mandeln und Parmesan.</li>
+                    <li>Eigene Nudeln (frisch oder getrocknet)</li>
+                    <li>Frischkäse oder Joghurt (aus Milch oder Pflanzenmilch)</li>
+                    <li>Hausgemachtes Müsli oder Granola</li>
+                    <li>Aufstriche (z.B. Linsenaufstrich, Karotten-Ingwer)</li>
+                    <li>Sirup aus Holunderblüten, Minze oder Beeren</li>
+                    <li>Fermentiertes Gemüse (Kimchi, Sauerkraut)</li>
                 </ul>
-            </div>
-            <p style="font-size: 14px; color: #6c757d; margin-top: 15px;">
-                Viel Spaß beim Ausprobieren und Genießen deiner selbstgemachten Köstlichkeiten!
-            </p>
-        </div>
+            </li>
+        </ul>
+        <p style="margin-top: 15px; font-size: 14px; color: #6c757d;">Kreativität in der Küche schmeckt am besten!</p>
     </div>
 
 
-    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB und KI-Prognosen</div>
+    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
 
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Shell Kickers","x":["2026-09-07 21:00:02","2026-09-07 18:00:03","2026-09-07 15:00:02","2026-09-07 09:00:02","2026-09-07 06:00:02","2026-09-07 03:00:02","2026-09-07 00:00:02","2026-09-06 21:00:02","2026-09-06 18:00:03","2026-09-06 15:00:02","2026-09-06 12:00:04","2026-09-06 09:00:02","2026-09-06 06:00:02","2026-09-06 03:00:03","2026-09-06 00:00:02","2026-09-05 21:00:03","2026-09-05 18:00:03","2026-09-05 15:00:02","2026-09-05 12:00:02","2026-09-05 09:00:02","2026-09-05 06:00:02","2026-09-05 00:00:02","2026-09-04 21:00:02","2026-09-04 18:00:03","2026-09-04 15:00:02","2026-09-04 12:00:02","2026-09-04 09:00:02","2026-09-04 06:00:02","2026-09-04 03:00:01","2026-09-04 00:00:02","2026-09-03 21:00:04","2026-09-03 18:00:03","2026-09-03 15:00:02"],"y":[2.239,2.239,2.269,2.279,2.279,2.279,2.279,2.279,2.279,2.359,2.259,2.259,2.259,2.259,2.259,2.259,2.259,2.359,2.259,2.259,2.269,2.269,2.269,2.269,2.309,2.249,2.259,2.259,2.259,2.259,2.259,2.259,2.269],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-09-07 21:00:01","2026-09-07 18:00:01","2026-09-07 15:00:01","2026-09-07 12:00:01","2026-09-07 09:00:01","2026-09-07 06:00:01","2026-09-07 03:00:01","2026-09-07 00:00:01","2026-09-06 21:00:01","2026-09-06 18:00:01","2026-09-06 15:00:01","2026-09-06 12:00:01","2026-09-06 09:00:01","2026-09-06 06:00:01","2026-09-06 03:00:01","2026-09-06 00:00:01","2026-09-05 21:00:01","2026-09-05 18:00:01","2026-09-05 15:00:01","2026-09-05 12:00:01","2026-09-05 09:00:01","2026-09-05 06:00:01","2026-09-05 03:00:01","2026-09-05 00:00:01","2026-09-04 21:00:01","2026-09-04 18:00:01","2026-09-04 15:00:01","2026-09-04 12:00:01","2026-09-04 09:00:01","2026-09-04 06:00:01","2026-09-04 03:00:01","2026-09-04 00:00:01","2026-09-03 21:00:01","2026-09-03 18:00:01","2026-09-03 15:00:01"],"y":[2.219,2.219,2.259,2.189,2.209,2.209,2.209,2.209,2.229,2.299,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.239,2.319,2.189,2.209,2.219,2.219,2.219,2.239,2.249,2.269,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.249],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Aral Bieberer Straße","x":["2026-09-07 21:00:01","2026-09-07 18:00:01","2026-09-07 15:00:01","2026-09-07 12:00:01","2026-09-07 09:00:01","2026-09-07 06:00:01","2026-09-07 03:00:01","2026-09-07 00:00:01","2026-09-06 21:00:01","2026-09-06 18:00:01","2026-09-06 15:00:01","2026-09-06 12:00:01","2026-09-06 09:00:01","2026-09-06 06:00:01","2026-09-06 03:00:01","2026-09-06 00:00:01"],"y":[2.229,2.229,2.269,2.219,2.219,2.219,2.219,2.219,2.219,2.269,2.349,2.219,2.219,2.219,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"ESSO Waldstraße","x":["2026-09-07 21:00:01","2026-09-07 18:00:01","2026-09-07 15:00:01","2026-09-07 12:00:01","2026-09-07 09:00:01","2026-09-07 06:00:01","2026-09-07 03:00:01","2026-09-07 00:00:01","2026-09-06 21:00:01","2026-09-06 18:00:01","2026-09-06 15:00:01","2026-09-06 12:00:01","2026-09-06 09:00:01","2026-09-06 06:00:01","2026-09-06 03:00:01","2026-09-06 00:00:01"],"y":[2.229,2.229,2.269,2.209,2.219,2.219,2.219,2.219,2.219,2.239,2.329,2.219,2.219,2.219,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Shell Kickers","x":["2026-09-09 21:00:02","2026-09-09 18:00:04","2026-09-09 15:00:02","2026-09-09 09:00:03","2026-09-09 06:00:04","2026-09-09 03:00:02","2026-09-09 00:00:02","2026-09-08 21:00:02","2026-09-08 18:00:03","2026-09-08 15:00:03","2026-09-08 12:00:02","2026-09-08 09:00:02","2026-09-08 06:00:02","2026-09-08 03:00:02","2026-09-08 00:00:06","2026-09-07 21:00:02","2026-09-07 18:00:03","2026-09-07 15:00:02","2026-09-07 09:00:02","2026-09-07 06:00:02","2026-09-07 03:00:02","2026-09-07 00:00:02","2026-09-06 21:00:02","2026-09-06 18:00:03"],"y":[2.229,2.229,2.319,2.219,2.229,2.229,2.229,2.229,2.229,2.279,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.269,2.279,2.279,2.279,2.279,2.279,2.279],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"ESSO Waldstraße","x":["2026-09-09 21:00:01","2026-09-09 18:00:01","2026-09-09 15:00:01","2026-09-09 12:00:01","2026-09-09 09:00:01","2026-09-09 06:00:01","2026-09-09 03:00:01","2026-09-09 00:00:01","2026-09-08 21:00:01","2026-09-08 18:00:01","2026-09-08 15:00:01","2026-09-08 12:00:01","2026-09-08 09:00:01","2026-09-08 06:00:01","2026-09-08 03:00:01","2026-09-08 00:00:01","2026-09-07 21:00:01","2026-09-07 18:00:01","2026-09-07 15:00:01","2026-09-07 12:00:01","2026-09-07 09:00:01","2026-09-07 06:00:01","2026-09-07 03:00:01","2026-09-07 00:00:01","2026-09-06 21:00:01"],"y":[2.229,2.229,2.299,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.269,2.219,2.229,2.229,2.229,2.229,2.229,2.229,2.269,2.209,2.219,2.219,2.219,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-09-09 21:00:01","2026-09-09 18:00:01","2026-09-09 15:00:01","2026-09-09 12:00:01","2026-09-09 09:00:01","2026-09-09 06:00:01","2026-09-09 03:00:01","2026-09-09 00:00:01","2026-09-08 21:00:01","2026-09-08 18:00:01","2026-09-08 15:00:01","2026-09-08 12:00:01","2026-09-08 09:00:01","2026-09-08 06:00:01","2026-09-08 03:00:01","2026-09-08 00:00:01","2026-09-07 21:00:01","2026-09-07 18:00:01","2026-09-07 15:00:01","2026-09-07 12:00:01","2026-09-07 09:00:01","2026-09-07 06:00:01","2026-09-07 03:00:01","2026-09-07 00:00:01","2026-09-06 21:00:01","2026-09-06 18:00:01"],"y":[2.209,2.209,2.269,2.199,2.199,2.199,2.199,2.199,2.199,2.209,2.249,2.199,2.219,2.219,2.219,2.219,2.219,2.219,2.259,2.189,2.209,2.209,2.209,2.209,2.209,2.229],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Aral Bieberer Straße","x":["2026-09-09 21:00:01","2026-09-09 18:00:01","2026-09-09 15:00:01","2026-09-09 12:00:01","2026-09-09 09:00:01","2026-09-09 06:00:01","2026-09-09 03:00:01","2026-09-09 00:00:01","2026-09-08 21:00:01","2026-09-08 18:00:01","2026-09-08 15:00:01","2026-09-08 12:00:01","2026-09-08 09:00:01","2026-09-08 06:00:01","2026-09-08 03:00:01","2026-09-08 00:00:01","2026-09-07 21:00:01","2026-09-07 18:00:01","2026-09-07 15:00:01","2026-09-07 12:00:01","2026-09-07 09:00:01","2026-09-07 06:00:01","2026-09-07 03:00:01","2026-09-07 00:00:01","2026-09-06 21:00:01"],"y":[2.229,2.229,2.319,2.209,2.209,2.209,2.209,2.209,2.209,2.219,2.279,2.229,2.229,2.229,2.229,2.229,2.229,2.229,2.269,2.219,2.219,2.219,2.219,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -358,17 +242,19 @@
                 orientation: 'h',
                 y: -0.3,
                 x: 0.5,
-                xanchor: 'center'
+                xanchor: 'center',
+                font: { size: 12 } /* Ensure legend text is small on mobile */
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#e9ecef',
+                gridcolor: '#eee',
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true
             },
             yaxis: {
                 title: 'Preis (€)',
-                gridcolor: '#e9ecef',
+                gridcolor: '#eee',
+                // Zeigt 3 Nachkommastellen an (typisch für Tankstellen)
                 tickformat: ',.3f', 
                 autorange: true
             },
