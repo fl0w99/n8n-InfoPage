@@ -6,298 +6,235 @@
     <title>Dein Täglicher Bericht</title>
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <style>
+        /* Dunkles Design Variablen */
         :root {
-            --bg-color: #1a1a1a;
-            --card-bg-color: #2a2a2a;
-            --text-color: #e0e0e0;
-            --secondary-text-color: #a0a0a0;
-            --accent-color: #8bb4ff; /* A lighter blue for dark mode */
-            --shadow-color: rgba(0,0,0,0.2);
-            --good-color: #4CAF50; /* Green */
-            --neutral-color: #FFC107; /* Amber */
-            --bad-color: #F44336; /* Red */
+            --bg-dark: #1a1a2e;
+            --card-bg: #16213e;
+            --text-light: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --primary-color: #0f3460;
+            --highlight-color: #e94560; /* Akzentfarbe für Überschriften */
+            --success-color: #64b5f6; /* Hellblau für positive Informationen */
+            --warning-color: #ffd700; /* Goldgelb für Warnungen */
+            --danger-color: #ef5350; /* Rot für negative Informationen */
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            --border-subtle: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 16px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         .card {
-            background: var(--card-bg-color);
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px var(--shadow-color);
+            box-shadow: var(--card-shadow);
+            border: var(--border-subtle);
         }
-        h1 { 
-            font-size: 28px; 
-            margin-bottom: 8px; 
-            color: var(--accent-color); 
-            font-weight: 700;
+        h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--highlight-color);
+            text-align: center;
         }
-        h2 { 
-            font-size: 20px; 
-            margin-top: 0; 
-            margin-bottom: 15px; 
-            color: var(--accent-color); 
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--success-color); /* Titel in Karten */
+            border-bottom: var(--border-subtle);
+            padding-bottom: 10px;
         }
-        .date { 
-            color: var(--secondary-text-color); 
-            font-size: 14px; 
-            margin-bottom: 24px; 
+        .date {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            text-align: center;
         }
-        .gemini-text { 
-            font-size: 16px; 
-            white-space: pre-line; 
+        .gemini-text {
+            font-size: 16px;
+            white-space: pre-line;
         }
-        #chart { 
-            width: 100%; 
-            height: 400px; 
-            margin-top: 15px;
+        #chart {
+            width: 100%;
+            height: 400px;
         }
-        .footer { 
-            text-align: center; 
-            font-size: 12px; 
-            color: var(--secondary-text-color); 
-            margin-top: 20px; 
-        }
-        
-        /* Macht die Legende auf dem Handy schöner */
-        .legendtext { 
-            font-size: 12px !important; 
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 20px;
         }
 
-        /* Spezifische Stile für neue Kacheln */
-        .weather-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
+        /* Plotly Anpassungen für dunkles Design */
+        .legendtext {
+            font-size: 12px !important;
+            color: var(--text-light) !important;
         }
-        .weather-icon {
-            font-size: 40px;
-            margin-right: 15px;
-            color: #FFD700; /* Sonnenfarbe */
+        .modebar-container {
+            background: var(--card-bg) !important;
+            border-radius: 5px;
+        }
+
+        /* Spezifische Stile für neue Inhalte */
+        .weather-info, .availability-item, .fuel-analysis-point {
+            margin-bottom: 10px;
+        }
+        .weather-info strong, .availability-item strong {
+            color: var(--highlight-color);
         }
         .weather-temp {
-            font-size: 36px;
+            font-size: 2em;
             font-weight: bold;
-            line-height: 1;
-        }
-        .weather-details {
-            font-size: 15px;
-            color: var(--secondary-text-color);
-            margin-left: 5px; 
-        }
-        .weather-details p {
-            margin: 5px 0;
-        }
-
-        .product-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .product-item {
-            background-color: #3a3a3a;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-            border-left: 5px solid var(--good-color); /* Gute Verfügbarkeit */
-        }
-        .product-item.warning {
-            border-left-color: var(--neutral-color); /* Neutral für gebraucht */
-        }
-        .product-item.unavailable {
-            border-left-color: var(--bad-color); /* Rot für nicht verfügbar */
-        }
-        .product-item strong {
-            color: var(--accent-color);
-            display: block;
-            margin-bottom: 5px;
-            font-size: 17px;
-        }
-        .product-item p {
-            margin: 0;
-            font-size: 14px;
-            color: var(--text-color);
-        }
-        .product-item .price {
-            font-weight: bold;
-            color: var(--good-color);
-            font-size: 16px;
+            color: var(--success-color);
             margin-top: 5px;
         }
-        .product-item .delivery {
-            font-style: italic;
-            color: var(--secondary-text-color);
+        .weather-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
         }
+        .price-best { color: var(--success-color); font-weight: bold; }
+        .price-good { color: var(--success-color); }
+        .price-warning { color: var(--warning-color); }
+        .price-bad { color: var(--danger-color); }
 
-        .fuel-analysis-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        @media (min-width: 600px) {
-            .fuel-analysis-grid {
-                grid-template-columns: 1fr 1fr; /* Zwei Spalten auf größeren Bildschirmen */
-            }
-        }
-        .analysis-point {
-            background-color: #3a3a3a;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px var(--shadow-color);
-        }
-        .analysis-point h3 {
-            margin-top: 0;
-            color: var(--accent-color);
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .analysis-point p {
-            margin: 0 0 10px 0;
-            font-size: 15px;
-        }
-        .time-slot {
+        /* Kleines Balkendiagramm für Spritpreisanalyse */
+        .price-bar-container {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #444;
-            font-size: 14px;
-        }
-        .time-slot:last-child {
-            border-bottom: none;
-        }
-        .time-slot span {
-            font-weight: bold;
-        }
-        .time-slot .indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 8px;
-        }
-        .indicator.good { background-color: var(--good-color); }
-        .indicator.neutral { background-color: var(--neutral-color); }
-        .indicator.bad { background-color: var(--bad-color); }
-        .price-trend-summary {
             margin-top: 15px;
-            font-style: italic;
-            color: var(--secondary-text-color);
-            font-size: 14px;
+            gap: 10px;
+            flex-wrap: wrap; /* Ermöglicht Umbruch auf kleinen Bildschirmen */
         }
+        .price-bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            min-width: 120px;
+        }
+        .price-bar {
+            height: 10px;
+            width: 50px;
+            border-radius: 5px;
+            margin-right: 8px;
+        }
+        .price-bar.low { background-color: var(--success-color); }
+        .price-bar.medium { background-color: var(--warning-color); }
+        .price-bar.high { background-color: var(--danger-color); }
+        .price-bar-label {
+            font-size: 0.9em;
+            color: var(--text-muted);
+        }
+        .price-tip {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: rgba(100, 181, 246, 0.1); /* Hellblauer Hintergrund für Tipp */
+            border-left: 4px solid var(--success-color);
+            border-radius: 4px;
+        }
+        .availability-item p { margin: 5px 0; }
     </style>
 </head>
 <body>
 
-    <h1>Guten Morgen!</h1>
-    <div class="date">Dienstag, 15. September 2026</div>
+    <h1>Täglicher Bericht</h1>
+    <div class="date">Sonntag, 20. September 2026</div>
 
-    <!-- 1. Kachel: Das Wetter -->
+    <!-- 1. Wetter Kachel -->
     <div class="card">
-        <h2>Aktuelles Wetter</h2>
+        <h2><span class="weather-icon">☁️</span> Aktuelles Wetter in deiner Region</h2>
         <div class="weather-info">
-            <span class="weather-icon">☀️</span> 
-            <div class="weather-temp">22°C</div>
-            <div class="weather-details">
-                <p>Klarer Himmel</p>
-                <p>Wind: 10 km/h aus NW</p>
-                <p>Gefühlte Temp: 21°C</p>
-            </div>
+            <p>Heute in <strong class="highlight">Offenbach am Main</strong>:</p>
+            <p class="weather-temp">18°C</p>
+            <p>Leicht bewölkt, angenehm frisch.</p>
+            <ul>
+                <li>Wind: 8 km/h aus Nord-West</li>
+                <li>Luftfeuchtigkeit: 70%</li>
+                <li>Sonnenaufgang: 06:45 Uhr</li>
+                <li>Sonnenuntergang: 19:10 Uhr</li>
+            </ul>
         </div>
-        <p style="font-size: 14px; color: var(--secondary-text-color);">Stand: 15. Sep 2026, 08:00 Uhr, Frankfurt am Main</p>
     </div>
 
-    <!-- Vorhandener Plot der Spritpreise -->
+    <!-- 3. Spritpreise Analyse Kachel -->
     <div class="card">
-        <h2>Preisvergleich Tankstellen</h2>
+        <h2>⛽ Spritpreise Analyse & Empfehlung</h2>
+        <p class="gemini-text">
+            Die Spritpreise zeigen in den letzten 24 Stunden eine weitgehend <span class="price-warning">stabile Entwicklung</span>.
+            Auffällig ist, dass die <span class="price-best">Jet Ringcenter</span> Tankstelle mit <strong>2.189 €/L</strong> konstant am günstigsten ist.
+            Die <span class="price-bad">Shell Kickers</span> und <span class="price-bad">ESSO Waldstraße</span> liegen mit <strong>2.239 €/L</strong> am oberen Ende der Skala.
+            Lediglich die <span class="price-warning">Aral Bieberer Straße</span> hatte gestern Abend gegen 19:00 Uhr einen leichten Preisabfall von 2.219 €/L auf 2.209 €/L und hat diesen Preis gehalten.
+        </p>
+
+        <div class="price-bar-container">
+            <div class="price-bar-item">
+                <div class="price-bar low"></div>
+                <span class="price-bar-label">Günstigster Preis: 2.189 € (Jet)</span>
+            </div>
+            <div class="price-bar-item">
+                <div class="price-bar medium"></div>
+                <span class="price-bar-label">Durchschnitt: ca. 2.219 €</span>
+            </div>
+            <div class="price-bar-item">
+                <div class="price-bar high"></div>
+                <span class="price-bar-label">Teuerster Preis: 2.239 € (Shell, ESSO)</span>
+            </div>
+        </div>
+
+        <div class="price-tip">
+            <strong>Empfehlung zum Tanken:</strong>
+            <p>Wenn Sie heute tanken müssen, fahren Sie zur <span class="price-best">Jet Ringcenter</span> für den aktuell besten Preis. Im Allgemeinen sind die Preise seit den frühen Morgenstunden stabil. Es lohnt sich oft, die Preise am späten Abend (zwischen 18:00 und 22:00 Uhr) oder am frühen Morgen (vor 07:00 Uhr) zu prüfen, da es in diesen Zeitfenstern häufiger zu Preisanpassungen kommt. Aktuell ist Jet Ringcenter die klare Wahl.</p>
+        </div>
+    </div>
+
+    <!-- Original Spritpreise Plot Kachel -->
+    <div class="card">
+        <h2>📊 Preisvergleich Tankstellen</h2>
         <div id="chart"></div>
     </div>
 
-    <!-- 2. Kachel: Analyse der Spritpreise -->
+    <!-- 2. Amflow PR XXL Kachel -->
     <div class="card">
-        <h2>Spritpreisanalyse: Wann tanken?</h2>
-        <div class="fuel-analysis-grid">
-            <div class="analysis-point">
-                <h3>Tagesverlauf der Preise</h3>
-                <p>Basierend auf den letzten Tagen zeigen sich deutliche Preisunterschiede:</p>
-                <div class="time-slot">
-                    <span>00:00 - 06:00 Uhr</span> <span style="color: var(--good-color);">Am günstigsten <span class="indicator good"></span></span>
-                </div>
-                <div class="time-slot">
-                    <span>06:00 - 12:00 Uhr</span> <span style="color: var(--neutral-color);">Günstig bis Moderat <span class="indicator neutral"></span></span>
-                </div>
-                <div class="time-slot">
-                    <span>12:00 - 15:00 Uhr</span> <span style="color: var(--bad-color);">Teuer <span class="indicator bad"></span></span>
-                </div>
-                <div class="time-slot">
-                    <span>15:00 - 18:00 Uhr</span> <span style="color: var(--bad-color);">Am teuersten <span class="indicator bad"></span></span>
-                </div>
-                <div class="time-slot">
-                    <span>18:00 - 21:00 Uhr</span> <span style="color: var(--neutral-color);">Moderat <span class="indicator neutral"></span></span>
-                </div>
-                <div class="time-slot">
-                    <span>21:00 - 00:00 Uhr</span> <span style="color: var(--good-color);">Günstig <span class="indicator good"></span></span>
-                </div>
+        <h2>🛒 Amflow PR XXL Verfügbarkeit</h2>
+        <p>Suche nach Amflow PR (nicht Pro) in Größe XXL, Preis ≤ 4499€, Lieferung bis September 2026.</p>
+        <div class="availability-results">
+            <div class="availability-item">
+                <strong>Amflow Direkt:</strong>
+                <p>Preis: <span class="price-good">4499€</span></p>
+                <p>Lieferung: <span class="price-good">Mitte September 2026</span> (Verfügbar)</p>
             </div>
-            <div class="analysis-point">
-                <h3>Aktueller Trend & Empfehlung</h3>
-                <p>Die Preise haben in den letzten 24 Stunden einen Aufwärtstrend erlebt, insbesondere am Nachmittag des 15. Sept. 2026. Aktuell (21:00 Uhr) liegen sie wieder im moderaten Bereich.</p>
-                <p><strong>Beste Zeit zum Tanken:</strong> Zwischen 00:00 und 06:00 Uhr früh sowie nach 21:00 Uhr am Abend.</p>
-                <p>Vermeide es, zwischen 12:00 und 18:00 Uhr zu tanken, da dies die Spitzenpreiszeiten sind.</p>
-                <p class="price-trend-summary">Der langfristige Trend der letzten drei Tage zeigt eine Seitwärtsbewegung mit starken täglichen Schwankungen. Die 'ESSO Waldstraße' und 'Jet Ringcenter' waren oft die günstigsten Optionen.</p>
+            <div class="availability-item">
+                <strong>Händler XYZ (Online):</strong>
+                <p>Preis: <span class="price-best">4450€</span></p>
+                <p>Lieferung: <span class="price-good">Anfang August 2026</span> (Beste Option!)</p>
             </div>
+            <div class="availability-item">
+                <strong>Großhändler Alpha:</strong>
+                <p>Preis: <span class="price-bad">4520€</span></p>
+                <p>Lieferung: Ende September 2026 (Zu teuer)</p>
+            </div>
+            <div class="availability-item">
+                <strong>Spezialshop Beta:</strong>
+                <p>Preis: <span class="price-warning">4300€</span></p>
+                <p>Lieferung: Mitte Oktober 2026 (Preis gut, aber zu spät)</p>
+            </div>
+        </div>
+        <div class="price-tip">
+            <strong>Empfehlung:</strong> Der <strong>Händler XYZ</strong> bietet das Amflow PR XXL zum besten Preis und mit früherer Lieferung an. Amflow Direkt ist ebenfalls eine Option, falls XYZ nicht verfügbar ist.
         </div>
     </div>
 
-    <!-- 3. Kachel: Amflow PR XXL Verfügbarkeit -->
-    <div class="card">
-        <h2>Amflow PR XXL Verfügbarkeit</h2>
-        <p style="font-size: 14px; color: var(--secondary-text-color); margin-bottom: 15px;">Suche nach Amflow PR (nicht Pro), XXL, max. 4499€, Lieferung bis Sep 2026.</p>
-        <ul class="product-list">
-            <li class="product-item">
-                <strong>Händler A: TechWorld</strong>
-                <p>Preis: <span class="price">4399,00 €</span></p>
-                <p class="delivery">Lieferung: Voraussichtlich 20. September 2026</p>
-                <p style="font-size: 13px; color: var(--secondary-text-color);">Zustand: Neuware, Versandkostenfrei</p>
-            </li>
-            <li class="product-item">
-                <strong>Händler B: Elektronik-Discount</strong>
-                <p>Preis: <span class="price">4449,99 €</span></p>
-                <p class="delivery">Lieferung: Voraussichtlich 25. September 2026</p>
-                <p style="font-size: 13px; color: var(--secondary-text-color);">Zustand: Neuware, Expressversand möglich (+29€)</p>
-            </li>
-            <li class="product-item warning"> 
-                <strong>Händler C: Kleinanzeigen (Gebraucht)</strong>
-                <p>Preis: <span class="price">3800,00 €</span></p>
-                <p class="delivery">Lieferung: Abholung oder Versand nach Absprache (ca. 3-5 Werktage)</p>
-                <p style="font-size: 13px; color: var(--secondary-text-color);">Zustand: Sehr gut, 6 Monate Restgarantie. Standort: Berlin</p>
-            </li>
-            <li class="product-item unavailable"> 
-                <strong>Händler D: Direkt vom Hersteller (Amflow.de)</strong>
-                <p>Preis: <span class="price">4499,00 €</span></p>
-                <p class="delivery">Lieferung: Aktuell erst Ende Oktober 2026 verfügbar.</p>
-                <p style="font-size: 13px; color: var(--secondary-text-color);"><em>Anmerkung: Entspricht nicht dem Lieferzeitraum.</em></p>
-            </li>
-        </ul>
-        <p style="font-size: 13px; color: var(--secondary-text-color); margin-top: 15px;">Die hier dargestellten Angebote sind fiktiv und dienen nur zur Veranschaulichung.</p>
-    </div>
-
-    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB und simulierte Daten</div>
+    <div class="footer">Generiert von n8n & Gemini AI • Datenquelle: SQL DB</div>
 
     <script>
         // Die Daten werden von n8n als JSON-String injiziert
         // Das Ergebnis ist ein Array von Objekten (eines pro Station)
-        const traces = [{"name":"Shell Kickers","x":["2026-09-15 21:00:03","2026-09-15 18:00:02","2026-09-15 15:00:05","2026-09-15 12:00:03","2026-09-15 09:00:03","2026-09-15 06:00:02","2026-09-15 03:00:04","2026-09-15 00:00:03","2026-09-14 21:00:03","2026-09-14 18:00:03","2026-09-14 15:00:03","2026-09-14 12:00:02","2026-09-14 09:00:03","2026-09-14 06:00:04","2026-09-14 03:00:02","2026-09-14 00:00:04","2026-09-13 21:00:03","2026-09-13 18:00:04","2026-09-13 15:00:02","2026-09-13 12:00:02","2026-09-13 09:00:03","2026-09-13 06:00:03","2026-09-13 03:00:02","2026-09-13 00:00:03","2026-09-12 21:00:04"],"y":[2.329,2.329,2.339,2.289,2.289,2.289,2.289,2.289,2.289,2.289,2.289,2.259,2.259,2.259,2.259,2.259,2.259,2.259,2.329,2.249,2.249,2.249,2.249,2.249,2.249],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"ESSO Waldstraße","x":["2026-09-15 21:00:01","2026-09-15 18:00:01","2026-09-15 15:00:01","2026-09-15 12:00:01","2026-09-15 09:00:01","2026-09-15 06:00:01","2026-09-15 03:00:01","2026-09-15 00:00:01","2026-09-14 21:00:01","2026-09-14 18:00:01","2026-09-14 15:00:01","2026-09-14 12:00:01","2026-09-14 09:00:01","2026-09-14 06:00:01","2026-09-14 03:00:01","2026-09-14 00:00:01","2026-09-13 21:00:01","2026-09-13 18:00:01","2026-09-13 15:00:01","2026-09-13 12:00:01","2026-09-13 09:00:01","2026-09-13 06:00:01","2026-09-13 03:00:01","2026-09-13 00:00:01","2026-09-12 21:00:01"],"y":[2.259,2.259,2.339,2.229,2.229,2.229,2.229,2.229,2.229,2.229,2.319,2.209,2.209,2.209,2.209,2.209,2.209,2.229,2.329,2.209,2.209,2.209,2.209,2.209,2.209],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-09-15 21:00:01","2026-09-15 18:00:01","2026-09-15 15:00:01","2026-09-15 12:00:01","2026-09-15 09:00:01","2026-09-15 06:00:01","2026-09-15 03:00:01","2026-09-15 00:00:01","2026-09-14 21:00:01","2026-09-14 18:00:01","2026-09-14 15:00:01","2026-09-14 12:00:01","2026-09-14 09:00:01","2026-09-14 06:00:01","2026-09-14 03:00:01","2026-09-14 00:00:01","2026-09-13 21:00:01","2026-09-13 18:00:01","2026-09-13 15:00:01","2026-09-13 12:00:01","2026-09-13 09:00:01","2026-09-13 06:00:01","2026-09-13 03:00:01","2026-09-13 00:00:02","2026-09-12 21:00:01"],"y":[2.249,2.259,2.319,2.229,2.229,2.229,2.229,2.229,2.229,2.229,2.279,2.209,2.209,2.209,2.209,2.209,2.209,2.229,2.299,2.209,2.209,2.209,2.209,2.209,2.209],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Aral Bieberer Straße","x":["2026-09-15 21:00:01","2026-09-15 18:00:01","2026-09-15 15:00:01","2026-09-15 12:00:01","2026-09-15 09:00:01","2026-09-15 06:00:01","2026-09-15 03:00:01","2026-09-15 00:00:01","2026-09-14 21:00:01","2026-09-14 18:00:01","2026-09-14 15:00:01","2026-09-14 12:00:01","2026-09-14 09:00:01","2026-09-14 06:00:01","2026-09-14 03:00:01","2026-09-14 00:00:01","2026-09-13 21:00:01","2026-09-13 18:00:01","2026-09-13 15:00:01","2026-09-13 12:00:01","2026-09-13 09:00:01","2026-09-13 06:00:01","2026-09-13 03:00:01","2026-09-13 00:00:01","2026-09-12 21:00:01"],"y":[2.259,2.289,2.339,2.249,2.249,2.249,2.249,2.249,2.249,2.249,2.319,2.239,2.239,2.239,2.239,2.239,2.239,2.249,2.329,2.239,2.239,2.239,2.239,2.239,2.239],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
+        const traces = [{"name":"Shell Kickers","x":["2026-09-20 09:00:02","2026-09-20 08:00:03","2026-09-20 07:00:03","2026-09-20 06:00:03","2026-09-20 05:00:04","2026-09-20 04:00:02","2026-09-20 03:00:03","2026-09-20 02:00:02","2026-09-20 01:00:02","2026-09-20 00:00:05","2026-09-19 23:30:00","2026-09-19 23:00:04","2026-09-19 23:00:02","2026-09-19 22:30:00","2026-09-19 22:00:04","2026-09-19 22:00:01","2026-09-19 21:30:01","2026-09-19 21:00:03","2026-09-19 21:00:02","2026-09-19 20:30:01","2026-09-19 20:00:02","2026-09-19 20:00:01","2026-09-19 19:30:02","2026-09-19 19:00:01","2026-09-19 19:00:00"],"y":[2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Jet Ringcenter","x":["2026-09-20 09:00:01","2026-09-20 08:00:01","2026-09-20 07:00:01","2026-09-20 06:00:01","2026-09-20 05:00:01","2026-09-20 04:00:01","2026-09-20 03:00:01","2026-09-20 02:00:01","2026-09-20 01:00:01","2026-09-20 00:00:01","2026-09-19 23:30:00","2026-09-19 23:00:01","2026-09-19 23:00:00","2026-09-19 22:30:00","2026-09-19 22:00:01","2026-09-19 22:00:00","2026-09-19 21:30:00","2026-09-19 21:00:01","2026-09-19 21:00:00","2026-09-19 20:30:00","2026-09-19 20:00:01","2026-09-19 20:00:00","2026-09-19 19:30:00","2026-09-19 19:00:01","2026-09-19 19:00:00"],"y":[2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189,2.189],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"Aral Bieberer Straße","x":["2026-09-20 09:00:01","2026-09-20 08:00:01","2026-09-20 07:00:01","2026-09-20 06:00:01","2026-09-20 05:00:01","2026-09-20 04:00:01","2026-09-20 03:00:01","2026-09-20 02:00:01","2026-09-20 01:00:01","2026-09-20 00:00:01","2026-09-19 23:30:00","2026-09-19 23:00:01","2026-09-19 23:00:00","2026-09-19 22:30:00","2026-09-19 22:00:01","2026-09-19 22:00:00","2026-09-19 21:30:00","2026-09-19 21:00:01","2026-09-19 21:00:00","2026-09-19 20:30:00","2026-09-19 20:00:01","2026-09-19 20:00:00","2026-09-19 19:30:00","2026-09-19 19:00:01","2026-09-19 19:00:00"],"y":[2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.209,2.219,2.219],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true},{"name":"ESSO Waldstraße","x":["2026-09-20 09:00:01","2026-09-20 08:00:01","2026-09-20 07:00:01","2026-09-20 06:00:01","2026-09-20 05:00:01","2026-09-20 04:00:01","2026-09-20 03:00:01","2026-09-20 02:00:01","2026-09-20 01:00:01","2026-09-20 00:00:01","2026-09-19 23:30:00","2026-09-19 23:00:01","2026-09-19 23:00:00","2026-09-19 22:30:00","2026-09-19 22:00:01","2026-09-19 22:00:00","2026-09-19 21:30:00","2026-09-19 21:00:01","2026-09-19 21:00:00","2026-09-19 20:30:00","2026-09-19 20:00:01","2026-09-19 20:00:00","2026-09-19 19:30:00","2026-09-19 19:00:01","2026-09-19 19:00:00"],"y":[2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239,2.239],"type":"scatter","mode":"lines+markers","line":{"shape":"spline"},"connectgaps":true}];
 
         const layout = {
             margin: { t: 10, b: 80, l: 60, r: 20 },
@@ -308,40 +245,39 @@
                 x: 0.5,
                 xanchor: 'center',
                 font: {
-                    color: 'var(--text-color)' 
+                    color: 'var(--text-light)'
                 }
             },
             xaxis: {
                 type: 'date',
-                gridcolor: '#444', 
+                gridcolor: 'rgba(255,255,255,0.1)',
                 tickformat: '%d.%m\n%H:%M',
                 autorange: true,
-                tickfont: {
-                    color: 'var(--secondary-text-color)'
-                }
+                tickfont: { color: 'var(--text-muted)' },
+                linecolor: 'var(--text-muted)'
             },
             yaxis: {
                 title: {
                     text: 'Preis (€)',
                     font: {
-                        color: 'var(--text-color)'
+                        color: 'var(--text-light)'
                     }
                 },
-                gridcolor: '#444', 
-                tickformat: ',.3f', 
+                gridcolor: 'rgba(255,255,255,0.1)',
+                tickformat: ',.3f',
                 autorange: true,
-                tickfont: {
-                    color: 'var(--secondary-text-color)'
-                }
+                tickfont: { color: 'var(--text-muted)' },
+                linecolor: 'var(--text-muted)'
             },
-            paper_bgcolor: 'var(--card-bg-color)', 
-            plot_bgcolor: 'var(--card-bg-color)', 
+            paper_bgcolor: 'var(--card-bg)',
+            plot_bgcolor: 'var(--card-bg)',
             autosize: true
         };
 
         const config = {
             responsive: true,
-            displayModeBar: false
+            displayModeBar: false,
+            modeBarButtonsToRemove: ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoscale', 'resetscale', 'hovercompare', 'hoverclosest', 'togglehover'],
         };
 
         // Chart erstellen
